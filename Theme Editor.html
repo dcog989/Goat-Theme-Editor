@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Theme Editor</title>
+    <link rel="icon"
+        href="data:image/png;base64,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"
+        type="image/x-icon">
+
+    <style>
+        :root {
+            /* Dark Theme (default) */
+            --bg-body: #282828;
+            --text-body: #d3d3d3;
+            --bg-sidebar: #232323;
+            --bg-main: var(--bg-body);
+            --border-strong: #444;
+            --border-medium: #333;
+            --bg-input: #222;
+            --text-input: var(--text-body);
+            --button-bg: #444;
+            --button-text: #fff;
+            --button-bg-hover: #666;
+            --button-bg-disabled: #333;
+            --button-text-disabled: #888;
+            --bg-palette-container: #181818;
+            --bg-theme-item-list: #232323;
+            --bg-theme-item-row-hover: #3a3a3a;
+            --text-filename-display: #aaa;
+            --selected-palette-border: #ffb347;
+            --selected-palette-shadow: #ffb34744;
+            --text-title: var(--text-body);
+        }
+
+        body.light-theme {
+            --bg-body: #eeeeee;
+            --text-body: #333333;
+            --bg-sidebar: #f5f5f5;
+            --bg-main: var(--bg-body);
+            --border-strong: #cccccc;
+            --border-medium: #dddddd;
+            --bg-input: #ffffff;
+            --text-input: var(--text-body);
+            --button-bg: #cccccc;
+            --button-text: #333333;
+            --button-bg-hover: #bbbbbb;
+            --button-bg-disabled: #e0e0e0;
+            --button-text-disabled: #aaaaaa;
+            --bg-palette-container: #f0f0f0;
+            --bg-theme-item-list: #f5f5f5;
+            --bg-theme-item-row-hover: #e0e0e0;
+            --text-filename-display: #777777;
+            --selected-palette-border: #007bff;
+            --selected-palette-shadow: #007bff44;
+            --text-title: var(--text-body);
+        }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-body);
+            font-family: 'Source Code Pro', monospace;
+            font-size: 16px;
+            margin: 0;
+            min-height: 98vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 98vh;
+        }
+
+        .sidebar {
+            background: var(--bg-sidebar);
+            padding: 24px 16px 16px 16px;
+            width: 550px;
+            border-right: 1px solid var(--border-strong);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .main {
+            flex: 1;
+            padding: 32px 32px 32px 32px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            max-height: 98vh;
+            background: var(--bg-main);
+            transition: background 0.3s;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            color: var(--text-title);
+        }
+
+        .theme-toggle-button {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .theme-toggle-button:hover {
+            background: var(--button-bg-hover);
+        }
+
+        .file-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .import-btn {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s, color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .import-btn:hover {
+            background: var(--button-bg-hover);
+        }
+
+        .file-name-display {
+            color: var(--text-filename-display);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+
+        .filter-row {
+            margin: 12px 0 0 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        #filterInput {
+            flex: 1;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-strong);
+            background: var(--bg-input);
+            color: var(--text-input);
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        #bulkAssignBtn,
+        #exportBtn {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        #bulkAssignBtn:disabled,
+        #exportBtn:disabled {
+            background: var(--button-bg-disabled);
+            color: var(--button-text-disabled);
+            cursor: not-allowed;
+        }
+
+        #bulkAssignBtn:hover:not(:disabled),
+        #exportBtn:hover:not(:disabled) {
+            background: var(--button-bg-hover);
+        }
+
+        #paletteColors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 360px;
+            overflow-y: auto;
+            background: var(--bg-palette-container);
+            border-radius: 6px;
+            padding: 8px;
+            margin: 10px 0 10px;
+            border: 1px solid var(--border-medium);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .palette-color {
+            border: 2px solid var(--border-strong);
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            height: 40px;
+            width: 40px;
+            margin: 0;
+            transition: border 0.2s, transform 0.1s, border-color 0.3s;
+        }
+
+        .palette-color.selected {
+            border: 2px solid var(--selected-palette-border);
+            box-shadow: 0 0 0 2px var(--selected-palette-shadow);
+            transform: scale(1.08);
+        }
+
+        .palette-color:hover {
+            border: 2px solid var(--button-bg-hover);
+        }
+
+        #themeColors {
+            border: 1px solid var(--border-strong);
+            flex-grow: 1;
+            overflow-y: auto;
+            background: var(--bg-theme-item-list);
+            border-radius: 6px;
+            padding: 8px 0;
+            min-height: 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .color-row {
+            align-items: center;
+            display: flex;
+            margin: 2px 0;
+            padding: 6px 12px;
+            border-bottom: 1px solid var(--border-medium);
+            transition: background 0.1s, border-color 0.3s;
+        }
+
+        .color-row:hover {
+            background: var(--bg-theme-item-row-hover);
+        }
+
+
+        .color-row:last-child {
+            border-bottom: none;
+        }
+
+        .color-sample {
+            border: 1px solid var(--border-strong);
+            height: 28px;
+            margin-right: 12px;
+            width: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+
+        button {
+            width: fit-content;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div>
+                <h1>Theme Editor</h1>
+                <button id="themeToggleBtn" class="theme-toggle-button">Toggle Light or Dark</button>
+            </div>
+            <div class="file-inputs">
+                <div class="file-input-row">
+                    <button id="importPaletteBtn" class="import-btn">Import Palette</button>
+                    <span id="paletteFileName" class="file-name-display">No palette file selected</span>
+                    <input type="file" id="paletteFile" accept=".xml" style="display: none;">
+                </div>
+                <div class="file-input-row">
+                    <button id="importThemeBtn" class="import-btn">Import Theme</button>
+                    <span id="themeFileName" class="file-name-display">No theme file selected</span>
+                    <input type="file" id="themeFile" accept=".xml" style="display: none;">
+                </div>
+            </div>
+            <div class="filter-row">
+                <input type="text" id="filterInput" placeholder="Filter by name...">
+            </div>
+            <button id="bulkAssignBtn" disabled>Bulk Assign Selected Color</button>
+            <div id="paletteColors"></div>
+
+            <button id="exportBtn" disabled>Export Updated XML</button>
+        </div>
+        <div class="main">
+            <div id="themeColors"></div>
+        </div>
+    </div>
+
+    <script>
+        let palette = [];
+        let themeItems = [];
+        let filteredThemeItems = [];
+        let selectedPaletteColor = null;
+        let themeFileDoc = null;
+        let originalThemeFileName = "Theme"; // Default if no file is loaded
+
+        const themeToggleBtn = document.getElementById('themeToggleBtn');
+        function applyTheme(themeName) {
+            if (themeName === 'light') {
+                document.body.classList.add('light-theme');
+                localStorage.setItem('themeEditorTheme', 'light');
+            } else {
+                document.body.classList.remove('light-theme');
+                localStorage.setItem('themeEditorTheme', 'dark');
+            }
+            if (palette.length > 0 || document.getElementById('paletteColors').innerHTML.includes('palette-color')) {
+                renderPalette();
+            }
+            if (filteredThemeItems.length > 0 || themeItems.length > 0) { // Check if theme items are loaded
+                renderThemeItems();
+            }
+        }
+
+        themeToggleBtn.onclick = () => {
+            if (document.body.classList.contains('light-theme')) {
+                applyTheme('dark');
+            } else {
+                applyTheme('light');
+            }
+        };
+
+        const savedTheme = localStorage.getItem('themeEditorTheme');
+        if (savedTheme) {
+            applyTheme(savedTheme);
+        }
+
+        // --- Color Parsing and Formatting ---
+        function parseColorString(str) {
+            if (typeof str !== 'string') return null;
+            str = str.trim();
+
+            const rgbMatch = str.match(/^(rgb|RGB|Rgb)\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*[\d.]+\s*)?\)$/i); // Case-insensitive prefix match
+            if (rgbMatch) {
+                const prefix = rgbMatch[1]; // Capture original case of "rgb"
+                const r = parseInt(rgbMatch[2], 10);
+                const g = parseInt(rgbMatch[3], 10);
+                const b = parseInt(rgbMatch[4], 10);
+                if ([r, g, b].every(c => c >= 0 && c <= 255)) {
+                    const rHex = r.toString(16).padStart(2, '0');
+                    const gHex = g.toString(16).padStart(2, '0');
+                    const bHex = b.toString(16).padStart(2, '0');
+                    return {
+                        hex: (rHex + gHex + bHex).toUpperCase(), // Normalized RRGGBB for internal use
+                        type: "rgb",
+                        originalString: str, // Keep the full original string
+                        rgbPrefix: prefix
+                    };
+                }
+            }
+
+            const hexRaw = str.startsWith('#') ? str.substring(1) : str;
+            let finalHex = '';
+            if (/^[0-9a-fA-F]{3}$/.test(hexRaw)) {
+                finalHex = (hexRaw[0] + hexRaw[0] + hexRaw[1] + hexRaw[1] + hexRaw[2] + hexRaw[2]).toUpperCase();
+            } else if (/^[0-9a-fA-F]{6}$/.test(hexRaw)) {
+                finalHex = hexRaw.toUpperCase();
+            }
+
+            if (finalHex) {
+                return {
+                    hex: finalHex, // Normalized RRGGBB
+                    type: "hex",
+                    originalString: str,
+                    hexPrefix: str.startsWith('#') ? "#" : "" // Preserve original '#' if present
+                };
+            }
+            return null;
+        }
+
+        function formatColorForOutput(hexRRGGBB, colorInfo) {
+            if (!colorInfo) return `#${hexRRGGBB}`;
+
+            if (colorInfo.type === "rgb" && colorInfo.rgbPrefix) {
+                const r = parseInt(hexRRGGBB.substring(0, 2), 16);
+                const g = parseInt(hexRRGGBB.substring(2, 4), 16);
+                const b = parseInt(hexRRGGBB.substring(4, 6), 16);
+                return `${colorInfo.rgbPrefix}(${r},${g},${b})`;
+            } else if (colorInfo.type === "hex") {
+                // For hex, output 6-digit, respecting original prefix.
+                return `${colorInfo.hexPrefix || ""}${hexRRGGBB}`;
+            }
+            return `#${hexRRGGBB}`; // Fallback
+        }
+
+        function normalizeHex(hexInput) { // Used for palette parsing, keeps RRGGBB format
+            let hex = hexInput;
+            if (typeof hex !== 'string') hex = '';
+            hex = hex.replace('#', '');
+            if (hex.length === 3) {
+                return (hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2]).toUpperCase();
+            }
+            if (hex.length === 6) {
+                return hex.toUpperCase();
+            }
+            return '000000';
+        }
+
+        function updateButtonStates() {
+            const bulkAssignBtn = document.getElementById('bulkAssignBtn');
+            const exportBtn = document.getElementById('exportBtn');
+            const hasColorItems = themeItems.some(it => it.isColor);
+
+            exportBtn.disabled = !themeFileDoc || !hasColorItems;
+            bulkAssignBtn.disabled = !(selectedPaletteColor && filteredThemeItems.some(it => it.isColor));
+        }
+
+        function parsePalette(xml) {
+            const doc = new DOMParser().parseFromString(xml, 'application/xml');
+            if (doc.documentElement.nodeName === 'parsererror') {
+                console.error('Palette XML parsing error:', doc.documentElement.textContent);
+                alert('Error: Invalid Palette XML file.');
+                return [];
+            }
+            const myColors = doc.getElementsByTagName('myColor');
+            return Array.from(myColors).map(e => ({
+                name: e.getAttribute('name') || 'Unnamed Color',
+                hex: normalizeHex(e.getAttribute('hexvalue') || '')
+            }));
+        }
+
+        function parseGenericThemeFile(xml) {
+            const doc = new DOMParser().parseFromString(xml, 'application/xml');
+            if (doc.documentElement.nodeName === 'parsererror') {
+                console.error('Theme XML parsing error:', doc.documentElement.textContent);
+                alert('Error: Invalid Theme XML file.');
+                return { doc: null, items: [] };
+            }
+
+            const items = [];
+
+            function traverse(node, path = []) {
+                if (node.nodeType !== Node.ELEMENT_NODE) {
+                    return;
+                }
+                const currentPath = [...path, node.nodeName];
+
+                if (node.attributes) {
+                    for (let i = 0; i < node.attributes.length; i++) {
+                        const attr = node.attributes[i];
+                        const colorInfo = parseColorString(attr.value);
+                        if (colorInfo) {
+                            items.push({
+                                name: `${node.nodeName}[${attr.name}]`, // Could use currentPath.join('>') for more uniqueness if needed
+                                fgColor: colorInfo.hex,
+                                colorInfo: colorInfo,
+                                el: node,
+                                attributeName: attr.name,
+                                isColor: true,
+                            });
+                        }
+                    }
+                }
+
+                let hasElementChildren = false;
+                for (let k = 0; k < node.childNodes.length; k++) {
+                    if (node.childNodes[k].nodeType === Node.ELEMENT_NODE) {
+                        hasElementChildren = true;
+                        traverse(node.childNodes[k], currentPath);
+                    }
+                }
+
+                if (!hasElementChildren && node.textContent) {
+                    const textContent = node.textContent.trim();
+                    if (textContent) { // Ensure it's not just whitespace from formatting before parsing
+                        const colorInfo = parseColorString(textContent);
+                        if (colorInfo) {
+                            items.push({
+                                name: node.nodeName, // Could use currentPath.join('>') for more uniqueness
+                                fgColor: colorInfo.hex,
+                                colorInfo: colorInfo,
+                                el: node,
+                                attributeName: null,
+                                isColor: true,
+                            });
+                        }
+                    }
+                }
+            }
+
+            if (doc.documentElement) {
+                traverse(doc.documentElement);
+            }
+            return { doc, items };
+        }
+
+
+        function renderPalette() {
+            const div = document.getElementById('paletteColors');
+            div.innerHTML = '';
+            const isLightTheme = document.body.classList.contains('light-theme');
+
+            palette.forEach(c => {
+                const colorHexNoHash = c.hex;
+                const d = document.createElement('div');
+                d.className = 'palette-color' + (selectedPaletteColor && selectedPaletteColor.hex === colorHexNoHash ? ' selected' : '');
+                d.title = (c.name || 'Color') + ' #' + colorHexNoHash;
+                d.style.background = '#' + colorHexNoHash;
+                d.draggable = true;
+                d.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', colorHexNoHash);
+                };
+                d.onclick = () => {
+                    selectedPaletteColor = { name: c.name, hex: colorHexNoHash };
+                    renderPalette();
+                    updateButtonStates();
+                };
+
+                const label = document.createElement('div');
+                label.textContent = '#' + colorHexNoHash;
+                label.style.fontSize = '10px';
+                label.style.textAlign = 'center';
+                label.style.color = '#' + colorHexNoHash;
+                label.style.marginTop = '2px';
+
+
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'flex';
+                wrapper.style.flexDirection = 'column';
+                wrapper.style.alignItems = 'center';
+                wrapper.appendChild(d);
+                wrapper.appendChild(label);
+                div.appendChild(wrapper);
+            });
+
+            const br = document.createElement('div');
+            br.style.width = '100%';
+            br.style.height = '8px';
+            div.appendChild(br);
+
+            const grayHexesWithHash = [
+                '#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA', '#999999', '#888888',
+                '#777777', '#666666', '#555555', '#444444', '#333333', '#222222', '#111111', '#000000'
+            ];
+            grayHexesWithHash.forEach(grayHexWithHash => {
+                const grayHexNoHash = grayHexWithHash.replace('#', '');
+                const d = document.createElement('div');
+                d.className = 'palette-color' + (selectedPaletteColor && selectedPaletteColor.hex === grayHexNoHash ? ' selected' : '');
+                d.title = grayHexWithHash;
+                d.style.background = grayHexWithHash;
+                d.draggable = true;
+                d.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', grayHexNoHash);
+                };
+                d.onclick = () => {
+                    selectedPaletteColor = { name: grayHexWithHash, hex: grayHexNoHash };
+                    renderPalette();
+                    updateButtonStates();
+                };
+
+                const label = document.createElement('div');
+                label.textContent = grayHexWithHash;
+                label.style.fontSize = '10px';
+                label.style.textAlign = 'center';
+                label.style.color = isLightTheme ? '#000000' : '#FFFFFF';
+                label.style.marginTop = '2px';
+
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'flex';
+                wrapper.style.flexDirection = 'column';
+                wrapper.style.alignItems = 'center';
+                wrapper.appendChild(d);
+                wrapper.appendChild(label);
+                div.appendChild(wrapper);
+            });
+        }
+
+        function renderThemeItems() {
+            const div = document.getElementById('themeColors');
+            div.innerHTML = '';
+
+            filteredThemeItems.forEach((item) => {
+                if (!item.isColor) return;
+
+                const row = document.createElement('div');
+                row.className = 'color-row';
+
+                row.ondragover = (e) => { e.preventDefault(); };
+                row.ondragleave = () => { };
+                row.ondrop = (e) => {
+                    e.preventDefault();
+                    let colorDataFromDrop = e.dataTransfer.getData('text/plain');
+                    if (colorDataFromDrop && /^[0-9a-fA-F]{6}$/.test(colorDataFromDrop)) {
+                        const newHexColor = colorDataFromDrop.toUpperCase();
+                        item.fgColor = newHexColor;
+                        if (item.colorInfo) item.colorInfo.hex = newHexColor;
+
+                        const formattedValue = formatColorForOutput(newHexColor, item.colorInfo);
+                        if (item.attributeName) {
+                            item.el.setAttribute(item.attributeName, formattedValue);
+                        } else {
+                            item.el.textContent = formattedValue;
+                        }
+                        renderThemeItems();
+                    }
+                };
+
+                const fgSampleDiv = document.createElement('div');
+                fgSampleDiv.className = 'color-sample';
+                fgSampleDiv.style.background = '#' + item.fgColor;
+                fgSampleDiv.style.position = 'relative';
+
+                const colorInput = document.createElement('input');
+                colorInput.type = 'color';
+                colorInput.value = '#' + item.fgColor;
+                colorInput.style.opacity = 0;
+                colorInput.style.position = 'absolute';
+                colorInput.style.left = 0;
+                colorInput.style.top = 0;
+                colorInput.style.width = '100%';
+                colorInput.style.height = '100%';
+                colorInput.style.cursor = 'pointer';
+                colorInput.oninput = (e) => {
+                    const newHex = e.target.value.replace('#', '').toUpperCase();
+                    item.fgColor = newHex;
+                    if (item.colorInfo) item.colorInfo.hex = newHex;
+
+                    const formattedValue = formatColorForOutput(newHex, item.colorInfo);
+                    if (item.attributeName) {
+                        item.el.setAttribute(item.attributeName, formattedValue);
+                    } else {
+                        item.el.textContent = formattedValue;
+                    }
+                    renderThemeItems();
+                };
+                fgSampleDiv.appendChild(colorInput);
+                fgSampleDiv.onclick = () => colorInput.click();
+                row.appendChild(fgSampleDiv);
+
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = item.name;
+                nameSpan.style.color = 'var(--text-body)';
+                nameSpan.style.marginRight = '8px';
+                row.appendChild(nameSpan);
+
+                const detailsContainer = document.createElement('span');
+                const currentValSpan = document.createElement('span');
+                currentValSpan.textContent = formatColorForOutput(item.fgColor, item.colorInfo);
+                currentValSpan.style.color = '#' + item.fgColor;
+                currentValSpan.style.color = '#' + item.fgColor;
+
+                let prefixSpan = document.createElement('span');
+                prefixSpan.textContent = '(';
+                prefixSpan.style.color = 'var(--text-body)';
+                detailsContainer.appendChild(prefixSpan);
+                detailsContainer.appendChild(currentValSpan);
+
+                let fgTextPart = document.createElement('span');
+                fgTextPart.textContent = ` [fg: `;
+                fgTextPart.style.color = 'var(--text-body)';
+                detailsContainer.appendChild(fgTextPart);
+
+                let fgHexValPart = document.createElement('span');
+                fgHexValPart.textContent = `#${item.fgColor}`;
+                fgHexValPart.style.color = '#' + item.fgColor;
+                detailsContainer.appendChild(fgHexValPart);
+
+                let closeBracketPart = document.createElement('span');
+                closeBracketPart.textContent = `]`;
+                closeBracketPart.style.color = 'var(--text-body)';
+                detailsContainer.appendChild(closeBracketPart);
+
+                let suffixSpan = document.createElement('span');
+                suffixSpan.textContent = ')';
+                suffixSpan.style.color = 'var(--text-body)';
+                detailsContainer.appendChild(suffixSpan);
+
+                row.appendChild(detailsContainer);
+                div.appendChild(row);
+            });
+            updateButtonStates();
+        }
+
+        function filterThemeItems() {
+            const word = document.getElementById('filterInput').value.trim().toLowerCase();
+            const seen = new Set();
+
+            let colorItems = themeItems.filter(item => item.isColor);
+
+            if (word) {
+                colorItems = colorItems.filter(item => item.name.toLowerCase().includes(word));
+            }
+
+            filteredThemeItems = colorItems.filter(item => {
+                // Use a more robust key for de-duplication if names are not unique enough (e.g. same element name in different paths)
+                // For now, simple name de-duplication after sort.
+                const uniqueKey = item.name.toLowerCase() + (item.attributeName ? `[${item.attributeName.toLowerCase()}]` : '');
+                if (seen.has(uniqueKey)) return false;
+                seen.add(uniqueKey);
+                return true;
+            });
+
+            renderThemeItems();
+        }
+
+        document.getElementById('importPaletteBtn').onclick = () => document.getElementById('paletteFile').click();
+        document.getElementById('importThemeBtn').onclick = () => document.getElementById('themeFile').click();
+
+        document.getElementById('paletteFile').onchange = function (e) {
+            const file = e.target.files[0];
+            const fileNameDisplay = document.getElementById('paletteFileName');
+            if (!file) {
+                fileNameDisplay.textContent = 'No palette file selected';
+                return;
+            }
+            fileNameDisplay.textContent = file.name;
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                palette = parsePalette(ev.target.result);
+                renderPalette();
+            };
+            reader.readAsText(file);
+        };
+
+        document.getElementById('themeFile').onchange = function (e) {
+            const file = e.target.files[0];
+            const fileNameDisplay = document.getElementById('themeFileName');
+            if (!file) {
+                fileNameDisplay.textContent = 'No theme file selected';
+                originalThemeFileName = "Theme";
+                themeItems = [];
+                themeFileDoc = null;
+                filterThemeItems();
+                return;
+            }
+            fileNameDisplay.textContent = file.name;
+            const nameParts = file.name.split('.');
+            if (nameParts.length > 1) {
+                nameParts.pop();
+                originalThemeFileName = nameParts.join('.');
+            } else {
+                originalThemeFileName = file.name;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                const result = parseGenericThemeFile(ev.target.result);
+                themeFileDoc = result.doc;
+                themeItems = result.items;
+
+                themeItems.sort((a, b) => {
+                    const nameA = a.name.toLowerCase() + (a.attributeName ? `[${a.attributeName.toLowerCase()}]` : '');
+                    const nameB = b.name.toLowerCase() + (b.attributeName ? `[${b.attributeName.toLowerCase()}]` : '');
+                    return nameA.localeCompare(nameB);
+                });
+
+                filterThemeItems();
+            };
+            reader.readAsText(file);
+        };
+
+        document.getElementById('filterInput').oninput = filterThemeItems;
+
+        document.getElementById('bulkAssignBtn').onclick = function () {
+            if (!selectedPaletteColor || !selectedPaletteColor.hex || filteredThemeItems.length === 0) return;
+
+            const newHexColor = selectedPaletteColor.hex;
+
+            filteredThemeItems.forEach(item => {
+                if (!item.isColor) return;
+                item.fgColor = newHexColor;
+                if (item.colorInfo) item.colorInfo.hex = newHexColor;
+
+                const formattedValue = formatColorForOutput(newHexColor, item.colorInfo);
+                if (item.attributeName) {
+                    item.el.setAttribute(item.attributeName, formattedValue);
+                } else {
+                    item.el.textContent = formattedValue;
+                }
+            });
+            renderThemeItems();
+        };
+
+        function exportXml() {
+            if (!themeFileDoc) return;
+
+            function escapeXml(unsafeStr) {
+                const str = String(unsafeStr);
+                return str.replace(/&/g, '&')
+                    .replace(/</g, '<')
+                    .replace(/>/g, '>')
+                    .replace(/"/g, '"')
+                    .replace(/'/g, "'");
+            }
+
+            function formatNode(node, indentLevel) {
+                let xml = '';
+                const indentStr = '    ';
+                const currentIndent = indentStr.repeat(indentLevel);
+
+                switch (node.nodeType) {
+                    case Node.ELEMENT_NODE:
+                        xml += '\r\n' + currentIndent + '<' + node.nodeName;
+                        for (let i = 0; i < node.attributes.length; i++) {
+                            const attr = node.attributes[i];
+                            xml += ` ${attr.name}="${escapeXml(attr.value)}"`;
+                        }
+
+                        let hasNonTextChildNodes = false;
+                        for (let k = 0; k < node.childNodes.length; k++) {
+                            if (node.childNodes[k].nodeType === Node.ELEMENT_NODE || node.childNodes[k].nodeType === Node.COMMENT_NODE) {
+                                hasNonTextChildNodes = true;
+                                break;
+                            }
+                        }
+
+                        if (node.childNodes.length === 0) { // Truly empty
+                            xml += ` />`;
+                        } else if (!hasNonTextChildNodes) { // Only text nodes (or empty if all text nodes are whitespace)
+                            let collectedText = "";
+                            for (let k = 0; k < node.childNodes.length; k++) {
+                                // Collect all child node values if they are text or CDATA
+                                if (node.childNodes[k].nodeType === Node.TEXT_NODE || node.childNodes[k].nodeType === Node.CDATA_SECTION_NODE) {
+                                    collectedText += node.childNodes[k].nodeValue;
+                                }
+                            }
+                            xml += `>${escapeXml(collectedText)}</${node.nodeName}>`;
+                        } else { // Has element/comment children (mixed content or structured)
+                            xml += `>`;
+                            for (let i = 0; i < node.childNodes.length; i++) {
+                                xml += formatNode(node.childNodes[i], indentLevel + 1);
+                            }
+                            xml += '\r\n' + currentIndent + `</${node.nodeName}>`;
+                        }
+                        break;
+                    case Node.TEXT_NODE:
+                        // This is primarily for mixed content where text is interspersed with elements
+                        // If the parent is simple (only text), its text is handled by the ELEMENT_NODE case above.
+                        if (node.parentNode && (Array.from(node.parentNode.childNodes).some(n => n.nodeType === Node.ELEMENT_NODE || n.nodeType === Node.COMMENT_NODE))) {
+                            if (node.nodeValue.trim() !== '') { // Output significant text in mixed content
+                                xml += escapeXml(node.nodeValue);
+                            } else if (/\S/.test(node.nodeValue)) { // Output if it contains non-whitespace, even if trim is empty (e.g. " \n ")
+                                xml += escapeXml(node.nodeValue); // Preserve internal whitespace if it's part of mixed content
+                            }
+                        }
+                        break;
+                    case Node.COMMENT_NODE:
+                        xml += '\r\n' + currentIndent + '<!--' + escapeXml(node.nodeValue) + '-->';
+                        break;
+                    case Node.DOCUMENT_TYPE_NODE:
+                        let dtString = '<!DOCTYPE ' + node.name;
+                        if (node.publicId) dtString += ` PUBLIC "${node.publicId}"`;
+                        if (!node.publicId && node.systemId) dtString += ' SYSTEM';
+                        if (node.systemId) dtString += ` "${node.systemId}"`;
+                        dtString += '>';
+                        xml += '\r\n' + (indentLevel > 0 ? currentIndent : '') + dtString;
+                        break;
+                    case Node.PROCESSING_INSTRUCTION_NODE:
+                        if (node.target.toLowerCase() !== "xml") {
+                            xml += '\r\n' + (indentLevel > 0 ? currentIndent : '') + `<?${node.target} ${escapeXml(node.data)}?>`;
+                        }
+                        break;
+                    case Node.CDATA_SECTION_NODE:
+                        // Handled by parent element if it's a simple text content, or here if mixed
+                        if (node.parentNode && (Array.from(node.parentNode.childNodes).some(n => n.nodeType === Node.ELEMENT_NODE || n.nodeType === Node.COMMENT_NODE))) {
+                            xml += `<![CDATA[${node.nodeValue}]]>`;
+                        }
+                        break;
+                }
+                return xml;
+            }
+
+            let xmlDeclaration = '<?xml version="1.0" encoding="UTF-8"?>';
+            let leadingContent = '';
+
+            for (let i = 0; i < themeFileDoc.childNodes.length; i++) {
+                const child = themeFileDoc.childNodes[i];
+                if (child.nodeType === Node.PROCESSING_INSTRUCTION_NODE && child.target.toLowerCase() === "xml") {
+                    xmlDeclaration = `<?${child.target} ${child.data}?>`;
+                } else if (child !== themeFileDoc.documentElement) {
+                    leadingContent += formatNode(child, 0);
+                }
+            }
+
+            let formattedRoot = formatNode(themeFileDoc.documentElement, 0);
+
+            let prettyXml = xmlDeclaration + leadingContent + formattedRoot;
+
+            const now = new Date();
+            const pad = n => String(n).padStart(2, '0');
+            const y = now.getFullYear().toString().slice(-2);
+            const m = pad(now.getMonth() + 1);
+            const d = pad(now.getDate());
+            const H = pad(now.getHours());
+            const M = pad(now.getMinutes());
+            const filename = `${originalThemeFileName}.${y}${m}${d}${H}${M}.xml`;
+
+            const blob = new Blob([prettyXml], { type: 'application/xml;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(a.href);
+        }
+
+        document.getElementById('exportBtn').onclick = exportXml;
+
+        updateButtonStates();
+
+    </script>
+
+</body>
+
+</html>
