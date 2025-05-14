@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GOAT Theme Editor</title>
+    <link rel="icon" href="data:image/png;base64,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" type="image/x-icon">
+
+    <style>
+        :root {
+            /* Dark Theme (default) */
+            --bg-body: #282828;
+            /* Overall page background */
+            --bg-input: #222222;
+            /* Background for text inputs */
+            --bg-main: var(--bg-body);
+            /* Background of the main content area */
+            --bg-palette-container: #1e1e1e;
+            /* Background for the color palette squares */
+            --bg-sidebar: #232323;
+            /* Sidebar background */
+            --bg-theme-item-list: #232323;
+            /* Background for the list of theme color items */
+            --bg-theme-item-row-hover: #3a3a3a;
+            /* Background of a theme item row on hover */
+            --border-medium: #333333;
+            /* A medium-strength border color */
+            --border-strong: #444444;
+            /* A stronger border color */
+            --button-bg-disabled: #333333;
+            /* Background color for disabled buttons */
+            --button-bg-hover: #666666;
+            /* Button background on hover */
+            --button-bg: #444444;
+            /* Default button background */
+            --button-text-disabled: #888888;
+            /* Text color for disabled buttons */
+            --button-text: #ffffff;
+            /* Default button text color */
+            --selected-palette-border: #ffb347;
+            /* Border for selected palette color (dark theme) */
+            --selected-palette-shadow: #ffb34744;
+            /* Shadow for selected palette color (dark theme) */
+            --text-body: #d3d3d3;
+            /* Main text color for the body */
+            --text-filename-display: #aaaaaa;
+            /* Color for displaying file names */
+            --text-input: var(--text-body);
+            /* Text color for inputs */
+            --text-title: var(--text-body);
+            /* Color for main titles (like H1) */
+        }
+
+        body.light-theme {
+            --bg-body: #eeeeee;
+            --bg-input: #ffffff;
+            --bg-main: var(--bg-body);
+            --bg-palette-container: #f0f0f0;
+            --bg-sidebar: #f5f5f5;
+            --bg-theme-item-list: #f5f5f5;
+            --bg-theme-item-row-hover: #e0e0e0;
+            --border-medium: #dddddd;
+            --border-strong: #cccccc;
+            --button-bg-disabled: #e0e0e0;
+            --button-bg-hover: #bbbbbb;
+            --button-bg: #cccccc;
+            --button-text-disabled: #aaaaaa;
+            --button-text: #333333;
+            --selected-palette-border: #007bff;
+            /* Border for selected palette color (light theme) */
+            --selected-palette-shadow: #007bff44;
+            /* Shadow for selected palette color (light theme) */
+            --text-body: #333333;
+            --text-filename-display: #777777;
+            --text-input: var(--text-body);
+            --text-title: var(--text-body);
+        }
+
+        body {
+            background: var(--bg-body);
+            color: var(--text-body);
+            font-family: 'Source Code Pro', monospace;
+            font-size: 16px;
+            margin: 0;
+            min-height: 98vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row;
+            height: 98vh;
+        }
+
+        .sidebar {
+            background: var(--bg-sidebar);
+            padding: 24px 16px 16px 16px;
+            width: 550px;
+            border-right: 1px solid var(--border-strong);
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            transition: background 0.3s, border-color 0.3s;
+            flex-shrink: 0;
+            /* Prevent sidebar from shrinking if main content is wide */
+        }
+
+        .main {
+            flex-grow: 1;
+            /* Allow main to take remaining space */
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            max-height: 98vh;
+            background: var(--bg-main);
+            transition: background 0.3s;
+            overflow-x: auto;
+            /* Allow main content area to scroll horizontally if #themeColors gets too wide */
+            min-width: 0;
+            /* Important for flex children that need to shrink */
+        }
+
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            letter-spacing: 1px;
+            color: var(--text-title);
+        }
+
+        .theme-toggle-button {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s, color 0.2s;
+            margin-bottom: 10px;
+            align-self: flex-start;
+        }
+
+        .theme-toggle-button:hover {
+            background: var(--button-bg-hover);
+        }
+
+        .file-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .import-btn {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s, color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .import-btn:hover {
+            background: var(--button-bg-hover);
+        }
+
+        .file-name-display {
+            color: var(--text-filename-display);
+            font-size: 0.85rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex-grow: 1;
+        }
+
+
+        .filter-row {
+            margin: 12px 0 0 0;
+            display: flex;
+            gap: 8px;
+        }
+
+        #filterInput {
+            flex: 1;
+            padding: 6px 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-strong);
+            background: var(--bg-input);
+            color: var(--text-input);
+            transition: background 0.3s, color 0.3s, border-color 0.3s;
+        }
+
+        #bulkAssignBtn,
+        #exportBtn {
+            background: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            margin-top: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        #bulkAssignBtn:disabled,
+        #exportBtn:disabled {
+            background: var(--button-bg-disabled);
+            color: var(--button-text-disabled);
+            cursor: not-allowed;
+        }
+
+        #bulkAssignBtn:hover:not(:disabled),
+        #exportBtn:hover:not(:disabled) {
+            background: var(--button-bg-hover);
+        }
+
+        #paletteColors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            max-height: 460px;
+            overflow-y: auto;
+            background: var(--bg-palette-container);
+            border-radius: 4px;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid var(--border-medium);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .palette-color {
+            border: 2px solid var(--border-strong);
+            border-radius: 4px;
+            cursor: pointer;
+            display: inline-block;
+            height: 42px;
+            width: 42px;
+            margin: 0;
+            transition: border 0.2s, transform 0.1s, border-color 0.3s;
+        }
+
+        .palette-color.selected {
+            border: 2px solid var(--selected-palette-border);
+            box-shadow: 0 0 0 2px var(--selected-palette-shadow);
+            transform: scale(1.08);
+        }
+
+        .palette-color:hover {
+            border: 2px solid var(--button-bg-hover);
+        }
+
+        button {
+            width: fit-content;
+        }
+
+
+        #themeColors {
+            /* Container for all .color-row elements */
+            border: 1px solid var(--border-strong);
+            flex-grow: 1;
+            background: var(--bg-theme-item-list);
+            border-radius: 4px;
+            padding: 8px 0;
+            /* Vertical padding for the list container */
+            min-height: 0;
+            /* Essential for flex children that need to scroll */
+            transition: background 0.3s, border-color 0.3s;
+            overflow-y: auto;
+            /* Vertical scrolling for the list of rows */
+            overflow-x: auto;
+            /* Horizontal scrolling if a single row becomes too wide */
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-medium);
+            box-sizing: border-box;
+        }
+
+        .color-row:hover {
+            background: var(--bg-theme-item-row-hover);
+        }
+
+        .color-row:last-child {
+            border-bottom: none;
+        }
+
+        .color-sample {
+            /* The color swatch */
+            border: 1px solid var(--border-strong);
+            height: 42px;
+            width: 42px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            /* For the hidden color input */
+            box-sizing: border-box;
+            flex-shrink: 0;
+            /* Prevent swatch from shrinking */
+        }
+
+        /* Styles for the text spans within .color-row */
+        .color-row>span {
+            text-align: left;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            min-width: 160px;
+            padding: 2px 0;
+            margin: 0 10px;
+            max-width: 280px;
+        }
+
+        .color-row>span:nth-child(2) {
+            flex-shrink: 1;
+            max-width: 340px;
+            min-width: 280px;
+            text-align: left;
+        }
+
+        .color-row>span:nth-child(3) {
+            flex-shrink: 1;
+            max-width: 320px;
+            min-width: 0;
+            text-align: left;
+        }
+
+        .color-row>span:nth-child(4) {
+            flex-shrink: 1;
+            min-width: 140px;
+            max-width: 340px;
+            text-align: left;
+            overflow: visible;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div>
+                <h1>GOAT Theme Editor</h1>
+                <button id="themeToggleBtn" class="theme-toggle-button">Toggle Light or Dark</button>
+            </div>
+            <div class="file-inputs">
+                <div class="file-input-row">
+                    <button id="importPaletteBtn" class="import-btn">Import Palette</button>
+                    <span id="paletteFileName" class="file-name-display">No palette file selected</span>
+                    <input type="file" id="paletteFile" accept=".xml" style="display: none;">
+                </div>
+                <div class="file-input-row">
+                    <button id="importThemeBtn" class="import-btn">Import Theme</button>
+                    <span id="themeFileName" class="file-name-display">No theme file selected</span>
+                    <input type="file" id="themeFile" accept=".xml" style="display: none;">
+                </div>
+            </div>
+            <div class="filter-row">
+                <input type="text" id="filterInput" placeholder="Filter by name...">
+            </div>
+            <button id="bulkAssignBtn" disabled>Bulk Assign Selected Color</button>
+            <div id="paletteColors"></div>
+
+            <button id="exportBtn" disabled>Export Updated XML</button>
+        </div>
+        <div class="main">
+            <div id="themeColors">
+            </div>
+        </div>
+    </div>
+
+    <script>/* GoatColor.js
+* A compact, performant color conversion library for Hex, RGB, HSL, and OKLCH.
+* @author Bluff McCougar
+* @version 20250510.1230
+* @license MIT
+* Supports parsing modern and legacy CSS Color Module Level 4 syntax, including named colors.
+* OKLCH conversion based on Björn Ottosson's specification.
+*/
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t="undefined"!=typeof globalThis?globalThis:t||self).GoatColor=e()}(this,(function(){"use strict";const t=[[.4123907993,.3575843394,.1804807884],[.2126390059,.7151686788,.0721923154],[.0193308187,.1191947798,.9505321522]],e=[[3.240969942,-1.5373831776,-.4986107603],[-.9692436363,1.8759675015,.0415550574],[.0556300797,-.2039769589,1.0569715142]],r=(t,e,r)=>Math.max(e,Math.min(t,r)),a=(t,e=6)=>Math.round(t*10**e)/10**e,i=t=>"string"==typeof t&&t.endsWith("%");function s(t){const e=String(t);return i(e)?r(2.55*parseFloat(e),0,255):r(parseFloat(e),0,255)}function n(t){const e=String(t).toLowerCase().trim(),r=parseFloat(e);return isNaN(r)?0:e.endsWith("deg")||!/[a-z]$/.test(e)?r%360:e.endsWith("rad")?180*r/Math.PI%360:e.endsWith("grad")?.9*r%360:e.endsWith("turn")?360*r%360:0}function h(t){const e=String(t);if(!i(e))throw new Error("Saturation/Lightness components in HSL must be percentages (e.g., '50%').");const a=parseFloat(e);return r(a,0,100)}function o(t){if(null==t)return 1;const e=String(t).trim();return""===e?1:i(e)?r(parseFloat(e),0,100)/100:r(parseFloat(e),0,1)}function f(t){return Math.round(r(t,0,255)).toString(16).padStart(2,"0")}function d(t){const e=t/255;return e<=.04045?e/12.92:Math.pow((e+.055)/1.055,2.4)}function l(t){const e=t<=.0031308?12.92*t:1.055*Math.pow(t,1/2.4)-.055;return Math.round(255*r(e,0,1))}function c(t,e){return[t[0][0]*e[0]+t[0][1]*e[1]+t[0][2]*e[2],t[1][0]*e[0]+t[1][1]*e[1]+t[1][2]*e[2],t[2][0]*e[0]+t[2][1]*e[1]+t[2][2]*e[2]]}function u(t,e,a){const i=(t%360+360)%360/360,s=r(e,0,100)/100,n=r(a,0,100)/100;let h,o,f;if(0===s)h=o=f=n;else{const t=(t,e,r)=>(r<0&&(r+=1),r>1&&(r-=1),r<1/6?t+6*(e-t)*r:r<.5?e:r<2/3?t+(e-t)*(2/3-r)*6:t),e=n<.5?n*(1+s):n+s-n*s,r=2*n-e;h=t(r,e,i+1/3),o=t(r,e,i),f=t(r,e,i-1/3)}return{r:Math.round(255*h),g:Math.round(255*o),b:Math.round(255*f)}}const g=/^rgba?\(\s*([+\-\d.%]+)\s+([+\-\d.%]+)\s+([+\-\d.%]+)\s*(?:\/\s*([+\-\d.%]+)\s*)?\)$/i,b=/^rgba?\(\s*([+\-\d.%]+)\s*,\s*([+\-\d.%]+)\s*,\s*([+\-\d.%]+)\s*(?:,\s*([+\-\d.%]+)\s*)?\)$/i,m=/^hsla?\(\s*([+\-\d.%a-z]+)\s+([+\-\d.%]+)\s+([+\-\d.%]+)\s*(?:\/\s*([+\-\d.%]+)\s*)?\)$/i,p=/^hsla?\(\s*([+\-\d.%a-z]+)\s*,\s*([+\-\d.%]+)\s*,\s*([+\-\d.%]+)\s*(?:,\s*([+\-\d.%]+)\s*)?\)$/i,$=/^#?([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})([a-f\d]{1})?$|^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i,k=/^0x([a-f\d]{2})?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i,y=/^oklch\(\s*([+\-\d.%]+)\s+([+\-\d.%]+)\s+([+\-\d.%a-z]+)\s*(?:\/\s*([+\-\d.%]+)\s*)?\)$/i,v={aliceblue:"#f0f8ff",antiquewhite:"#faebd7",aqua:"#00ffff",aquamarine:"#7fffd4",azure:"#f0ffff",beige:"#f5f5dc",bisque:"#ffe4c4",black:"#000000",blanchedalmond:"#ffebcd",blue:"#0000ff",blueviolet:"#8a2be2",brown:"#a52a2a",burlywood:"#deb887",cadetblue:"#5f9ea0",chartreuse:"#7fff00",chocolate:"#d2691e",coral:"#ff7f50",cornflowerblue:"#6495ed",cornsilk:"#fff8dc",crimson:"#dc143c",cyan:"#00ffff",darkblue:"#00008b",darkcyan:"#008b8b",darkgoldenrod:"#b8860b",darkgray:"#a9a9a9",darkgreen:"#006400",darkgrey:"#a9a9a9",darkkhaki:"#bdb76b",darkmagenta:"#8b008b",darkolivegreen:"#556b2f",darkorange:"#ff8c00",darkorchid:"#9932cc",darkred:"#8b0000",darksalmon:"#e9967a",darkseagreen:"#8fbc8f",darkslateblue:"#483d8b",darkslategray:"#2f4f4f",darkslategrey:"#2f4f4f",darkturquoise:"#00ced1",darkviolet:"#9400d3",deeppink:"#ff1493",deepskyblue:"#00bfff",dimgray:"#696969",dimgrey:"#696969",dodgerblue:"#1e90ff",firebrick:"#b22222",floralwhite:"#fffaf0",forestgreen:"#228b22",fuchsia:"#ff00ff",gainsboro:"#dcdcdc",ghostwhite:"#f8f8ff",gold:"#ffd700",goldenrod:"#daa520",gray:"#808080",green:"#008000",greenyellow:"#adff2f",grey:"#808080",honeydew:"#f0fff0",hotpink:"#ff69b4",indianred:"#cd5c5c",indigo:"#4b0082",ivory:"#fffff0",khaki:"#f0e68c",lavender:"#e6e6fa",lavenderblush:"#fff0f5",lawngreen:"#7cfc00",lemonchiffon:"#fffacd",lightblue:"#add8e6",lightcoral:"#f08080",lightcyan:"#e0ffff",lightgoldenrodyellow:"#fafad2",lightgray:"#d3d3d3",lightgreen:"#90ee90",lightgrey:"#d3d3d3",lightpink:"#ffb6c1",lightsalmon:"#ffa07a",lightseagreen:"#20b2aa",lightskyblue:"#87cefa",lightslategray:"#778899",lightslategrey:"#778899",lightsteelblue:"#b0c4de",lightyellow:"#ffffe0",lime:"#00ff00",limegreen:"#32cd32",linen:"#faf0e6",magenta:"#ff00ff",maroon:"#800000",mediumaquamarine:"#66cdaa",mediumblue:"#0000cd",mediumorchid:"#ba55d3",mediumpurple:"#9370db",mediumseagreen:"#3cb371",mediumslateblue:"#7b68ee",mediumspringgreen:"#00fa9a",mediumturquoise:"#48d1cc",mediumvioletred:"#c71585",midnightblue:"#191970",mintcream:"#f5fffa",mistyrose:"#ffe4e1",moccasin:"#ffe4b5",navajowhite:"#ffdead",navy:"#000080",oldlace:"#fdf5e6",olive:"#808000",olivedrab:"#6b8e23",orange:"#ffa500",orangered:"#ff4500",orchid:"#da70d6",palegoldenrod:"#eee8aa",palegreen:"#98fb98",paleturquoise:"#afeeee",palevioletred:"#db7093",papayawhip:"#ffefd5",peachpuff:"#ffdab9",peru:"#cd853f",pink:"#ffc0cb",plum:"#dda0dd",powderblue:"#b0e0e6",purple:"#800080",rebeccapurple:"#663399",red:"#ff0000",rosybrown:"#bc8f8f",royalblue:"#4169e1",saddlebrown:"#8b4513",salmon:"#fa8072",sandybrown:"#f4a460",seagreen:"#2e8b57",seashell:"#fff5ee",sienna:"#a0522d",silver:"#c0c0c0",skyblue:"#87ceeb",slateblue:"#6a5acd",slategray:"#708090",slategrey:"#708090",snow:"#fffafa",springgreen:"#00ff7f",steelblue:"#4682b4",tan:"#d2b48c",teal:"#008080",thistle:"#d8bfd8",tomato:"#ff6347",transparent:"#ffffff00",turquoise:"#40e0d0",violet:"#ee82ee",wheat:"#f5deb3",white:"#ffffff",whitesmoke:"#f5f5f5",yellow:"#ffff00",yellowgreen:"#9acd32"};class w{constructor(t){this.r=0,this.g=0,this.b=0,this.a=1,this.input=t,this.valid=!1,this._parse(t)}_parse(t){if("string"!=typeof t&&null!=t)return;let a=(f=String(t))&&"string"==typeof f?f.trim():"";var f;if(!a&&null!=t)return;if(null==t)return;const d=a.toLowerCase();let w;if(v.hasOwnProperty(d)&&(a=v[d]),!((w=a.match($))&&(void 0!==w[5]?(this.r=parseInt(w[5],16),this.g=parseInt(w[6],16),this.b=parseInt(w[7],16),this.a=w[8]?parseInt(w[8],16)/255:1,this.valid=!0):void 0!==w[1]&&(this.r=parseInt(w[1]+w[1],16),this.g=parseInt(w[2]+w[2],16),this.b=parseInt(w[3]+w[3],16),this.a=w[4]?parseInt(w[4]+w[4],16)/255:1,this.valid=!0),this.valid)||(w=a.match(k))&&(8===a.length&&void 0===w[1]?(this.r=parseInt(w[2],16),this.g=parseInt(w[3],16),this.b=parseInt(w[4],16),this.a=1,this.valid=!0):10===a.length&&void 0!==w[1]&&(this.a=parseInt(w[1],16)/255,this.r=parseInt(w[2],16),this.g=parseInt(w[3],16),this.b=parseInt(w[4],16),this.valid=!0),this.valid))){if(w=a.match(y)){try{const t=function(t){const e=String(t),a=parseFloat(e);if(isNaN(a))throw new Error("Invalid OKLCH Lightness value.");return i(e)?r(a,0,100):r(100*a,0,100)}(w[1]),a=function(t){const e=String(t),a=parseFloat(e);if(isNaN(a))throw new Error("Invalid OKLCH Chroma value.");return i(e)?r(a/100*.4,0,1/0):r(a,0,1/0)}(w[2]),s=n(w[3]),h=o(w[4]),{r:f,g:d,b:u}=function(t,a,i){const s=r(t,0,100)/100,n=r(a,0,1/0),h=(i%360+360)%360*Math.PI/180,o=n*Math.cos(h),f=n*Math.sin(h),d=s+.3963377774*o+.2158037573*f,u=s-.1055613458*o-.0638541728*f,g=s-.0894841775*o-1.291485548*f,b=d*d*d,m=u*u*u,p=g*g*g,[$,k,y]=c(e,[b,m,p]);return{r:l($),g:l(k),b:l(y)}}(t,a,s);this.r=f,this.g=d,this.b=u,this.a=h,this.valid=!0}catch(t){this.valid=!1}if(this.valid)return}if(w=a.match(m)){try{const t=n(w[1]),e=h(w[2]),r=h(w[3]),a=o(w[4]),{r:i,g:s,b:f}=u(t,e,r);this.r=i,this.g=s,this.b=f,this.a=a,this.valid=!0}catch(t){this.valid=!1}if(this.valid)return}if(w=a.match(p)){try{const t=n(w[1]),e=h(w[2]),r=h(w[3]),a=o(w[4]),{r:i,g:s,b:f}=u(t,e,r);this.r=i,this.g=s,this.b=f,this.a=a,this.valid=!0}catch(t){this.valid=!1}if(this.valid)return}if(w=a.match(g)){try{if(this.r=s(w[1]),this.g=s(w[2]),this.b=s(w[3]),this.a=o(w[4]),isNaN(this.r)||isNaN(this.g)||isNaN(this.b)||isNaN(this.a))throw new Error("Invalid RGB component");this.valid=!0}catch(t){this.valid=!1}if(this.valid)return}if(w=a.match(b))try{if(this.r=s(w[1]),this.g=s(w[2]),this.b=s(w[3]),this.a=o(w[4]),isNaN(this.r)||isNaN(this.g)||isNaN(this.b)||isNaN(this.a))throw new Error("Invalid RGB component");this.valid=!0}catch(t){this.valid=!1}}}isValid(){return this.valid}toRgb(){return{r:Math.round(this.r),g:Math.round(this.g),b:Math.round(this.b)}}toRgba(){return{r:Math.round(this.r),g:Math.round(this.g),b:Math.round(this.b),a:this.a}}toRgbString(t=!1){const{r:e,g:r,b:a}=this.toRgb();return t?`rgb(${e}, ${r}, ${a})`:`rgb(${e} ${r} ${a})`}toRgbaString(t=!1){const{r:e,g:r,b:i}=this.toRgb(),s=a(this.a,3).toString();return t?`rgba(${e}, ${r}, ${i}, ${s})`:1===this.a?`rgb(${e} ${r} ${i})`:`rgb(${e} ${r} ${i} / ${s})`}toHex(){return`#${f(this.r)}${f(this.g)}${f(this.b)}`}toHexa(){return`#${f(this.r)}${f(this.g)}${f(this.b)}${f(255*this.a)}`}toHexShort(){if(this.a<1)return null;const t=f(this.r),e=f(this.g),r=f(this.b);return t[0]===t[1]&&e[0]===e[1]&&r[0]===r[1]?`#${t[0]}${e[0]}${r[0]}`:null}toHexaShort(){const t=f(this.r),e=f(this.g),r=f(this.b),a=f(255*this.a);return t[0]===t[1]&&e[0]===e[1]&&r[0]===r[1]&&a[0]===a[1]?`#${t[0]}${e[0]}${r[0]}${a[0]}`:null}toHsl(){const{h:t,s:e,l:r}=function(t,e,r){const a=t/255,i=e/255,s=r/255,n=Math.max(a,i,s),h=Math.min(a,i,s);let o=0,f=0,d=(n+h)/2;if(n===h)o=f=0;else{const t=n-h;switch(f=d>.5?t/(2-n-h):t/(n+h),n){case a:o=(i-s)/t+(i<s?6:0);break;case i:o=(s-a)/t+2;break;case s:o=(a-i)/t+4}o/=6}return{h:360*o,s:100*f,l:100*d}}(this.r,this.g,this.b);return{h:a(t,1),s:a(e,1),l:a(r,1)}}toHsla(){const{h:t,s:e,l:r}=this.toHsl();return{h:t,s:e,l:r,a:this.a}}_formatFixed(t,e){let r=t.toFixed(e);return e>0&&(r=r.replace(/\.?0+$/,"")),r}toHslString(t=!1){const{h:e,s:r,l:a}=this.toHsl(),i=this._formatFixed(e,1),s=this._formatFixed(r,1),n=this._formatFixed(a,1);return t?`hsl(${i}, ${s}%, ${n}%)`:`hsl(${i} ${s}% ${n}%)`}toHslaString(t=!1){const{h:e,s:r,l:i}=this.toHsl(),s=a(this.a,3).toString(),n=this._formatFixed(e,1),h=this._formatFixed(r,1),o=this._formatFixed(i,1);return t?`hsla(${n}, ${h}%, ${o}%, ${s})`:1===this.a?`hsl(${n} ${h}% ${o}%)`:`hsl(${n} ${h}% ${o}% / ${s})`}toOklch(){const{l:e,c:r,h:i}=function(e,r,a){const i=d(e),s=d(r),n=d(a),[h,o,f]=c(t,[i,s,n]),l=Math.cbrt(h),u=Math.cbrt(o),g=Math.cbrt(f),b=.2104542553*l+.793617785*u-.0040720468*g,m=1.9779984951*l-2.428592205*u+.4505937099*g,p=.0259040371*l+.7827717662*u-.808675766*g,$=Math.sqrt(m*m+p*p);let k=180*Math.atan2(p,m)/Math.PI;return k<0&&(k+=360),{l:100*b,c:$,h:k}}(this.r,this.g,this.b);return{l:a(e,2),c:a(r,4),h:a(i,2)}}toOklcha(){const{l:t,c:e,h:r}=this.toOklch();return{l:t,c:e,h:r,a:this.a}}toOklchString(){const{l:t,c:e,h:r}=this.toOklch();return`oklch(${this._formatFixed(t,2)}% ${this._formatFixed(e,4)} ${this._formatFixed(r,2)})`}toOklchaString(){const{l:t,c:e,h:r}=this.toOklch(),i=a(this.a,3).toString(),s=this._formatFixed(t,2),n=this._formatFixed(e,4),h=this._formatFixed(r,2);return 1===this.a?`oklch(${s}% ${n} ${h})`:`oklch(${s}% ${n} ${h} / ${i})`}toString(t="auto"){if(!this.valid)return String(this.input);const e=this.a<1,r=this.toHexShort(),a=this.toHexaShort();switch(t){case"hex":return this.toHex();case"hexa":return this.toHexa();case"hexShort":return r||this.toHex();case"hexaShort":return a||this.toHexa();case"rgb":return this.toRgbString();case"rgba":return this.toRgbaString();case"rgbLegacy":return this.toRgbString(!0);case"rgbaLegacy":return this.toRgbaString(!0);case"hsl":return this.toHslString();case"hsla":return this.toHslaString();case"hslLegacy":return this.toHslString(!0);case"hslaLegacy":return this.toHslaString(!0);case"oklch":return this.toOklchString();case"oklcha":return this.toOklchaString();default:return e?a||this.toHexa():r||this.toHex()}}}function S(t){return new w(t)}return S.goatColor=w,S.cssNamedColors=v,S.isValidColorString=function(t){return new w(t).isValid()},S}));</script>
+
+    <script>/* GoatThemeEditor.js
+Allows importing theme XML files and color palettes, editing colors, and exporting the updated theme XML.*/
+let palette=[],themeItems=[],filteredThemeItems=[],selectedPaletteColor=null,themeFileDoc=null,originalThemeFileName="Theme";const themeToggleBtn=document.getElementById("themeToggleBtn");function applyTheme(e){"light"===e?(document.body.classList.add("light-theme"),localStorage.setItem("themeEditorTheme","light")):(document.body.classList.remove("light-theme"),localStorage.setItem("themeEditorTheme","dark")),"function"==typeof renderPalette&&(palette.length>0||document.getElementById("paletteColors").innerHTML.includes("palette-color"))&&renderPalette(),"function"==typeof renderThemeItems&&(filteredThemeItems.length>0||themeItems.length>0)&&renderThemeItems()}function parseColorString(e){if("string"!=typeof e)return null;let t=null,o="",n=!1,r=!1;const l=(e=e.trim()).toLowerCase();if(l.startsWith("#")||/^(0x)?[0-9a-f]+$/i.test(e)){t="hex",e.startsWith("#")?o="#":l.startsWith("0x")&&(o=e.substring(0,2));const n=e.replace(/^#|^0x/i,"");(4===n.length||8===n.length||10===n.length&&l.startsWith("0x"))&&(r=!0)}else l.startsWith("rgb")?(t="rgb",o=e.substring(0,l.indexOf("(")),e.includes(",")&&(n=!0),(e.includes("/")||"rgba"===o.toLowerCase()&&e.split(n?",":" ").length>3)&&(r=!0)):l.startsWith("hsl")?(t="hsl",o=e.substring(0,l.indexOf("(")),e.includes(",")&&(n=!0),(e.includes("/")||"hsla"===o.toLowerCase()&&e.split(n?",":" ").length>3)&&(r=!0)):l.startsWith("oklch")&&(t="oklch",o=e.substring(0,l.indexOf("(")),e.includes("/")&&(r=!0));const a=new GoatColor(e);if(a.isValid()){const l=a.toRgb();return{hex:(Math.round(l.r).toString(16).padStart(2,"0")+Math.round(l.g).toString(16).padStart(2,"0")+Math.round(l.b).toString(16).padStart(2,"0")).toUpperCase(),alpha:a.a,goatColor:a,originalString:e,inputFormat:t||"unknown",originalPrefix:o,originalUsesCommas:n,originalHadExplicitAlpha:r}}return null}function formatColorForOutput(e){if(!e||!e.goatColor||!e.goatColor.isValid())return e&&"string"==typeof e.originalString?e.originalString:"#000000";const t=e.goatColor,o=e.inputFormat,n=e.originalPrefix||"",r=e.originalUsesCommas,l=e.originalHadExplicitAlpha||t.a<1||n.toLowerCase().endsWith("a")&&n.length>3;let a="";switch(o){case"hex":const o=e.originalString.replace(/^#|^0x/i,""),i=3===o.length||4===o.length;if(l){const e=t.toHexaShort();a=i&&e?e:t.toHexa()}else{const e=t.toHexShort();a=i&&e?e:t.toHex()}if("0x"===n.toLowerCase()){if(a.startsWith("#"))if(9===a.length)a=n+a.substring(7,9)+a.substring(1,7);else if(5===a.length&&"#"===a.charAt(0)){const e=a[1]+a[1],t=a[2]+a[2],o=a[3]+a[3];a=n+(a[4]+a[4])+e+t+o}else a=n+a.substring(1)}else""===n&&a.startsWith("#")?a=a.substring(1):"#"!==n||a.startsWith("#")||(a="#"+a);break;case"rgb":let s=l?t.toRgbaString(r):t.toRgbString(r);if(n&&s.toLowerCase().startsWith(n.toLowerCase()))a=n+s.substring(n.length);else if(n&&l&&"rgb"===n.toLowerCase()&&s.toLowerCase().startsWith("rgba")){let e=n+"a";a=s.toLowerCase().startsWith(e.toLowerCase())?e+s.substring(e.length):s}else a=s;break;case"hsl":let c=l?t.toHslaString(r):t.toHslString(r);a=n&&c.toLowerCase().startsWith(n.toLowerCase())?n+c.substring(n.length):c;break;case"oklch":a=l?t.toOklchaString():t.toOklchString();break;default:a=t.toString("auto"),a.startsWith("#")&&("0x"===n.toLowerCase()?a=9===a.length?n+a.substring(7,9)+a.substring(1,7):n+a.substring(1):""===n&&(a=a.substring(1)))}return a}function normalizeHex(e){const t=new GoatColor(e);return t.isValid()?t.toHex().substring(1).toUpperCase():"000000"}function getRelativeLuminance(e){const t=new GoatColor(e);if(!t.isValid())return 0;const o=t.toRgb(),n=[o.r,o.g,o.b].map((function(e){const t=e/255;return t<=.03928?t/12.92:Math.pow((t+.055)/1.055,2.4)}));return.2126*n[0]+.7152*n[1]+.0722*n[2]}function calculateContrastRatio(e,t){const o=getRelativeLuminance(e),n=getRelativeLuminance(t);return o>n?(o+.05)/(n+.05):(n+.05)/(o+.05)}function updateButtonStates(){const e=document.getElementById("bulkAssignBtn"),t=document.getElementById("exportBtn");if(!e||!t)return void console.error("updateButtonStates: bulkAssignBtn or exportBtn not found.");const o=themeItems.some((e=>e.isColor));t.disabled=!themeFileDoc||!o,e.disabled=!(selectedPaletteColor&&filteredThemeItems.some((e=>e.isColor)))}function parsePalette(e){const t=(new DOMParser).parseFromString(e,"application/xml");return"parsererror"===t.documentElement.nodeName?(console.error("Palette XML error:",t.documentElement.textContent),alert("Error: Invalid Palette XML."),[]):Array.from(t.getElementsByTagName("myColor")).map((e=>({name:e.getAttribute("name")||"Unnamed",hex:normalizeHex(e.getAttribute("hexvalue")||"")})))}function parseGenericThemeFile(e){const t=(new DOMParser).parseFromString(e,"application/xml");if("parsererror"===t.documentElement.nodeName)return console.error("Theme XML error:",t.documentElement.textContent),alert("Error: Invalid Theme XML."),{doc:null,items:[]};const o=[];return t.documentElement&&function e(t){if(t.nodeType!==Node.ELEMENT_NODE)return;if(t.attributes)for(let e=0;e<t.attributes.length;e++){const n=t.attributes[e],r=parseColorString(n.value);if(r){const e=t.getAttribute("name"),l=e?`${e}[${n.name}]`:`${t.nodeName}[${n.name}]_idx${o.length}`;o.push({name:l,currentColorHex:r.hex,colorInfo:r,el:t,attributeName:n.name,isColor:!0})}}let n=!1;for(let o=0;o<t.childNodes.length;o++)t.childNodes[o].nodeType===Node.ELEMENT_NODE&&(n=!0,e(t.childNodes[o]));if(!n&&t.textContent){const e=t.textContent.trim();if(e){const n=parseColorString(e);n&&o.push({name:`${t.nodeName}[_text_]`,currentColorHex:n.hex,colorInfo:n,el:t,attributeName:null,isColor:!0})}}}(t.documentElement),{doc:t,items:o}}function renderPalette(){const e=document.getElementById("paletteColors");if(!e)return void console.error("renderPalette: paletteColors element not found.");e.innerHTML="";const t=document.body.classList.contains("light-theme");palette.forEach((t=>{const o=t.hex,n=document.createElement("div");n.className="palette-color"+(selectedPaletteColor&&selectedPaletteColor.hex===o?" selected":""),n.title=(t.name||"Color")+" #"+o,n.style.background="#"+o,n.draggable=!0,n.ondragstart=e=>{e.dataTransfer.setData("text/plain",o)},n.onclick=()=>{selectedPaletteColor={name:t.name,hex:o},renderPalette(),updateButtonStates()};const r=document.createElement("div");r.textContent="#"+o,r.style.fontSize="10px",r.style.textAlign="center",r.style.color="#"+o,r.style.marginTop="2px";const l=document.createElement("div");l.style.display="flex",l.style.flexDirection="column",l.style.alignItems="center",l.appendChild(n),l.appendChild(r),e.appendChild(l)}));const o=document.createElement("div");o.style.width="100%",o.style.height="8px",e.appendChild(o);["#FFFFFF","#EEEEEE","#DDDDDD","#CCCCCC","#BBBBBB","#AAAAAA","#999999","#888888","#777777","#666666","#555555","#444444","#333333","#222222","#111111","#000000"].forEach((o=>{const n=o.replace("#",""),r=document.createElement("div");r.className="palette-color"+(selectedPaletteColor&&selectedPaletteColor.hex===n?" selected":""),r.title=o,r.style.background=o,r.draggable=!0,r.ondragstart=e=>{e.dataTransfer.setData("text/plain",n)},r.onclick=()=>{selectedPaletteColor={name:o,hex:n},renderPalette(),updateButtonStates()};const l=document.createElement("div");l.textContent=o,l.style.fontSize="10px",l.style.textAlign="center";const a=t?"#000000":"#FFFFFF";l.style.color=a,l.style.marginTop="2px";const i=document.createElement("div");i.style.display="flex",i.style.flexDirection="column",i.style.alignItems="center",i.appendChild(r),i.appendChild(l),e.appendChild(i)}))}function renderThemeItems(){const e=document.getElementById("themeColors");e?(e.innerHTML="",filteredThemeItems.forEach((t=>{if(!t.isColor)return;const o=document.createElement("div");o.className="color-row",o.ondragover=e=>{e.preventDefault()},o.ondrop=e=>{e.preventDefault();const o=e.dataTransfer.getData("text/plain");if(!/^[0-9A-F]{6}$/i.test(o))return void console.error("Invalid data dropped:",o);const n=new GoatColor("#"+o);if(!n.isValid()||!t.colorInfo)return void console.error("Dropped color is invalid or item.colorInfo is missing.");t.currentColorHex=o.toUpperCase(),t.colorInfo.goatColor=n,t.colorInfo.hex=t.currentColorHex,t.colorInfo.alpha=n.a;const r=formatColorForOutput(t.colorInfo);t.attributeName?t.el.setAttribute(t.attributeName,r):t.el.textContent=r,renderThemeItems(),updateButtonStates()};const n=document.createElement("div");n.className="color-sample",n.style.backgroundColor="#"+t.currentColorHex,n.style.position="relative";const r=document.createElement("input");r.type="color",r.value="#"+t.currentColorHex,r.style.opacity=0,r.style.position="absolute",r.style.left="0",r.style.top="0",r.style.width="100%",r.style.height="100%",r.style.cursor="pointer",r.oninput=e=>{const o=e.target.value,n=new GoatColor(o);if(n.isValid()&&t.colorInfo){const e=n.toHex().substring(1).toUpperCase();t.currentColorHex=e,t.colorInfo.goatColor=n,t.colorInfo.hex=e,t.colorInfo.alpha=n.a}const r=formatColorForOutput(t.colorInfo);t.attributeName?t.el.setAttribute(t.attributeName,r):t.el.textContent=r,renderThemeItems()},n.appendChild(r),n.onclick=()=>r.click(),o.appendChild(n);let l="",a="";const i=t.name.match(/^(.*?)\[(.*?)\](?:_idx\d+)?$/);i?(l=i[1],a=i[2],"_text_"===a&&(a="")):(l=t.name.replace(/_idx\d+$/,""),t.attributeName&&(a=t.attributeName));const s=document.createElement("span");s.textContent=l.trim(),s.title=l.trim(),s.style.color="var(--text-body)",o.appendChild(s);const c=document.createElement("span");c.textContent=a,c.style.color="var(--text-body)",o.appendChild(c);const m=document.createElement("span");let d=`${formatColorForOutput(t.colorInfo)} (hex: ${`#${t.currentColorHex}`}`;t.colorInfo&&t.colorInfo.alpha<1&&(d+=` A:${t.colorInfo.alpha.toFixed(2)}`),d+=")",m.textContent=d,m.style.color="#"+t.currentColorHex;const u=getComputedStyle(o).backgroundColor;calculateContrastRatio("#"+t.currentColorHex,u)<3?getRelativeLuminance("#"+t.currentColorHex)>.5?m.style.backgroundColor="rgba(75, 75, 75, 0.67)":m.style.backgroundColor="rgba(220, 220, 220, 0.67)":m.style.backgroundColor="transparent",m.style.padding="2px 6px",m.style.borderRadius="3px",o.appendChild(m),e.appendChild(o)})),updateButtonStates()):console.error("renderThemeItems: themeColors element not found.")}function filterThemeItems(){const e=document.getElementById("filterInput");if(!e)return void console.error("filterThemeItems: filterInput not found.");const t=e.value.trim().toLowerCase();filteredThemeItems=t?themeItems.filter((e=>e.isColor&&e.name.toLowerCase().includes(t))):themeItems.filter((e=>e.isColor)),filteredThemeItems.sort(((e,t)=>e.name.localeCompare(t.name))),renderThemeItems()}function exportXml(){if(console.log("exportXml function called."),!themeFileDoc)return console.warn("ExportXML called but no themeFileDoc loaded."),void alert("No theme file loaded to export.");function e(e){return String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&apos;")}function t(o,n){let r="";const l="    ".repeat(n);switch(o.nodeType){case Node.ELEMENT_NODE:r+="\r\n"+l+"<"+o.nodeName;for(let t=0;t<o.attributes.length;t++){const n=o.attributes[t];r+=` ${n.name}="${e(n.value)}"`}if(0===o.childNodes.length)r+=`></${o.nodeName}>`;else{let a=!1;for(let e=0;e<o.childNodes.length;e++){const t=o.childNodes[e].nodeType;if(t===Node.ELEMENT_NODE||t===Node.COMMENT_NODE){a=!0;break}}if(a){r+=">";for(let e=0;e<o.childNodes.length;e++)r+=t(o.childNodes[e],n+1);r+="\r\n"+l+`</${o.nodeName}>`}else{r+=">";let t="";for(let n=0;n<o.childNodes.length;n++){const r=o.childNodes[n];r.nodeType===Node.TEXT_NODE?t+=e(r.nodeValue):r.nodeType===Node.CDATA_SECTION_NODE&&(t+=`<![CDATA[${r.nodeValue}]]>`)}r+=t,r+=`</${o.nodeName}>`}}break;case Node.TEXT_NODE:""!==o.nodeValue.trim()&&(r+=e(o.nodeValue));break;case Node.COMMENT_NODE:r+="\r\n"+l+`\x3c!--${o.nodeValue}--\x3e`;break;case Node.DOCUMENT_TYPE_NODE:let a="<!DOCTYPE "+o.name;o.publicId&&(a+=` PUBLIC "${o.publicId}"`),!o.publicId&&o.systemId&&(a+=" SYSTEM"),o.systemId&&(a+=` "${o.systemId}"`),a+=">",r+="\r\n"+(n>0?l:"")+a;break;case Node.PROCESSING_INSTRUCTION_NODE:"xml"!==o.target.toLowerCase()&&(r+="\r\n"+(n>0?l:"")+`<?${o.target} ${o.data}?>`);break;case Node.CDATA_SECTION_NODE:r+=`<![CDATA[${o.nodeValue}]]>`}return r}let o='<?xml version="1.0" encoding="UTF-8"?>',n="";for(let e=0;e<themeFileDoc.childNodes.length;e++){const r=themeFileDoc.childNodes[e];r.nodeType===Node.PROCESSING_INSTRUCTION_NODE&&"xml"===r.target.toLowerCase()?o=`<?${r.target} ${r.data}?>`:r!==themeFileDoc.documentElement&&(n+=t(r,0))}let r=t(themeFileDoc.documentElement,0);r.startsWith("\r\n")&&(r=r.substring(2));let l=o+(n?n+"\r\n":"\r\n")+r;const a=new Date,i=e=>String(e).padStart(2,"0"),s=a.getFullYear().toString().slice(-2),c=i(a.getMonth()+1),m=i(a.getDate()),d=i(a.getHours()),u=i(a.getMinutes()),h=`${originalThemeFileName}.${s}${c}${m}${d}${u}.xml`,p=new Blob([l],{type:"application/xml;charset=utf-8"}),g=document.createElement("a");g.href=URL.createObjectURL(p),g.download=h,document.body.appendChild(g),g.click(),document.body.removeChild(g),URL.revokeObjectURL(g.href)}const importPaletteBtn=document.getElementById("importPaletteBtn"),paletteFileEl=document.getElementById("paletteFile"),paletteFileNameEl=document.getElementById("paletteFileName"),importThemeBtn=document.getElementById("importThemeBtn"),themeFileEl=document.getElementById("themeFile"),themeFileNameEl=document.getElementById("themeFileName"),filterInputElement=document.getElementById("filterInput"),bulkAssignBtnElement=document.getElementById("bulkAssignBtn"),exportBtnElement=document.getElementById("exportBtn");themeToggleBtn?themeToggleBtn.onclick=()=>{document.body.classList.contains("light-theme")?applyTheme("dark"):applyTheme("light")}:console.error("Theme toggle button not found!"),importPaletteBtn&&paletteFileEl&&paletteFileNameEl?(importPaletteBtn.onclick=()=>{paletteFileEl.value=null,paletteFileEl.click()},paletteFileEl.onchange=function(e){const t=e.target.files[0];if(!t)return void(paletteFileNameEl.textContent="No palette file selected");paletteFileNameEl.textContent=t.name;const o=new FileReader;o.onload=function(e){try{e.target.result?(palette=parsePalette(e.target.result),renderPalette(),updateButtonStates()):alert("Error: Palette file content is empty or unreadable.")}catch(e){alert(`Error processing palette file: ${e.message}`)}},o.onerror=function(){alert(`Error reading palette file: ${o.error?o.error.message:"Unknown error"}`)};try{o.readAsText(t)}catch(e){alert(`Could not start reading palette file: ${e.message}`)}}):console.error("Could not find all required DOM elements for palette import!"),importThemeBtn&&themeFileEl&&themeFileNameEl?(importThemeBtn.onclick=()=>{themeFileEl.value=null,themeFileEl.click()},themeFileEl.onchange=function(e){const t=e.target.files[0];if(!t)return themeFileNameEl.textContent="No theme file selected",originalThemeFileName="Theme",themeItems=[],themeFileDoc=null,void filterThemeItems();themeFileNameEl.textContent=t.name;const o=t.name.split(".");o.length>1&&o.pop(),originalThemeFileName=o.join(".")||t.name;const n=new FileReader;n.onload=function(e){try{if(e.target.result){const t=parseGenericThemeFile(e.target.result);themeFileDoc=t.doc,themeItems=t.items,themeItems.sort(((e,t)=>e.name.localeCompare(t.name))),filterThemeItems()}else alert("Error: Theme file content is empty or unreadable.")}catch(e){alert(`Error processing theme file: ${e.message}`)}},n.onerror=function(){alert(`Error reading theme file: ${n.error?n.error.message:"Unknown error"}`)};try{n.readAsText(t)}catch(e){alert(`Could not start reading theme file: ${e.message}`)}}):console.error("Could not find all required DOM elements for theme import!"),filterInputElement?filterInputElement.oninput=filterThemeItems:console.error("Filter input element not found!"),bulkAssignBtnElement?bulkAssignBtnElement.onclick=function(){if(!selectedPaletteColor||!selectedPaletteColor.hex||0===filteredThemeItems.length)return;const e=selectedPaletteColor.hex;new GoatColor("#"+e).isValid()?(filteredThemeItems.forEach((t=>{if(!t.isColor||!t.colorInfo)return;t.currentColorHex=e,t.colorInfo.goatColor=new GoatColor("#"+e),t.colorInfo.hex=e,t.colorInfo.alpha=t.colorInfo.goatColor.a;const o=formatColorForOutput(t.colorInfo);t.attributeName?t.el.setAttribute(t.attributeName,o):t.el.textContent=o})),renderThemeItems()):console.error("Selected palette color for bulk assign is invalid:",e)}:console.error("Bulk Assign button element not found!"),exportBtnElement?exportBtnElement.onclick=exportXml:console.error("Export button element not found!");const initialTheme=localStorage.getItem("themeEditorTheme")||"dark";applyTheme(initialTheme),updateButtonStates(),renderPalette(),renderThemeItems();</script>
+
+</body>
+
+</html>
