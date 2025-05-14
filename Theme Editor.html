@@ -847,33 +847,53 @@
                             const attr = node.attributes[i];
                             xml += ` ${attr.name}="${escapeXml(attr.value)}"`;
                         }
-                        let hasElementChildren = false;
-                        let hasTextChild = false;
-                        let simpleTextContent = "";
 
-                        if (node.childNodes.length > 0) {
-                            for (let k = 0; k < node.childNodes.length; k++) {
-                                if (node.childNodes[k].nodeType === Node.ELEMENT_NODE) { hasElementChildren = true; break; }
-                                if (node.childNodes[k].nodeType === Node.TEXT_NODE && node.childNodes[k].nodeValue.trim() !== '') { hasTextChild = true; simpleTextContent += node.childNodes[k].nodeValue; }
-                                if (node.childNodes[k].nodeType === Node.CDATA_SECTION_NODE) { hasTextChild = true; simpleTextContent += `<![CDATA[${node.childNodes[k].nodeValue}]]>`; }
+                        if (node.childNodes.length === 0) {
+                            // Truly empty element: <Tag></Tag>
+                            xml += `></${node.nodeName}>`;
+                        } else {
+                            // Element has children, determine formatting style
+                            let useMultilineFormat = false;
+                            for (let i = 0; i < node.childNodes.length; i++) {
+                                const childType = node.childNodes[i].nodeType;
+                                if (childType === Node.ELEMENT_NODE || childType === Node.COMMENT_NODE) {
+                                    useMultilineFormat = true;
+                                    break;
+                                }
+                            }
+
+                            if (useMultilineFormat) {
+                                // Contains nested elements or comments: use multi-line indented format
+                                xml += `>`;
+                                for (let i = 0; i < node.childNodes.length; i++) {
+                                    // Recursive call will handle indentation and newlines for children
+                                    xml += formatNode(node.childNodes[i], indentLevel + 1);
+                                }
+                                xml += '\r\n' + currentIndent + `</${node.nodeName}>`;
+                            } else {
+                                // Only contains TEXT_NODE and/or CDATA_SECTION_NODE children: use single-line format
+                                xml += `>`;
+                                let simpleContent = '';
+                                for (let i = 0; i < node.childNodes.length; i++) {
+                                    const child = node.childNodes[i];
+                                    if (child.nodeType === Node.TEXT_NODE) {
+                                        simpleContent += escapeXml(child.nodeValue); // Get raw text value
+                                    } else if (child.nodeType === Node.CDATA_SECTION_NODE) {
+                                        simpleContent += `<![CDATA[${child.nodeValue}]]>`;
+                                    }
+                                    // Other node types (like PIs) inside such a "simple content" block are rare for UDL
+                                    // and this logic assumes they are not present or don't affect this formatting choice.
+                                }
+                                xml += simpleContent;
+                                xml += `</${node.nodeName}>`; // Closing tag on the same line
                             }
                         }
-                        if (node.childNodes.length === 0) {
-                            xml += ` />`;
-                        } else if (!hasElementChildren && hasTextChild) {
-                            if (simpleTextContent.includes("<![CDATA[")) { xml += `>${simpleTextContent}</${node.nodeName}>`; }
-                            else { xml += `>${escapeXml(simpleTextContent)}</${node.nodeName}>`; }
-                        } else if (hasElementChildren) {
-                            xml += `>`;
-                            for (let i = 0; i < node.childNodes.length; i++) { xml += formatNode(node.childNodes[i], indentLevel + 1); }
-                            xml += '\r\n' + currentIndent + `</${node.nodeName}>`;
-                        } else { xml += `></${node.nodeName}>`; }
-                        break;
+                        break; // End of case Node.ELEMENT_NODE
                     case Node.TEXT_NODE:
                         if (node.nodeValue.trim() !== '') { xml += escapeXml(node.nodeValue); }
                         break;
                     case Node.COMMENT_NODE:
-                        xml += '\r\n' + currentIndent + ``; // Removed <!-- ${node.nodeValue} --> to effectively strip comments from output
+                        xml += '\r\n' + currentIndent + `<!--${node.nodeValue}-->`;
                         break;
                     case Node.DOCUMENT_TYPE_NODE:
                         let dtString = '<!DOCTYPE ' + node.name;
