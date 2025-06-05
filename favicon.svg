@@ -1,0 +1,21 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <style>
+        .brace {
+            stroke-width: 4; /* Boldness of the brace */
+            stroke-linecap: round; /* Rounded ends for a softer look */
+            stroke-linejoin: round;
+        }
+        .brace1 {
+            stroke: #529DCF; /* A nice blue, similar to your hover color */
+        }
+        .brace2 {
+            stroke: #FFA07A; /* Light Salmon - a contrasting warm color */
+        }
+    </style>
+
+    <!-- Left Brace -->
+    <path class="brace brace1" d="M12 6 C 8 6, 6 10, 6 16 S 8 26, 12 26" />
+
+    <!-- Right Brace -->
+    <path class="brace brace2" d="M20 6 C 24 6, 26 10, 26 16 S 24 26, 20 26" />
+</svg>
