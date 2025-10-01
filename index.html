@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>GOAT Theme Editor</title>
+    <link rel="stylesheet" href="css/GoatThemeEditor.css">
+
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <div>
+                <h1>GOAT Theme Editor</h1>
+                <button id="themeToggleBtn" class="theme-toggle-button">Toggle Light or Dark</button>
+            </div>
+            <div class="file-inputs">
+                <div class="file-input-row">
+                    <button id="importPaletteBtn" class="import-btn">Import Palette</button>
+                    <span id="paletteFileName" class="file-name-display">No palette file selected</span>
+                    <input type="file" id="paletteFile" accept=".xml" style="display: none;">
+                </div>
+                <div class="file-input-row">
+                    <button id="importThemeBtn" class="import-btn">Import Theme</button>
+                    <span id="themeFileName" class="file-name-display">No theme file selected</span>
+                    <input type="file" id="themeFile" accept=".xml" style="display: none;">
+                </div>
+            </div>
+            <div class="filter-row">
+                <input type="text" id="filterInput" placeholder="Filter by name...">
+            </div>
+            <button id="bulkAssignBtn" class="btn-primary" disabled>Bulk Assign Selected Color</button>
+            <div class="add-color-row">
+                <input type="text" id="customColorInput" placeholder="Add color (hex, rgb, etc)...">
+                <button id="addCustomColorBtn">+</button>
+            </div>
+            <div id="paletteColors"></div>
+
+            <button id="exportBtn" class="btn-primary" disabled>Export Updated XML</button>
+        </div>
+        <div class="main">
+            <div id="themeColors">
+            </div>
+        </div>
+    </div>
+
+    <script src="js/GoatColorToolbox.js" defer></script>
+    <script src="js/GoatThemeEditorColorUtils.js" defer></script>
+    <script src="js/GoatThemeEditorIO.js" defer></script>
+    <script src="js/GoatThemeEditorUI.js" defer></script>
+    <script src="js/GoatThemeEditor.js" defer></script>
+
+</body>
+
+</html>
