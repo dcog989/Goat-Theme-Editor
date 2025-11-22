@@ -1,11 +1,10 @@
 # Project Specific
 .ai/
-.archive/
 .docs/
 .repomixignore
 build/
 repomix.config.json
-.docs/ToDo.md
+.cheetah/
 
 # -----------------------------------------------------------------------------
 
