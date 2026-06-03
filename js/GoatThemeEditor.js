@@ -13,6 +13,8 @@ let filteredThemeItems = [];
 let selectedPaletteColor = null;
 let themeFileDoc = null;
 let originalThemeFileName = "Theme";
+let currentPaletteReadId = 0;
+let currentThemeReadId = 0;
 
 
 // --- Core Logic Functions ---
@@ -42,6 +44,9 @@ function addCustomColor() {
 
 function deleteColorFromPalette(hexToDelete) {
     palette = palette.filter(p => p.hex !== hexToDelete);
+    if (selectedPaletteColor && selectedPaletteColor.hex === hexToDelete) {
+        selectedPaletteColor = null;
+    }
     renderPalette();
 }
 
@@ -55,10 +60,6 @@ function updateItemColor(item, newColorString) {
             newColorInfo.inputFormat = item.colorInfo.inputFormat;
             newColorInfo.originalPrefix = item.colorInfo.originalPrefix;
             newColorInfo.originalUsesCommas = item.colorInfo.originalUsesCommas;
-            if (item.colorInfo.originalHadExplicitAlpha) {
-                newColorInfo.instance = newColorInfo.instance.alpha(item.colorInfo.alpha);
-                newColorInfo.alpha = item.colorInfo.alpha;
-            }
         }
 
         const formattedValue = formatColorForOutput(newColorInfo);
@@ -127,8 +128,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = e.target.files[0];
             if (!file) { paletteFileNameEl.textContent = 'No palette file selected'; return; }
             paletteFileNameEl.textContent = file.name;
+            currentPaletteReadId++;
+            const thisReadId = currentPaletteReadId;
             const reader = new FileReader();
             reader.onload = function (ev) {
+                if (thisReadId !== currentPaletteReadId) return;
                 try {
                     if (ev.target.result) {
                         palette = parsePalette(ev.target.result);
@@ -137,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else { alert("Error: Palette file content is empty or unreadable."); }
                 } catch (error) { alert(`Error processing palette file: ${error.message}`); }
             };
-            reader.onerror = function () { alert(`Error reading palette file: ${reader.error ? reader.error.message : 'Unknown error'}`); };
+            reader.onerror = function () { if (thisReadId !== currentPaletteReadId) return; alert(`Error reading palette file: ${reader.error ? reader.error.message : 'Unknown error'}`); };
             try { reader.readAsText(file); } catch (readError) { alert(`Could not start reading palette file: ${readError.message}`); }
         };
     }
@@ -158,8 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameParts = file.name.split('.');
             if (nameParts.length > 1) nameParts.pop();
             originalThemeFileName = nameParts.join('.') || file.name;
+            currentThemeReadId++;
+            const thisReadId = currentThemeReadId;
             const reader = new FileReader();
             reader.onload = function (ev) {
+                if (thisReadId !== currentThemeReadId) return;
                 try {
                     if (ev.target.result) {
                         const result = parseGenericThemeFile(ev.target.result);
@@ -170,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else { alert("Error: Theme file content is empty or unreadable."); }
                 } catch (error) { alert(`Error processing theme file: ${error.message}`); }
             };
-            reader.onerror = function () { alert(`Error reading theme file: ${reader.error ? reader.error.message : 'Unknown error'}`); };
+            reader.onerror = function () { if (thisReadId !== currentThemeReadId) return; alert(`Error reading theme file: ${reader.error ? reader.error.message : 'Unknown error'}`); };
             try { reader.readAsText(file); } catch (readError) { alert(`Could not start reading theme file: ${readError.message}`); }
         };
     }
@@ -207,7 +214,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial Setup Calls
     const initialTheme = localStorage.getItem('themeEditorTheme') || 'dark';
     applyTheme(initialTheme);
-    updateButtonStates();
     renderPalette();
     renderThemeItems();
 });

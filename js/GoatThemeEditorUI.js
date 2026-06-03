@@ -14,7 +14,8 @@ function applyTheme(themeName) {
         document.body.classList.remove('light-theme');
         localStorage.setItem('themeEditorTheme', 'dark');
     }
-    if (typeof renderPalette === 'function' && (palette.length > 0 || document.getElementById('paletteColors').innerHTML.includes('palette-color'))) {
+    const paletteColorsEl = document.getElementById('paletteColors');
+    if (typeof renderPalette === 'function' && (palette.length > 0 || (paletteColorsEl && paletteColorsEl.innerHTML.includes('palette-color')))) {
         renderPalette();
     }
     if (typeof renderThemeItems === 'function' && (filteredThemeItems.length > 0 || themeItems.length > 0)) {
@@ -64,7 +65,7 @@ function renderPalette() {
         label.textContent = '#' + colorHexNoHash;
         label.style.fontSize = '10px';
         label.style.textAlign = 'center';
-        label.style.color = '#' + colorHexNoHash;
+        label.style.color = isEditorLightTheme ? '#000000' : '#FFFFFF';
         label.style.marginTop = '2px';
 
         wrapper.appendChild(d);
@@ -123,8 +124,8 @@ function updateThemeItemRow(item, row) {
 
     if (valueInput) {
         valueInput.value = item.colorInfo.originalString;
-        valueInput.style.color = fullHex;
-        valueInput.style.backgroundColor = getContrastingBackground(fullHex);
+        valueInput.style.color = getContrastingBackground(fullHex);
+        valueInput.style.backgroundColor = fullHex;
     }
     if (sampleText) {
         sampleText.style.color = fullHex;

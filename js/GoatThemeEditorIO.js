@@ -59,7 +59,7 @@ function parseGenericThemeFile(xml) {
             }
         } else {
             const textContent = node.textContent.trim();
-            if (textContent) {
+            if (textContent && /^#|^rgb|^hsl|^oklch|^[0-9a-fA-F]{3,}$/.test(textContent)) {
                 const parsedColor = parseColorString(textContent);
                 if (parsedColor) {
                     items.push({ id: `gte-item-${items.length}`, name: `${node.nodeName}[_text_]`, currentColorHex: parsedColor.hex, colorInfo: parsedColor, el: node, attributeName: null, isColor: true });
@@ -97,6 +97,8 @@ function exportXml() {
     a.download = filename;
     document.body.appendChild(a);
     a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+    }, 100);
 }

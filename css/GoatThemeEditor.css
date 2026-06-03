@@ -1,3 +1,5 @@
+*, *::before, *::after { box-sizing: border-box; }
+
 :root {
     --bg-body: #1a1a1a;
     --bg-input: #222222;
@@ -48,18 +50,26 @@ body {
     font-family: "Source Code Pro", monospace;
     font-size: 16px;
     margin: 0;
-    min-height: 98vh;
+    min-height: 100vh;
     transition: background 0.3s, color 0.3s;
+}
+@media (prefers-reduced-motion: reduce) {
+    body, .container, .sidebar, .main, .theme-toggle-button, .import-btn,
+    #filterInput, .btn-primary, #paletteColors, .palette-color,
+    .color-value-input, .palette-color-delete-btn {
+        transition: none !important;
+    }
 }
 .container {
     display: flex;
     flex-direction: row;
-    height: 98vh;
+    min-height: 100vh;
 }
 .sidebar {
     background: var(--bg-sidebar);
     padding: 24px 16px 16px 16px;
     width: 550px;
+    max-width: 100%;
     border-right: 1px solid var(--border-strong);
     display: flex;
     flex-direction: column;
@@ -99,6 +109,13 @@ h1 {
 }
 .theme-toggle-button:hover {
     background: var(--button-bg-hover);
+}
+.theme-toggle-button:focus-visible,
+.import-btn:focus-visible,
+.btn-primary:focus-visible,
+#addCustomColorBtn:focus-visible {
+    outline: 2px solid var(--selected-palette-border);
+    outline-offset: 2px;
 }
 .file-inputs {
     display: flex;

@@ -9,6 +9,11 @@ function toHexByte(value) {
     return Math.round(Math.min(Math.max(value, 0), 255)).toString(16).padStart(2, '0');
 }
 
+function formatAlpha(a) {
+    if (Math.abs(a - 1) < 0.0001) return '1';
+    return parseFloat(a.toFixed(8)).toString();
+}
+
 function hexToShort(hex) {
     if (hex.length !== 7) return null;
     if (hex[1] === hex[2] && hex[3] === hex[4] && hex[5] === hex[6]) {
@@ -115,8 +120,6 @@ function formatColorForOutput(colorInfo) {
                 }
             } else if (originalPrefix === "" && outputString.startsWith("#")) {
                 outputString = outputString.substring(1);
-            } else if (originalPrefix === "#" && !outputString.startsWith("#")) {
-                outputString = "#" + outputString;
             }
             break;
         }
@@ -128,13 +131,13 @@ function formatColorForOutput(colorInfo) {
             const a = rgb.alpha;
             if (usesCommas) {
                 if (outputAlpha) {
-                    outputString = `rgba(${r}, ${g}, ${b}, ${a === 1 ? '1' : a})`;
+                    outputString = `rgba(${r}, ${g}, ${b}, ${formatAlpha(a)})`;
                 } else {
                     outputString = `rgb(${r}, ${g}, ${b})`;
                 }
             } else {
                 if (outputAlpha) {
-                    outputString = `rgb(${r} ${g} ${b} / ${a === 1 ? '1' : a})`;
+                    outputString = `rgb(${r} ${g} ${b} / ${formatAlpha(a)})`;
                 } else {
                     outputString = `rgb(${r} ${g} ${b})`;
                 }
@@ -155,13 +158,13 @@ function formatColorForOutput(colorInfo) {
             const a = hsl.alpha;
             if (usesCommas) {
                 if (outputAlpha) {
-                    outputString = `hsla(${h}, ${s}%, ${l}%, ${a === 1 ? '1' : a})`;
+                    outputString = `hsla(${h}, ${s}%, ${l}%, ${formatAlpha(a)})`;
                 } else {
                     outputString = `hsl(${h}, ${s}%, ${l}%)`;
                 }
             } else {
                 if (outputAlpha) {
-                    outputString = `hsl(${h} ${s}% ${l}% / ${a === 1 ? '1' : a})`;
+                    outputString = `hsl(${h} ${s}% ${l}% / ${formatAlpha(a)})`;
                 } else {
                     outputString = `hsl(${h} ${s}% ${l}%)`;
                 }
@@ -180,9 +183,12 @@ function formatColorForOutput(colorInfo) {
         }
         default:
             outputString = c.toHex();
+            if (outputAlpha) {
+                outputString += toHexByte(c.alpha() * 255).toUpperCase();
+            }
             if (outputString.startsWith("#")) {
                 if (originalPrefix.toLowerCase() === "0x") {
-                    if (outputString.length >= 8) {
+                    if (outputAlpha) {
                         outputString = originalPrefix + outputString.substring(7, 9) + outputString.substring(1, 7);
                     } else {
                         outputString = originalPrefix + outputString.substring(1);
