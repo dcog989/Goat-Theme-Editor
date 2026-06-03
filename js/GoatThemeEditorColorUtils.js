@@ -52,7 +52,8 @@ function parseColorString(str) {
         if (str.includes('/')) originalHadExplicitAlpha = true;
     }
 
-    const c = colordx(str);
+    const colorParseInput = originalInputFormat === "hex" && !str.startsWith('#') ? '#' + str.replace(/^0x/i, '') : str;
+    const c = colordx(colorParseInput);
     if (c.isValid()) {
         const rgb = c.toRgb();
         const rHex = Math.round(rgb.r).toString(16).padStart(2, '0');
@@ -196,7 +197,8 @@ function formatColorForOutput(colorInfo) {
 }
 
 function normalizeHex(hexInput) {
-    const c = colordx(hexInput);
+    const normalized = typeof hexInput === 'string' && !hexInput.startsWith('#') ? '#' + hexInput.replace(/^0x/i, '') : hexInput;
+    const c = colordx(normalized);
     return c.isValid() ? c.toHex().substring(1, 7).toUpperCase() : '000000';
 }
 

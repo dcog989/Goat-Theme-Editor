@@ -137,6 +137,36 @@ function renderThemeItems() {
     if (!themeColorsDiv) { return; }
     themeColorsDiv.innerHTML = '';
 
+    // Build header row
+    const header = document.createElement('div');
+    header.className = 'color-row color-row-header';
+
+    const headerSwatch = document.createElement('div');
+    headerSwatch.className = 'color-sample col-header';
+    header.appendChild(headerSwatch);
+
+    const headerName = document.createElement('span');
+    headerName.className = 'style-name col-header';
+    headerName.textContent = 'Theme Class';
+    header.appendChild(headerName);
+
+    header.appendChild(createResizeHandle('--col-name-width'));
+
+    const headerValue = document.createElement('span');
+    headerValue.className = 'col-header-value col-header';
+    headerValue.textContent = 'Value';
+    header.appendChild(headerValue);
+
+    header.appendChild(createResizeHandle('--col-value-width'));
+
+    const headerPreview = document.createElement('span');
+    headerPreview.className = 'color-sample-text col-header';
+    headerPreview.textContent = 'Preview';
+    header.appendChild(headerPreview);
+
+    themeColorsDiv.appendChild(header);
+
+    // Data rows
     filteredThemeItems.forEach((item) => {
         if (!item.isColor) return;
 
@@ -174,16 +204,12 @@ function renderThemeItems() {
         swatchDiv.onclick = () => colorInput.click();
         row.appendChild(swatchDiv);
 
-        let styleName = "";
-        let attrKey = "";
+        let styleName = item.name;
         const match = item.name.match(/^(.*?)\[(.*?)\](?:_idx\d+)?$/);
         if (match) {
-            styleName = match[1];
-            attrKey = match[2];
-            if (attrKey === "_text_") { attrKey = ""; }
+            styleName = match[1].trim() + ' [' + match[2] + ']';
         } else {
             styleName = item.name.replace(/_idx\d+$/, "");
-            if (item.attributeName) { attrKey = item.attributeName; }
         }
 
         const styleNameSpan = document.createElement('span');
@@ -191,11 +217,6 @@ function renderThemeItems() {
         styleNameSpan.textContent = styleName.trim();
         styleNameSpan.title = styleName.trim();
         row.appendChild(styleNameSpan);
-
-        const colorAttrKeySpan = document.createElement('span');
-        colorAttrKeySpan.className = 'attr-key';
-        colorAttrKeySpan.textContent = attrKey;
-        row.appendChild(colorAttrKeySpan);
 
         const valueInput = document.createElement('input');
         valueInput.type = 'text';
@@ -217,6 +238,57 @@ function renderThemeItems() {
     });
     updateButtonStates();
 }
+
+function createResizeHandle(cssProp) {
+    const handle = document.createElement('div');
+    handle.className = 'resize-handle';
+
+    handle.addEventListener('mousedown', function (e) {
+        e.preventDefault();
+        const container = document.getElementById('themeColors');
+        const prev = handle.previousElementSibling;
+        if (!container || !prev) return;
+
+        const startX = e.clientX;
+        const startWidth = prev.getBoundingClientRect().width;
+
+        function onMouseMove(ev) {
+            const diff = ev.clientX - startX;
+            const newWidth = Math.max(60, startWidth + diff);
+            container.style.setProperty(cssProp, newWidth + 'px');
+            columnWidths[cssProp] = Math.round(newWidth);
+        }
+
+        function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+            document.body.style.userSelect = '';
+            document.body.style.cursor = '';
+            try { localStorage.setItem('themeEditorColWidths', JSON.stringify(columnWidths)); } catch (_) {}
+        }
+
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+        document.body.style.userSelect = 'none';
+        document.body.style.cursor = 'col-resize';
+    });
+
+    return handle;
+}
+
+const columnWidths = (() => {
+    try { return JSON.parse(localStorage.getItem('themeEditorColWidths')) || {}; } catch (_) { return {}; }
+})();
+
+(function applySavedColumnWidths() {
+    const container = document.getElementById('themeColors');
+    if (!container) { return; }
+    ['--col-name-width', '--col-value-width'].forEach(function (prop) {
+        if (columnWidths[prop]) {
+            container.style.setProperty(prop, columnWidths[prop] + 'px');
+        }
+    });
+})();
 
 window.applyTheme = applyTheme;
 window.updateButtonStates = updateButtonStates;

@@ -180,15 +180,13 @@ function parseGenericThemeXml(xml) {
 
 function parseGenericThemeCss(css) {
     const items = [];
-    const seen = new Set();
     const re = /--([^:]+):\s*([^;]+?)\s*;/gi;
     let match;
     while ((match = re.exec(css)) !== null) {
         const name = match[1].trim();
         const colorStr = match[2].trim();
         const parsedColor = parseColorString(colorStr);
-        if (parsedColor && !seen.has(parsedColor.hex)) {
-            seen.add(parsedColor.hex);
+        if (parsedColor) {
             items.push({
                 id: `gte-item-${items.length}`,
                 name: name,
@@ -212,13 +210,11 @@ function parseGenericThemeJson(json) {
         return { doc: null, items: [] };
     }
     const items = [];
-    const seen = new Set();
 
     function tryAdd(key, value) {
         if (typeof value !== 'string') return;
         const parsedColor = parseColorString(value);
-        if (parsedColor && !seen.has(parsedColor.hex)) {
-            seen.add(parsedColor.hex);
+        if (parsedColor) {
             items.push({
                 id: `gte-item-${items.length}`,
                 name: key || 'Unnamed',
@@ -231,36 +227,28 @@ function parseGenericThemeJson(json) {
         }
     }
 
-    if (Array.isArray(data)) {
-        data.forEach((item, i) => {
-            if (typeof item === 'string') {
-                tryAdd(`color-${i + 1}`, item);
-            } else if (item && typeof item === 'object') {
-                const name = item.name || item.label || item.key || `color-${i + 1}`;
-                const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
-                tryAdd(name, value);
-            }
-        });
-    } else if (data && typeof data === 'object') {
-        const arr = data.colors || data.palette || data.theme || null;
-        if (Array.isArray(arr)) {
-            arr.forEach((item, i) => {
+    function traverse(obj, prefix) {
+        if (Array.isArray(obj)) {
+            obj.forEach((item, i) => {
                 if (typeof item === 'string') {
-                    tryAdd(`color-${i + 1}`, item);
+                    tryAdd(prefix ? `${prefix}[${i}]` : `color-${i + 1}`, item);
                 } else if (item && typeof item === 'object') {
-                    const name = item.name || item.label || item.key || `color-${i + 1}`;
-                    const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
-                    tryAdd(name, value);
+                    traverse(item, prefix ? `${prefix}[${i}]` : `color-${i + 1}`);
                 }
             });
-        } else {
-            Object.entries(data).forEach(([key, value]) => {
+        } else if (obj && typeof obj === 'object') {
+            Object.entries(obj).forEach(([key, value]) => {
+                const fullKey = prefix ? `${prefix}.${key}` : key;
                 if (typeof value === 'string') {
-                    tryAdd(key, value);
+                    tryAdd(fullKey, value);
+                } else if (value && typeof value === 'object') {
+                    traverse(value, fullKey);
                 }
             });
         }
     }
+
+    traverse(data, '');
     return { doc: null, items };
 }
 
