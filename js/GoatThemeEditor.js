@@ -23,9 +23,9 @@ function addCustomColor() {
     const colorStr = input.value.trim();
     if (!colorStr) return;
 
-    const newColor = new GoatColor(colorStr);
+    const newColor = colordx(colorStr);
     if (newColor.isValid()) {
-        const newHex = newColor.toHex().substring(1).toUpperCase();
+        const newHex = newColor.toHex().substring(1, 7).toUpperCase();
         const isDuplicate = palette.some(p => p.hex === newHex);
         if (!isDuplicate) {
             palette.push({
@@ -56,7 +56,7 @@ function updateItemColor(item, newColorString) {
             newColorInfo.originalPrefix = item.colorInfo.originalPrefix;
             newColorInfo.originalUsesCommas = item.colorInfo.originalUsesCommas;
             if (item.colorInfo.originalHadExplicitAlpha) {
-                newColorInfo.goatColor.setAlpha(item.colorInfo.alpha);
+                newColorInfo.instance = newColorInfo.instance.alpha(item.colorInfo.alpha);
                 newColorInfo.alpha = item.colorInfo.alpha;
             }
         }
