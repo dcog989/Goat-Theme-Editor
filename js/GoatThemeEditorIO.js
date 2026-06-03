@@ -114,7 +114,24 @@ function parsePaletteJson(json) {
     return palette;
 }
 
-function parseGenericThemeFile(xml) {
+function parseGenericThemeFile(content) {
+    const trimmed = content.replace(/^\uFEFF/, '').trim();
+    if (!trimmed) return { doc: null, items: [] };
+    if (trimmed.includes('--')) {
+        const result = parseGenericThemeCss(trimmed);
+        if (result.items.length > 0) return result;
+    }
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+        return parseGenericThemeJson(trimmed);
+    }
+    if (trimmed.includes('{') && trimmed.includes(';')) {
+        const result = parseGenericThemeCss(trimmed);
+        if (result.items.length > 0) return result;
+    }
+    return parseGenericThemeXml(trimmed);
+}
+
+function parseGenericThemeXml(xml) {
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     if (doc.documentElement.nodeName === 'parsererror') { console.error('Theme XML error:', doc.documentElement.textContent); alert('Error: Invalid Theme XML.'); return { doc: null, items: [] }; }
     const items = [];
@@ -159,6 +176,92 @@ function parseGenericThemeFile(xml) {
 
     if (doc.documentElement) traverse(doc.documentElement);
     return { doc, items };
+}
+
+function parseGenericThemeCss(css) {
+    const items = [];
+    const seen = new Set();
+    const re = /--([^:]+):\s*([^;]+?)\s*;/gi;
+    let match;
+    while ((match = re.exec(css)) !== null) {
+        const name = match[1].trim();
+        const colorStr = match[2].trim();
+        const parsedColor = parseColorString(colorStr);
+        if (parsedColor && !seen.has(parsedColor.hex)) {
+            seen.add(parsedColor.hex);
+            items.push({
+                id: `gte-item-${items.length}`,
+                name: name,
+                currentColorHex: parsedColor.hex,
+                colorInfo: parsedColor,
+                el: null,
+                attributeName: null,
+                isColor: true
+            });
+        }
+    }
+    return { doc: null, items };
+}
+
+function parseGenericThemeJson(json) {
+    let data;
+    try {
+        data = JSON.parse(json);
+    } catch (e) {
+        alert('Error: Invalid Theme JSON.');
+        return { doc: null, items: [] };
+    }
+    const items = [];
+    const seen = new Set();
+
+    function tryAdd(key, value) {
+        if (typeof value !== 'string') return;
+        const parsedColor = parseColorString(value);
+        if (parsedColor && !seen.has(parsedColor.hex)) {
+            seen.add(parsedColor.hex);
+            items.push({
+                id: `gte-item-${items.length}`,
+                name: key || 'Unnamed',
+                currentColorHex: parsedColor.hex,
+                colorInfo: parsedColor,
+                el: null,
+                attributeName: null,
+                isColor: true
+            });
+        }
+    }
+
+    if (Array.isArray(data)) {
+        data.forEach((item, i) => {
+            if (typeof item === 'string') {
+                tryAdd(`color-${i + 1}`, item);
+            } else if (item && typeof item === 'object') {
+                const name = item.name || item.label || item.key || `color-${i + 1}`;
+                const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
+                tryAdd(name, value);
+            }
+        });
+    } else if (data && typeof data === 'object') {
+        const arr = data.colors || data.palette || data.theme || null;
+        if (Array.isArray(arr)) {
+            arr.forEach((item, i) => {
+                if (typeof item === 'string') {
+                    tryAdd(`color-${i + 1}`, item);
+                } else if (item && typeof item === 'object') {
+                    const name = item.name || item.label || item.key || `color-${i + 1}`;
+                    const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
+                    tryAdd(name, value);
+                }
+            });
+        } else {
+            Object.entries(data).forEach(([key, value]) => {
+                if (typeof value === 'string') {
+                    tryAdd(key, value);
+                }
+            });
+        }
+    }
+    return { doc: null, items };
 }
 
 function exportXml() {

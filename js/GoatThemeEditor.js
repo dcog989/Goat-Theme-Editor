@@ -68,10 +68,12 @@ function updateItemColor(item, newColorString) {
         item.colorInfo = newColorInfo;
         item.currentColorHex = newColorInfo.hex;
 
-        if (item.attributeName) {
-            item.el.setAttribute(item.attributeName, formattedValue);
-        } else {
-            item.el.textContent = formattedValue;
+        if (item.el) {
+            if (item.attributeName) {
+                item.el.setAttribute(item.attributeName, formattedValue);
+            } else {
+                item.el.textContent = formattedValue;
+            }
         }
 
         updateThemeItemRow(item, row);
