@@ -1,6 +1,6 @@
 # Goat Theme Editor
 
-A theme editor that parses XML themes and displays the color values for editing. 
+A theme editor that parses CSS, JSON, XML themes and displays the color values for editing.
 
 Features - drag & drop color editing, or edit each color with a color picker, or apply global edits by filtering on keywords. The UI can be toggled light / dark.
 
@@ -9,5 +9,3 @@ Features - drag & drop color editing, or edit each color with a color picker, or
 ## Usage
 
 Either [open the HTML](https://rawcdn.githack.com/dcog989/Goat-Theme-Editor/145b25d06f8ea4c42ad4f7278e02cbe727ac6add/Goat%20Theme%20Editor.html), or [download the files](https://github.com/dcog989/Goat-Theme-Editor/archive/refs/heads/main.zip) to use it locally.
-
-Tested on [Ditto Clipboard Manager](https://github.com/sabrogden/Ditto/), and [Notepad++](https://github.com/notepad-plus-plus/notepad-plus-plus). All good from my testing, but would recommend checking output with [WinMerge](https://github.com/WinMerge/winmerge).
