@@ -7,12 +7,12 @@
  */
 
 // --- State Variables ---
-let palette = [];
-let themeItems = [];
-let filteredThemeItems = [];
-let selectedPaletteColor = null;
-let themeFileDoc = null;
-let originalThemeFileName = "Theme";
+let palette = []; window.palette = palette;
+let themeItems = []; window.themeItems = themeItems;
+let filteredThemeItems = []; window.filteredThemeItems = filteredThemeItems;
+let selectedPaletteColor = null; window.selectedPaletteColor = selectedPaletteColor;
+let themeFileDoc = null; window.themeFileDoc = themeFileDoc;
+let originalThemeFileName = "Theme"; window.originalThemeFileName = originalThemeFileName;
 let currentPaletteReadId = 0;
 let currentThemeReadId = 0;
 
@@ -43,9 +43,9 @@ function addCustomColor() {
 }
 
 function deleteColorFromPalette(hexToDelete) {
-    palette = palette.filter(p => p.hex !== hexToDelete);
+    palette = palette.filter(p => p.hex !== hexToDelete); window.palette = palette;
     if (selectedPaletteColor && selectedPaletteColor.hex === hexToDelete) {
-        selectedPaletteColor = null;
+        selectedPaletteColor = null; window.selectedPaletteColor = selectedPaletteColor;
     }
     renderPalette();
 }
@@ -92,6 +92,7 @@ function filterThemeItems() {
     } else {
         filteredThemeItems = themeItems.filter(item => item.isColor);
     }
+    window.filteredThemeItems = filteredThemeItems;
     filteredThemeItems.sort((a, b) => a.name.localeCompare(b.name));
     renderThemeItems();
 }
@@ -135,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (thisReadId !== currentPaletteReadId) return;
                 try {
                     if (ev.target.result) {
-                        palette = parsePalette(ev.target.result);
+                        palette = parsePalette(ev.target.result); window.palette = palette;
                         renderPalette();
                         updateButtonStates();
                     } else { alert("Error: Palette file content is empty or unreadable."); }
@@ -152,16 +153,16 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = e.target.files[0];
             if (!file) {
                 themeFileNameEl.textContent = 'No theme file selected';
-                originalThemeFileName = "Theme";
-                themeItems = [];
-                themeFileDoc = null;
+                originalThemeFileName = "Theme"; window.originalThemeFileName = originalThemeFileName;
+                themeItems = []; window.themeItems = themeItems;
+                themeFileDoc = null; window.themeFileDoc = themeFileDoc;
                 filterThemeItems();
                 return;
             }
             themeFileNameEl.textContent = file.name;
             const nameParts = file.name.split('.');
             if (nameParts.length > 1) nameParts.pop();
-            originalThemeFileName = nameParts.join('.') || file.name;
+            originalThemeFileName = nameParts.join('.') || file.name; window.originalThemeFileName = originalThemeFileName;
             currentThemeReadId++;
             const thisReadId = currentThemeReadId;
             const reader = new FileReader();
@@ -170,8 +171,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 try {
                     if (ev.target.result) {
                         const result = parseGenericThemeFile(ev.target.result);
-                        themeFileDoc = result.doc;
-                        themeItems = result.items;
+                        themeFileDoc = result.doc; window.themeFileDoc = themeFileDoc;
+                        themeItems = result.items; window.themeItems = themeItems;
                         themeItems.sort((a, b) => a.name.localeCompare(b.name));
                         filterThemeItems();
                     } else { alert("Error: Theme file content is empty or unreadable."); }
@@ -217,3 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderPalette();
     renderThemeItems();
 });
+
+window.updateItemColor = updateItemColor;
+window.deleteColorFromPalette = deleteColorFromPalette;
+window.filterThemeItems = filterThemeItems;

@@ -6,23 +6,112 @@
  * @author Chase McGoat
  */
 
-function parsePalette(xml) {
+function parsePalette(content) {
+    const trimmed = content.replace(/^\uFEFF/, '').trim();
+    if (!trimmed) return [];
+    if (trimmed.includes('--')) {
+        const cssResult = parsePaletteCss(trimmed);
+        if (cssResult.length > 0) return cssResult;
+    }
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+        return parsePaletteJson(trimmed);
+    }
+    if (trimmed.includes('{') && trimmed.includes(';')) {
+        const cssResult = parsePaletteCss(trimmed);
+        if (cssResult.length > 0) return cssResult;
+    }
+    return parsePaletteXml(trimmed);
+}
+
+function parsePaletteXml(xml) {
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
     if (doc.documentElement.nodeName === 'parsererror') {
         console.error('Palette XML error:', doc.documentElement.textContent);
         alert('Error: Invalid Palette XML.');
         return [];
     }
-    return Array.from(doc.getElementsByTagName('myColor')).map(e => {
-        const name = e.getAttribute('name') || 'Unnamed';
-        const colorStr = e.getAttribute('hexvalue') ||
-            e.getAttribute('hslValue') ||
-            e.getAttribute('rgbValue') ||
-            e.getAttribute('oklchValue') ||
-            e.getAttribute('value') ||
-            '';
-        return { name: name, hex: normalizeHex(colorStr) };
-    });
+    return Array.from(doc.getElementsByTagName('myColor'))
+        .map(e => {
+            const name = e.getAttribute('name') || 'Unnamed';
+            const colorStr = e.getAttribute('hexvalue') ||
+                e.getAttribute('hslValue') ||
+                e.getAttribute('rgbValue') ||
+                e.getAttribute('oklchValue') ||
+                e.getAttribute('value') ||
+                '';
+            return { name, hex: normalizeHex(colorStr) };
+        })
+        .filter(e => e.hex !== '000000');
+}
+
+function parsePaletteCss(css) {
+    const palette = [];
+    const seen = new Set();
+    const re = /--([^:]+):\s*([^;]+?)\s*;/gi;
+    let match;
+    while ((match = re.exec(css)) !== null) {
+        const name = match[1].trim();
+        const colorStr = match[2].trim();
+        const hex = normalizeHex(colorStr);
+        if (hex !== '000000' && !seen.has(hex)) {
+            seen.add(hex);
+            palette.push({ name, hex });
+        }
+    }
+    return palette;
+}
+
+function parsePaletteJson(json) {
+    let data;
+    try {
+        data = JSON.parse(json);
+    } catch (e) {
+        alert('Error: Invalid Palette JSON.');
+        return [];
+    }
+    const palette = [];
+    const seen = new Set();
+
+    function tryAdd(name, value) {
+        if (typeof value !== 'string') return;
+        const hex = normalizeHex(value);
+        if (hex !== '000000' && !seen.has(hex)) {
+            seen.add(hex);
+            palette.push({ name: name || 'Unnamed', hex });
+        }
+    }
+
+    if (Array.isArray(data)) {
+        data.forEach((item, i) => {
+            if (typeof item === 'string') {
+                tryAdd(`color-${i + 1}`, item);
+            } else if (item && typeof item === 'object') {
+                const name = item.name || item.label || item.key || `color-${i + 1}`;
+                const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
+                tryAdd(name, value);
+            }
+        });
+    } else if (data && typeof data === 'object') {
+        const arr = data.colors || data.palette || data.theme || null;
+        if (Array.isArray(arr)) {
+            arr.forEach((item, i) => {
+                if (typeof item === 'string') {
+                    tryAdd(`color-${i + 1}`, item);
+                } else if (item && typeof item === 'object') {
+                    const name = item.name || item.label || item.key || `color-${i + 1}`;
+                    const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
+                    tryAdd(name, value);
+                }
+            });
+        } else {
+            Object.entries(data).forEach(([key, value]) => {
+                if (typeof value === 'string') {
+                    tryAdd(key, value);
+                }
+            });
+        }
+    }
+    return palette;
 }
 
 function parseGenericThemeFile(xml) {
@@ -102,3 +191,7 @@ function exportXml() {
         URL.revokeObjectURL(a.href);
     }, 100);
 }
+
+window.parsePalette = parsePalette;
+window.parseGenericThemeFile = parseGenericThemeFile;
+window.exportXml = exportXml;

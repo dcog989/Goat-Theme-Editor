@@ -1,10 +1,3 @@
-import { colordx, extend } from '@colordx/core';
-import a11yPlugin from '@colordx/core/plugins/a11y';
-
-extend([a11yPlugin]);
-
-window.colordx = colordx;
-
 function toHexByte(value) {
     return Math.round(Math.min(Math.max(value, 0), 255)).toString(16).padStart(2, '0');
 }

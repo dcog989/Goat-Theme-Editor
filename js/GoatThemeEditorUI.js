@@ -50,7 +50,7 @@ function renderPalette() {
         d.style.background = '#' + colorHexNoHash;
         d.draggable = true;
         d.ondragstart = (e) => { e.dataTransfer.setData('text/plain', colorHexNoHash); };
-        d.onclick = () => { selectedPaletteColor = { name: c.name, hex: colorHexNoHash }; renderPalette(); updateButtonStates(); };
+        d.onclick = () => { window.selectedPaletteColor = { name: c.name, hex: colorHexNoHash }; renderPalette(); updateButtonStates(); };
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'palette-color-delete-btn';
@@ -88,7 +88,7 @@ function renderPalette() {
         d.style.background = grayHexWithHash;
         d.draggable = true;
         d.ondragstart = (e) => { e.dataTransfer.setData('text/plain', grayHexNoHash); };
-        d.onclick = () => { selectedPaletteColor = { name: grayHexWithHash, hex: grayHexNoHash }; renderPalette(); updateButtonStates(); };
+        d.onclick = () => { window.selectedPaletteColor = { name: grayHexWithHash, hex: grayHexNoHash }; renderPalette(); updateButtonStates(); };
 
         const label = document.createElement('div');
         label.textContent = grayHexWithHash;
@@ -217,3 +217,9 @@ function renderThemeItems() {
     });
     updateButtonStates();
 }
+
+window.applyTheme = applyTheme;
+window.updateButtonStates = updateButtonStates;
+window.renderPalette = renderPalette;
+window.renderThemeItems = renderThemeItems;
+window.updateThemeItemRow = updateThemeItemRow;

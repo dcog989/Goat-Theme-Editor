@@ -20,7 +20,7 @@
                 <div class="file-input-row">
                     <button type="button" id="importPaletteBtn" class="import-btn">Import Palette</button>
                     <span id="paletteFileName" class="file-name-display">No palette file selected</span>
-                    <input type="file" id="paletteFile" accept=".xml" style="display: none;">
+                    <input type="file" id="paletteFile" accept=".xml,.css,.json" style="display: none;">
                 </div>
                 <div class="file-input-row">
                     <button type="button" id="importThemeBtn" class="import-btn">Import Theme</button>
@@ -46,15 +46,8 @@
         </div>
     </div>
 
-    <script type="importmap">
-        {
-            "imports": {
-                "@colordx/core": "https://cdn.jsdelivr.net/npm/@colordx/core@5.4.3/+esm",
-                "@colordx/core/plugins/a11y": "https://cdn.jsdelivr.net/npm/@colordx/core/plugins/a11y@5.4.3/+esm"
-            }
-        }
-    </script>
-    <script type="module" src="js/GoatThemeEditorColorUtils.js"></script>
+    <script src="js/vendor.colordx.js"></script>
+    <script src="js/GoatThemeEditorColorUtils.js" defer></script>
     <script src="js/GoatThemeEditorIO.js" defer></script>
     <script src="js/GoatThemeEditorUI.js" defer></script>
     <script src="js/GoatThemeEditor.js" defer></script>
