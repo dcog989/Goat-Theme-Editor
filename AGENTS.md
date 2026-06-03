@@ -2,6 +2,10 @@
 
 Browser-based tool to import XML theme files (Ditto Clipboard Manager, Notepad++, etc.), parse and edit color values via drag-and-drop/color pickers/bulk keyword filtering, and export modified XML.
 
+## Dev Environment
+
+Linux CachyOS, Limine boot loader, KDE Plasma 6, Wayland, Btrfs. Firefox, Kate text editor, Zed code editor, fish shell with Ghostty + Fresh editor. paru and bun package managers. All software is updated as of today.
+
 ## Tech Stack
 
 - Vanilla JS (ES6 modules), HTML5, CSS3 (light/dark theme via custom properties)
@@ -10,13 +14,11 @@ Browser-based tool to import XML theme files (Ditto Clipboard Manager, Notepad++
 
 ## Run Dev Server
 
-```bash
-python3 -m http.server 8000
-# or
-npx serve .
+```sh
+echo "http://localhost:9000" && bunx bunserv --port 9000
 ```
 
-Then open `http://localhost:8000`.
+The echo is for the user to click on.
 
 No build or test commands exist.
 

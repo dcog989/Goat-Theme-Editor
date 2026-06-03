@@ -207,7 +207,7 @@ function parseGenericThemeJson(json) {
         data = JSON.parse(json);
     } catch (e) {
         alert('Error: Invalid Theme JSON.');
-        return { doc: null, items: [] };
+        return { doc: null, items: [], data: null };
     }
     const items = [];
 
@@ -249,7 +249,70 @@ function parseGenericThemeJson(json) {
     }
 
     traverse(data, '');
-    return { doc: null, items };
+    return { doc: null, items, data };
+}
+
+function setJsonValueByPath(obj, path, value) {
+    const parts = path.split('.');
+    let current = obj;
+    for (let i = 0; i < parts.length - 1; i++) {
+        const part = parts[i];
+        const arrayMatch = part.match(/^(.+)\[(\d+)\]$/);
+        if (arrayMatch) {
+            current = current[arrayMatch[1]][parseInt(arrayMatch[2])];
+        } else {
+            current = current[part];
+        }
+        if (current == null) return false;
+    }
+    const last = parts[parts.length - 1];
+    const arrayMatch = last.match(/^(.+)\[(\d+)\]$/);
+    if (arrayMatch) {
+        if (!current[arrayMatch[1]]) return false;
+        current[arrayMatch[1]][parseInt(arrayMatch[2])] = value;
+    } else {
+        current[last] = value;
+    }
+    return true;
+}
+
+function downloadFile(content, mimeType, ext) {
+    const now = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    const y = now.getFullYear().toString().slice(-2);
+    const m = pad(now.getMonth() + 1);
+    const d = pad(now.getDate());
+    const H = pad(now.getHours());
+    const M = pad(now.getMinutes());
+    const filename = `${originalThemeFileName}.${y}${m}${d}${H}${M}${ext}`;
+    const blob = new Blob([content], { type: mimeType });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+    }, 100);
+}
+
+function exportTheme() {
+    if (themeFileDoc) {
+        const serializer = new XMLSerializer();
+        const xmlString = serializer.serializeToString(themeFileDoc);
+        downloadFile(xmlString, 'application/xml;charset=utf-8', '.xml');
+    } else if (themeFileJson) {
+        const modifiedData = JSON.parse(JSON.stringify(themeFileJson));
+        themeItems.forEach(item => {
+            if (item.isColor && item.colorInfo) {
+                setJsonValueByPath(modifiedData, item.name, item.colorInfo.originalString);
+            }
+        });
+        downloadFile(JSON.stringify(modifiedData, null, '\t'), 'application/json;charset=utf-8', '.json');
+    } else {
+        alert("No theme file loaded to export.");
+    }
 }
 
 function exportXml() {
@@ -285,4 +348,4 @@ function exportXml() {
 
 window.parsePalette = parsePalette;
 window.parseGenericThemeFile = parseGenericThemeFile;
-window.exportXml = exportXml;
+window.exportTheme = exportTheme;

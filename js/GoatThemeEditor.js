@@ -12,6 +12,7 @@ let themeItems = []; window.themeItems = themeItems;
 let filteredThemeItems = []; window.filteredThemeItems = filteredThemeItems;
 let selectedPaletteColor = null; window.selectedPaletteColor = selectedPaletteColor;
 let themeFileDoc = null; window.themeFileDoc = themeFileDoc;
+let themeFileJson = null; window.themeFileJson = themeFileJson;
 let originalThemeFileName = "Theme"; window.originalThemeFileName = originalThemeFileName;
 let currentPaletteReadId = 0;
 let currentThemeReadId = 0;
@@ -158,6 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 originalThemeFileName = "Theme"; window.originalThemeFileName = originalThemeFileName;
                 themeItems = []; window.themeItems = themeItems;
                 themeFileDoc = null; window.themeFileDoc = themeFileDoc;
+                themeFileJson = null; window.themeFileJson = themeFileJson;
                 filterThemeItems();
                 return;
             }
@@ -174,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (ev.target.result) {
                         const result = parseGenericThemeFile(ev.target.result);
                         themeFileDoc = result.doc; window.themeFileDoc = themeFileDoc;
+                        themeFileJson = result.data || null; window.themeFileJson = themeFileJson;
                         themeItems = result.items; window.themeItems = themeItems;
                         themeItems.sort((a, b) => a.name.localeCompare(b.name));
                         filterThemeItems();
@@ -202,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (exportBtnElement) {
-        exportBtnElement.onclick = exportXml;
+        exportBtnElement.onclick = exportTheme;
     }
 
     if (addCustomColorBtnElement && customColorInputElement) {

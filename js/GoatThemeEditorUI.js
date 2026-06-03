@@ -29,7 +29,7 @@ function updateButtonStates() {
     if (!bulkAssignBtn || !exportBtn) { return; }
 
     const hasColorItems = themeItems.some(it => it.isColor);
-    exportBtn.disabled = !themeFileDoc || !hasColorItems;
+    exportBtn.disabled = !(themeFileDoc || themeFileJson) || !hasColorItems;
     bulkAssignBtn.disabled = !(selectedPaletteColor && filteredThemeItems.some(it => it.isColor));
 }
 
