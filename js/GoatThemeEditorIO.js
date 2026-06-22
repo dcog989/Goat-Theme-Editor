@@ -6,21 +6,25 @@
  * @author Chase McGoat
  */
 
+function detectContentFormat(trimmed, parseCss, parseJson, parseXml, nonEmpty) {
+    if (trimmed.includes('--')) {
+        const result = parseCss(trimmed);
+        if (nonEmpty(result)) return result;
+    }
+    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
+        return parseJson(trimmed);
+    }
+    if (trimmed.includes('{') && trimmed.includes(';')) {
+        const result = parseCss(trimmed);
+        if (nonEmpty(result)) return result;
+    }
+    return parseXml(trimmed);
+}
+
 function parsePalette(content) {
     const trimmed = content.replace(/^\uFEFF/, '').trim();
     if (!trimmed) return [];
-    if (trimmed.includes('--')) {
-        const cssResult = parsePaletteCss(trimmed);
-        if (cssResult.length > 0) return cssResult;
-    }
-    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-        return parsePaletteJson(trimmed);
-    }
-    if (trimmed.includes('{') && trimmed.includes(';')) {
-        const cssResult = parsePaletteCss(trimmed);
-        if (cssResult.length > 0) return cssResult;
-    }
-    return parsePaletteXml(trimmed);
+    return detectContentFormat(trimmed, parsePaletteCss, parsePaletteJson, parsePaletteXml, (r) => r.length > 0);
 }
 
 function parsePaletteXml(xml) {
@@ -118,18 +122,13 @@ function parsePaletteJson(json) {
 function parseGenericThemeFile(content) {
     const trimmed = content.replace(/^\uFEFF/, '').trim();
     if (!trimmed) return { doc: null, items: [] };
-    if (trimmed.includes('--')) {
-        const result = parseGenericThemeCss(trimmed);
-        if (result.items.length > 0) return result;
-    }
-    if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
-        return parseGenericThemeJson(trimmed);
-    }
-    if (trimmed.includes('{') && trimmed.includes(';')) {
-        const result = parseGenericThemeCss(trimmed);
-        if (result.items.length > 0) return result;
-    }
-    return parseGenericThemeXml(trimmed);
+    return detectContentFormat(
+        trimmed,
+        parseGenericThemeCss,
+        parseGenericThemeJson,
+        parseGenericThemeXml,
+        (r) => r.items.length > 0
+    );
 }
 
 function parseGenericThemeXml(xml) {
