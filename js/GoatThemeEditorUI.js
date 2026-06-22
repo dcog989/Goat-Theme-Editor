@@ -53,7 +53,7 @@ function renderPalette() {
             case 'H':
                 if (ga !== gb) return ga - gb;
                 if (ga) return ha.l - hb.l;
-                return ha.h - hb.h;
+                return (ha.h < 315 ? ha.h + 360 : ha.h) - (hb.h < 315 ? hb.h + 360 : hb.h);
             default:
                 return 0;
         }

@@ -176,7 +176,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             paletteFileNameEl.textContent = file.name;
             readFileWithTracker(file, paletteReadId, (content) => {
-                appState.palette = parsePalette(content);
+                const loaded = parsePalette(content);
+                const existingHex = new Set(appState.palette.map((c) => c.hex));
+                for (const c of loaded) {
+                    if (!existingHex.has(c.hex)) {
+                        existingHex.add(c.hex);
+                        appState.palette.push(c);
+                    }
+                }
                 renderPalette();
                 updateButtonStates();
             });
