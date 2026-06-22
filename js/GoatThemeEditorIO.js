@@ -66,56 +66,56 @@ function parsePaletteCss(css) {
     return palette;
 }
 
-function parsePaletteJson(json) {
-    let data;
+function safeParseJson(json, errorMessage) {
     try {
-        data = JSON.parse(json);
+        return JSON.parse(json);
     } catch (_e) {
-        alert('Error: Invalid Palette JSON.');
-        return [];
+        alert(errorMessage);
+        return null;
     }
-    const palette = [];
-    const seen = new Set();
+}
 
-    function tryAdd(name, value) {
-        if (typeof value !== 'string') return;
+function walkJsonValues(data, onString, prefix) {
+    if (Array.isArray(data)) {
+        if (data.length >= 3 && data.length <= 4 && data.every((v) => typeof v === 'number')) {
+            onString(prefix || '', `rgb(${Math.round(data[0])}, ${Math.round(data[1])}, ${Math.round(data[2])})`);
+            return;
+        }
+        data.forEach((item, i) => {
+            const key = prefix ? `${prefix}[${i}]` : `color-${i + 1}`;
+            if (typeof item === 'string') {
+                onString(key, item);
+            } else if (item && typeof item === 'object') {
+                walkJsonValues(item, onString, key);
+            }
+        });
+    } else if (data && typeof data === 'object') {
+        Object.entries(data).forEach(([key, value]) => {
+            const fullKey = prefix ? `${prefix}.${key}` : key;
+            if (typeof value === 'string') {
+                onString(fullKey, value);
+            } else if (value && typeof value === 'object') {
+                walkJsonValues(value, onString, fullKey);
+            }
+        });
+    }
+}
+
+function parsePaletteJson(json) {
+    const data = safeParseJson(json, 'Error: Invalid Palette JSON.');
+    if (!data) return [];
+
+    const seen = new Set();
+    const palette = [];
+
+    walkJsonValues(data, (name, value) => {
         const hex = normalizeHex(value);
         if (hex !== '000000' && !seen.has(hex)) {
             seen.add(hex);
             palette.push({ name: name || 'Unnamed', hex });
         }
-    }
+    });
 
-    if (Array.isArray(data)) {
-        data.forEach((item, i) => {
-            if (typeof item === 'string') {
-                tryAdd(`color-${i + 1}`, item);
-            } else if (item && typeof item === 'object') {
-                const name = item.name || item.label || item.key || `color-${i + 1}`;
-                const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
-                tryAdd(name, value);
-            }
-        });
-    } else if (data && typeof data === 'object') {
-        const arr = data.colors || data.palette || data.theme || null;
-        if (Array.isArray(arr)) {
-            arr.forEach((item, i) => {
-                if (typeof item === 'string') {
-                    tryAdd(`color-${i + 1}`, item);
-                } else if (item && typeof item === 'object') {
-                    const name = item.name || item.label || item.key || `color-${i + 1}`;
-                    const value = item.hex || item.value || item.color || item.rgb || item.hsl || '';
-                    tryAdd(name, value);
-                }
-            });
-        } else {
-            Object.entries(data).forEach(([key, value]) => {
-                if (typeof value === 'string') {
-                    tryAdd(key, value);
-                }
-            });
-        }
-    }
     return palette;
 }
 
@@ -224,17 +224,12 @@ function parseGenericThemeCss(css) {
 }
 
 function parseGenericThemeJson(json) {
-    let data;
-    try {
-        data = JSON.parse(json);
-    } catch (_e) {
-        alert('Error: Invalid Theme JSON.');
-        return { doc: null, items: [], data: null };
-    }
+    const data = safeParseJson(json, 'Error: Invalid Theme JSON.');
+    if (!data) return { doc: null, items: [], data: null };
+
     const items = [];
 
-    function tryAdd(key, value) {
-        if (typeof value !== 'string') return;
+    walkJsonValues(data, (key, value) => {
         const parsedColor = parseColorString(value);
         if (parsedColor) {
             items.push({
@@ -247,34 +242,8 @@ function parseGenericThemeJson(json) {
                 isColor: true
             });
         }
-    }
+    });
 
-    function traverse(obj, prefix) {
-        if (Array.isArray(obj)) {
-            if (obj.length >= 3 && obj.length <= 4 && obj.every((v) => typeof v === 'number')) {
-                tryAdd(prefix, `rgb(${Math.round(obj[0])}, ${Math.round(obj[1])}, ${Math.round(obj[2])})`);
-                return;
-            }
-            obj.forEach((item, i) => {
-                if (typeof item === 'string') {
-                    tryAdd(prefix ? `${prefix}[${i}]` : `color-${i + 1}`, item);
-                } else if (item && typeof item === 'object') {
-                    traverse(item, prefix ? `${prefix}[${i}]` : `color-${i + 1}`);
-                }
-            });
-        } else if (obj && typeof obj === 'object') {
-            Object.entries(obj).forEach(([key, value]) => {
-                const fullKey = prefix ? `${prefix}.${key}` : key;
-                if (typeof value === 'string') {
-                    tryAdd(fullKey, value);
-                } else if (value && typeof value === 'object') {
-                    traverse(value, fullKey);
-                }
-            });
-        }
-    }
-
-    traverse(data, '');
     return { doc: null, items, data };
 }
 
