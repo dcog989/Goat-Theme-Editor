@@ -6,14 +6,6 @@
  * @author Chase McGoat
  */
 
-const columnWidths = (() => {
-    try {
-        return JSON.parse(localStorage.getItem('themeEditorColWidths')) || {};
-    } catch (_) {
-        return {};
-    }
-})();
-
 function applyTheme(themeName) {
     if (themeName === 'light') {
         document.body.classList.add('light-theme');
@@ -185,11 +177,6 @@ function renderThemeItems() {
     }
     themeColorsDiv.innerHTML = '';
     if (themeBgColor) themeColorsDiv.style.background = themeBgColor;
-
-    const savedNameWidth = columnWidths['--col-name-width'];
-    const savedValueWidth = columnWidths['--col-value-width'];
-    if (savedNameWidth) themeColorsDiv.style.setProperty('--col-name-width', `${savedNameWidth}px`);
-    if (savedValueWidth) themeColorsDiv.style.setProperty('--col-value-width', `${savedValueWidth}px`);
 
     // Build header row
     const header = document.createElement('div');
@@ -374,7 +361,6 @@ function createResizeHandle(cssProp) {
             const diff = ev.clientX - startX;
             const newWidth = Math.max(60, startWidth + diff);
             container.style.setProperty(cssProp, `${newWidth}px`);
-            columnWidths[cssProp] = Math.round(newWidth);
         }
 
         function onMouseUp() {
@@ -382,9 +368,6 @@ function createResizeHandle(cssProp) {
             document.removeEventListener('mouseup', onMouseUp);
             document.body.style.userSelect = '';
             document.body.style.cursor = '';
-            try {
-                localStorage.setItem('themeEditorColWidths', JSON.stringify(columnWidths));
-            } catch (_) {}
         }
 
         document.addEventListener('mousemove', onMouseMove);
