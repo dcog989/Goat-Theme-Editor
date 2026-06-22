@@ -237,7 +237,7 @@ body:not(.light-theme) .theme-icon.moon-icon {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    max-height: 420px;
+    max-height: 600px;
     overflow-y: auto;
     background: var(--bg-palette-container);
     border-radius: 4px;
