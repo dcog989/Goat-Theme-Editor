@@ -179,7 +179,7 @@ function parseGenericThemeXml(xml) {
             }
         } else {
             const textContent = node.textContent.trim();
-            if (textContent && /^#|^rgb|^hsl|^oklch|^[0-9a-fA-F]{3,}$/.test(textContent)) {
+            if (textContent && /^(?:#|rgb|hsl|oklch|[0-9a-fA-F]{3,})/.test(textContent)) {
                 const parsedColor = parseColorString(textContent);
                 if (parsedColor) {
                     items.push({
