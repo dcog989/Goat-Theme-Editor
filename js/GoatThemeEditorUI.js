@@ -92,7 +92,6 @@ function renderPalette() {
         };
         d.onclick = () => {
             selectedPaletteColor = { name: c.name, hex: colorHexNoHash };
-            window.selectedPaletteColor = selectedPaletteColor;
             renderPalette();
             updateButtonStates();
         };
@@ -143,7 +142,6 @@ function renderPalette() {
         const isDuplicate = palette.some((p) => p.hex === hex);
         if (!isDuplicate) {
             palette.push({ name: this.value, hex });
-            window.palette = palette;
             renderPalette();
         }
         this.value = '#000000';
@@ -239,7 +237,6 @@ function renderThemeItems() {
         if (c.isValid()) {
             const hex = c.toHex();
             themeBgColor = hex;
-            window.themeBgColor = themeBgColor;
             try {
                 localStorage.setItem('themeEditorBg', themeBgColor);
             } catch (_) {}
