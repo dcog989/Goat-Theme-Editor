@@ -32,34 +32,38 @@ function deleteColorFromPalette(hexToDelete) {
 }
 
 function updateItemColor(item, newColorString) {
-    const row = document.getElementById(item.id);
     const newColorInfo = parseColorString(newColorString);
 
-    if (newColorInfo) {
-        if (!newColorString.trim().includes('(')) {
-            newColorInfo.inputFormat = item.colorInfo.inputFormat;
-            newColorInfo.originalPrefix = item.colorInfo.originalPrefix;
-            newColorInfo.originalUsesCommas = item.colorInfo.originalUsesCommas;
-        }
+    if (!newColorInfo) return false;
 
-        const formattedValue = formatColorForOutput(newColorInfo);
-        newColorInfo.originalString = formattedValue;
-
-        item.colorInfo = newColorInfo;
-        item.currentColorHex = newColorInfo.hex;
-
-        if (item.el) {
-            if (item.attributeName) {
-                item.el.setAttribute(item.attributeName, formattedValue);
-            } else {
-                item.el.textContent = formattedValue;
-            }
-        }
-
-        updateThemeItemRow(item, row);
-        return true;
+    if (!newColorString.trim().includes('(')) {
+        newColorInfo.inputFormat = item.colorInfo.inputFormat;
+        newColorInfo.originalPrefix = item.colorInfo.originalPrefix;
+        newColorInfo.originalUsesCommas = item.colorInfo.originalUsesCommas;
     }
-    return false;
+
+    const formattedValue = formatColorForOutput(newColorInfo);
+    newColorInfo.originalString = formattedValue;
+
+    item.colorInfo = newColorInfo;
+    item.currentColorHex = newColorInfo.hex;
+
+    syncItemDom(item);
+    return true;
+}
+
+function syncItemDom(item) {
+    if (item.el) {
+        const value = item.colorInfo.originalString;
+        if (item.attributeName) {
+            item.el.setAttribute(item.attributeName, value);
+        } else {
+            item.el.textContent = value;
+        }
+    }
+
+    const row = document.getElementById(item.id);
+    if (row) updateThemeItemRow(item, row);
 }
 
 function populatePaletteFromTheme() {
