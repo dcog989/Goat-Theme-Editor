@@ -23,9 +23,9 @@ function updateButtonStates() {
         return;
     }
 
-    const hasColorItems = themeItems.some((it) => it.isColor);
-    exportBtn.disabled = !(themeFileDoc || themeFileJson) || !hasColorItems;
-    bulkAssignBtn.disabled = !(selectedPaletteColor && filteredThemeItems.some((it) => it.isColor));
+    const hasColorItems = appState.themeItems.some((it) => it.isColor);
+    exportBtn.disabled = !(appState.themeFileDoc || appState.themeFileJson) || !hasColorItems;
+    bulkAssignBtn.disabled = !(appState.selectedPaletteColor && appState.filteredThemeItems.some((it) => it.isColor));
 }
 
 function renderPalette() {
@@ -36,7 +36,7 @@ function renderPalette() {
     div.innerHTML = '';
     const isEditorLightTheme = document.body.classList.contains('light-theme');
 
-    const sorted = [...palette].sort((a, b) => {
+    const sorted = [...appState.palette].sort((a, b) => {
         const ca = colordx(`#${a.hex}`);
         const cb = colordx(`#${b.hex}`);
         if (!ca.isValid()) return 1;
@@ -45,7 +45,7 @@ function renderPalette() {
         const hb = cb.toHsl();
         const ga = ha.s < 5 ? 1 : 0;
         const gb = hb.s < 5 ? 1 : 0;
-        switch (paletteSortMode) {
+        switch (appState.paletteSortMode) {
             case 'L':
                 return ha.l - hb.l;
             case 'C':
@@ -65,7 +65,7 @@ function renderPalette() {
         wrapper.className = 'palette-color-wrapper';
 
         const d = document.createElement('div');
-        d.className = `palette-color${selectedPaletteColor && selectedPaletteColor.hex === colorHexNoHash ? ' selected' : ''}`;
+        d.className = `palette-color${appState.selectedPaletteColor && appState.selectedPaletteColor.hex === colorHexNoHash ? ' selected' : ''}`;
         d.title = `${c.name || 'Color'} #${colorHexNoHash}`;
         d.style.background = `#${colorHexNoHash}`;
         d.draggable = true;
@@ -73,7 +73,7 @@ function renderPalette() {
             e.dataTransfer.setData('text/plain', colorHexNoHash);
         };
         d.onclick = () => {
-            selectedPaletteColor = { name: c.name, hex: colorHexNoHash };
+            appState.selectedPaletteColor = { name: c.name, hex: colorHexNoHash };
             renderPalette();
             updateButtonStates();
         };
@@ -100,7 +100,7 @@ function renderPalette() {
         div.appendChild(wrapper);
     });
 
-    if (palette.length === 0) {
+    if (appState.palette.length === 0) {
         const empty = document.createElement('div');
         empty.className = 'palette-empty';
         empty.textContent = 'Import a theme to populate the palette.';
@@ -121,9 +121,9 @@ function renderPalette() {
     colorInput.style.height = '0';
     colorInput.onchange = function () {
         const hex = this.value.substring(1).toUpperCase();
-        const isDuplicate = palette.some((p) => p.hex === hex);
+        const isDuplicate = appState.palette.some((p) => p.hex === hex);
         if (!isDuplicate) {
-            palette.push({ name: this.value, hex });
+            appState.palette.push({ name: this.value, hex });
             renderPalette();
         }
         this.value = '#000000';
@@ -180,9 +180,9 @@ function createBackgroundPicker(themeColorsDiv) {
         const c = colordx(value);
         if (c.isValid()) {
             const hex = c.toHex();
-            themeBgColor = hex;
+            appState.themeBgColor = hex;
             try {
-                localStorage.setItem('themeEditorBg', themeBgColor);
+                localStorage.setItem('themeEditorBg', appState.themeBgColor);
             } catch (_) {}
             themeColorsDiv.style.background = hex;
             bgInput.value = value;
@@ -233,7 +233,7 @@ function renderThemeItems() {
         return;
     }
     themeColorsDiv.innerHTML = '';
-    if (themeBgColor) themeColorsDiv.style.background = themeBgColor;
+    if (appState.themeBgColor) themeColorsDiv.style.background = appState.themeBgColor;
 
     // Build header row
     const header = document.createElement('div');
@@ -267,7 +267,7 @@ function renderThemeItems() {
     themeColorsDiv.appendChild(header);
 
     // Data rows
-    filteredThemeItems.forEach((item) => {
+    appState.filteredThemeItems.forEach((item) => {
         if (!item.isColor) return;
 
         const row = document.createElement('div');

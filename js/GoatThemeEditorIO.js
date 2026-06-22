@@ -279,7 +279,7 @@ function downloadFile(content, mimeType, ext) {
     const d = pad(now.getDate());
     const H = pad(now.getHours());
     const M = pad(now.getMinutes());
-    const filename = `${originalThemeFileName}.${y}${m}${d}${H}${M}${ext}`;
+    const filename = `${appState.originalThemeFileName}.${y}${m}${d}${H}${M}${ext}`;
     const blob = new Blob([content], { type: mimeType });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -293,13 +293,13 @@ function downloadFile(content, mimeType, ext) {
 }
 
 function exportTheme() {
-    if (themeFileDoc) {
+    if (appState.themeFileDoc) {
         const serializer = new XMLSerializer();
-        const xmlString = serializer.serializeToString(themeFileDoc);
+        const xmlString = serializer.serializeToString(appState.themeFileDoc);
         downloadFile(xmlString, 'application/xml;charset=utf-8', '.xml');
-    } else if (themeFileJson) {
-        const modifiedData = JSON.parse(JSON.stringify(themeFileJson));
-        themeItems.forEach((item) => {
+    } else if (appState.themeFileJson) {
+        const modifiedData = JSON.parse(JSON.stringify(appState.themeFileJson));
+        appState.themeItems.forEach((item) => {
             if (item.isColor && item.colorInfo) {
                 setJsonValueByPath(modifiedData, item.name, item.colorInfo.originalString);
             }

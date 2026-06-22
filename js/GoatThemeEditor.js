@@ -7,29 +7,30 @@
  */
 
 // --- State Variables ---
-window.palette = [];
-window.themeItems = [];
-window.filteredThemeItems = [];
-window.selectedPaletteColor = null;
-window.themeFileDoc = null;
-window.themeFileJson = null;
-window.originalThemeFileName = 'Theme';
+window.appState = {
+    palette: [],
+    themeItems: [],
+    filteredThemeItems: [],
+    selectedPaletteColor: null,
+    themeFileDoc: null,
+    themeFileJson: null,
+    originalThemeFileName: 'Theme',
+    paletteSortMode: 'L',
+    themeBgColor: localStorage.getItem('themeEditorBg') || ''
+};
 const paletteReadId = { value: 0 };
 const themeReadId = { value: 0 };
-window.paletteSortMode = 'L';
-window.themeBgColor = localStorage.getItem('themeEditorBg') || '';
 
 // --- Core Logic Functions ---
 
 function deleteColorFromPalette(hexToDelete) {
-    palette = palette.filter((p) => p.hex !== hexToDelete);
-    if (selectedPaletteColor && selectedPaletteColor.hex === hexToDelete) {
-        selectedPaletteColor = null;
+    appState.palette = appState.palette.filter((p) => p.hex !== hexToDelete);
+    if (appState.selectedPaletteColor && appState.selectedPaletteColor.hex === hexToDelete) {
+        appState.selectedPaletteColor = null;
     }
     renderPalette();
 }
 
-// --- Centralized State Update Function ---
 function updateItemColor(item, newColorString) {
     const row = document.getElementById(item.id);
     const newColorInfo = parseColorString(newColorString);
@@ -64,15 +65,15 @@ function updateItemColor(item, newColorString) {
 function populatePaletteFromTheme() {
     const seen = new Set();
     const colors = [];
-    themeItems.forEach((item) => {
+    appState.themeItems.forEach((item) => {
         if (item.isColor && item.currentColorHex && !seen.has(item.currentColorHex)) {
             seen.add(item.currentColorHex);
             colors.push({ name: item.name, hex: item.currentColorHex });
         }
     });
-    palette = colors;
-    selectedPaletteColor = null;
-    paletteSortMode = 'H';
+    appState.palette = colors;
+    appState.selectedPaletteColor = null;
+    appState.paletteSortMode = 'H';
     document.querySelectorAll('.sort-btn').forEach((b) => {
         b.classList.toggle('active', b.dataset.sort === 'H');
     });
@@ -81,8 +82,8 @@ function populatePaletteFromTheme() {
 }
 
 function clearPalette() {
-    palette = [];
-    selectedPaletteColor = null;
+    appState.palette = [];
+    appState.selectedPaletteColor = null;
     renderPalette();
     updateButtonStates();
 }
@@ -96,11 +97,13 @@ function filterThemeItems() {
     const filterText = filterInput.value.trim().toLowerCase();
 
     if (filterText) {
-        filteredThemeItems = themeItems.filter((item) => item.isColor && item.name.toLowerCase().includes(filterText));
+        appState.filteredThemeItems = appState.themeItems.filter(
+            (item) => item.isColor && item.name.toLowerCase().includes(filterText)
+        );
     } else {
-        filteredThemeItems = themeItems.filter((item) => item.isColor);
+        appState.filteredThemeItems = appState.themeItems.filter((item) => item.isColor);
     }
-    filteredThemeItems.sort((a, b) => a.name.localeCompare(b.name));
+    appState.filteredThemeItems.sort((a, b) => a.name.localeCompare(b.name));
     renderThemeItems();
 }
 
@@ -170,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             paletteFileNameEl.textContent = file.name;
             readFileWithTracker(file, paletteReadId, (content) => {
-                palette = parsePalette(content);
+                appState.palette = parsePalette(content);
                 renderPalette();
                 updateButtonStates();
             });
@@ -186,23 +189,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = e.target.files[0];
             if (!file) {
                 themeFileNameEl.textContent = 'No theme file selected';
-                originalThemeFileName = 'Theme';
-                themeItems = [];
-                themeFileDoc = null;
-                themeFileJson = null;
+                appState.originalThemeFileName = 'Theme';
+                appState.themeItems = [];
+                appState.themeFileDoc = null;
+                appState.themeFileJson = null;
                 filterThemeItems();
                 return;
             }
             themeFileNameEl.textContent = file.name;
             const nameParts = file.name.split('.');
             if (nameParts.length > 1) nameParts.pop();
-            originalThemeFileName = nameParts.join('.') || file.name;
+            appState.originalThemeFileName = nameParts.join('.') || file.name;
             readFileWithTracker(file, themeReadId, (content) => {
                 const result = parseGenericThemeFile(content);
-                themeFileDoc = result.doc;
-                themeFileJson = result.data || null;
-                themeItems = result.items;
-                themeItems.sort((a, b) => a.name.localeCompare(b.name));
+                appState.themeFileDoc = result.doc;
+                appState.themeFileJson = result.data || null;
+                appState.themeItems = result.items;
+                appState.themeItems.sort((a, b) => a.name.localeCompare(b.name));
                 populatePaletteFromTheme();
                 filterThemeItems();
             });
@@ -215,11 +218,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (bulkAssignBtnElement) {
         bulkAssignBtnElement.onclick = () => {
-            if (!selectedPaletteColor?.hex || filteredThemeItems.length === 0) {
+            if (!appState.selectedPaletteColor?.hex || appState.filteredThemeItems.length === 0) {
                 return;
             }
-            const newColorStr = `#${selectedPaletteColor.hex}`;
-            filteredThemeItems.forEach((item) => {
+            const newColorStr = `#${appState.selectedPaletteColor.hex}`;
+            appState.filteredThemeItems.forEach((item) => {
                 if (item.isColor) {
                     updateItemColor(item, newColorStr);
                 }
@@ -236,13 +239,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.querySelectorAll('.sort-btn').forEach((btn) => {
-        if (btn.dataset.sort === paletteSortMode) btn.classList.add('active');
+        if (btn.dataset.sort === appState.paletteSortMode) btn.classList.add('active');
         btn.onclick = () => {
             document.querySelectorAll('.sort-btn').forEach((b) => {
                 b.classList.remove('active');
             });
             btn.classList.add('active');
-            paletteSortMode = btn.dataset.sort;
+            appState.paletteSortMode = btn.dataset.sort;
             renderPalette();
         };
     });
