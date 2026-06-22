@@ -14,8 +14,8 @@ let selectedPaletteColor = null; window.selectedPaletteColor = selectedPaletteCo
 let themeFileDoc = null; window.themeFileDoc = themeFileDoc;
 let themeFileJson = null; window.themeFileJson = themeFileJson;
 let originalThemeFileName = "Theme"; window.originalThemeFileName = originalThemeFileName;
-let currentPaletteReadId = 0;
-let currentThemeReadId = 0;
+const paletteReadId = { value: 0 };
+const themeReadId = { value: 0 };
 let paletteSortMode = 'L'; window.paletteSortMode = paletteSortMode;
 let themeBgColor = localStorage.getItem('themeEditorBg') || ''; window.themeBgColor = themeBgColor;
 
@@ -104,6 +104,33 @@ function filterThemeItems() {
 }
 
 
+function readFileWithTracker(file, readId, onContent) {
+    readId.value++;
+    const thisReadId = readId.value;
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+        if (thisReadId !== readId.value) return;
+        try {
+            if (ev.target.result) {
+                onContent(ev.target.result);
+            } else {
+                alert("Error: File content is empty or unreadable.");
+            }
+        } catch (error) {
+            alert(`Error processing file: ${error.message}`);
+        }
+    };
+    reader.onerror = function () {
+        if (thisReadId !== readId.value) return;
+        alert(`Error reading file: ${reader.error ? reader.error.message : 'Unknown error'}`);
+    };
+    try {
+        reader.readAsText(file);
+    } catch (readError) {
+        alert(`Could not start reading file: ${readError.message}`);
+    }
+}
+
 // --- Event Listener Setup ---
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggleBtn = document.getElementById('themeToggleBtn');
@@ -134,21 +161,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const file = e.target.files[0];
             if (!file) { paletteFileNameEl.textContent = 'No palette file selected'; return; }
             paletteFileNameEl.textContent = file.name;
-            currentPaletteReadId++;
-            const thisReadId = currentPaletteReadId;
-            const reader = new FileReader();
-            reader.onload = function (ev) {
-                if (thisReadId !== currentPaletteReadId) return;
-                try {
-                    if (ev.target.result) {
-                        palette = parsePalette(ev.target.result); window.palette = palette;
-                        renderPalette();
-                        updateButtonStates();
-                    } else { alert("Error: Palette file content is empty or unreadable."); }
-                } catch (error) { alert(`Error processing palette file: ${error.message}`); }
-            };
-            reader.onerror = function () { if (thisReadId !== currentPaletteReadId) return; alert(`Error reading palette file: ${reader.error ? reader.error.message : 'Unknown error'}`); };
-            try { reader.readAsText(file); } catch (readError) { alert(`Could not start reading palette file: ${readError.message}`); }
+            readFileWithTracker(file, paletteReadId, content => {
+                palette = parsePalette(content); window.palette = palette;
+                renderPalette();
+                updateButtonStates();
+            });
         };
     }
 
@@ -169,25 +186,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const nameParts = file.name.split('.');
             if (nameParts.length > 1) nameParts.pop();
             originalThemeFileName = nameParts.join('.') || file.name; window.originalThemeFileName = originalThemeFileName;
-            currentThemeReadId++;
-            const thisReadId = currentThemeReadId;
-            const reader = new FileReader();
-            reader.onload = function (ev) {
-                if (thisReadId !== currentThemeReadId) return;
-                try {
-                    if (ev.target.result) {
-                        const result = parseGenericThemeFile(ev.target.result);
-                        themeFileDoc = result.doc; window.themeFileDoc = themeFileDoc;
-                        themeFileJson = result.data || null; window.themeFileJson = themeFileJson;
-                        themeItems = result.items; window.themeItems = themeItems;
-                        themeItems.sort((a, b) => a.name.localeCompare(b.name));
-                        populatePaletteFromTheme();
-                        filterThemeItems();
-                    } else { alert("Error: Theme file content is empty or unreadable."); }
-                } catch (error) { alert(`Error processing theme file: ${error.message}`); }
-            };
-            reader.onerror = function () { if (thisReadId !== currentThemeReadId) return; alert(`Error reading theme file: ${reader.error ? reader.error.message : 'Unknown error'}`); };
-            try { reader.readAsText(file); } catch (readError) { alert(`Could not start reading theme file: ${readError.message}`); }
+            readFileWithTracker(file, themeReadId, content => {
+                const result = parseGenericThemeFile(content);
+                themeFileDoc = result.doc; window.themeFileDoc = themeFileDoc;
+                themeFileJson = result.data || null; window.themeFileJson = themeFileJson;
+                themeItems = result.items; window.themeItems = themeItems;
+                themeItems.sort((a, b) => a.name.localeCompare(b.name));
+                populatePaletteFromTheme();
+                filterThemeItems();
+            });
         };
     }
 
