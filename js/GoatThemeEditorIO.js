@@ -79,7 +79,11 @@ function safeParseJson(json, errorMessage) {
 function walkJsonValues(data, onString, prefix) {
     if (Array.isArray(data)) {
         if (data.length >= 3 && data.length <= 4 && data.every((v) => typeof v === 'number')) {
-            onString(prefix || '', `rgb(${Math.round(data[0])}, ${Math.round(data[1])}, ${Math.round(data[2])})`);
+            const scale = Math.max(...data) <= 1 ? 255 : 1;
+            onString(
+                prefix || '',
+                `rgb(${Math.round(data[0] * scale)}, ${Math.round(data[1] * scale)}, ${Math.round(data[2] * scale)})`
+            );
             return;
         }
         data.forEach((item, i) => {
