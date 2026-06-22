@@ -319,37 +319,6 @@ function exportTheme() {
     }
 }
 
-function exportXml() {
-    if (!themeFileDoc) {
-        console.warn("ExportXML called but no themeFileDoc loaded.");
-        alert("No theme file loaded to export.");
-        return;
-    }
-
-    const serializer = new XMLSerializer();
-    const xmlString = serializer.serializeToString(themeFileDoc);
-
-    const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
-    const y = now.getFullYear().toString().slice(-2);
-    const m = pad(now.getMonth() + 1);
-    const d = pad(now.getDate());
-    const H = pad(now.getHours());
-    const M = pad(now.getMinutes());
-    const filename = `${originalThemeFileName}.${y}${m}${d}${H}${M}.xml`;
-
-    const blob = new Blob([xmlString], { type: 'application/xml;charset=utf-8' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-        document.body.removeChild(a);
-        URL.revokeObjectURL(a.href);
-    }, 100);
-}
-
 window.parsePalette = parsePalette;
 window.parseGenericThemeFile = parseGenericThemeFile;
 window.exportTheme = exportTheme;
