@@ -265,3 +265,12 @@ window.updateItemColor = updateItemColor;
 window.deleteColorFromPalette = deleteColorFromPalette;
 window.filterThemeItems = filterThemeItems;
 window.clearPalette = clearPalette;
+window.setSelectedPaletteColor = (c) => {
+    appState.selectedPaletteColor = c;
+};
+window.addPaletteColor = (name, hex) => {
+    appState.palette.push({ name, hex });
+};
+window.setThemeBgColor = (hex) => {
+    appState.themeBgColor = hex;
+};

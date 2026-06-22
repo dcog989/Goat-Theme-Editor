@@ -73,7 +73,7 @@ function renderPalette() {
             e.dataTransfer.setData('text/plain', colorHexNoHash);
         };
         d.onclick = () => {
-            appState.selectedPaletteColor = { name: c.name, hex: colorHexNoHash };
+            setSelectedPaletteColor({ name: c.name, hex: colorHexNoHash });
             renderPalette();
             updateButtonStates();
         };
@@ -123,7 +123,7 @@ function renderPalette() {
         const hex = this.value.substring(1).toUpperCase();
         const isDuplicate = appState.palette.some((p) => p.hex === hex);
         if (!isDuplicate) {
-            appState.palette.push({ name: this.value, hex });
+            addPaletteColor(this.value, hex);
             renderPalette();
         }
         this.value = '#000000';
@@ -180,7 +180,7 @@ function createBackgroundPicker(themeColorsDiv) {
         const c = colordx(value);
         if (c.isValid()) {
             const hex = c.toHex();
-            appState.themeBgColor = hex;
+            setThemeBgColor(hex);
             try {
                 localStorage.setItem('themeEditorBg', appState.themeBgColor);
             } catch (_) {}
