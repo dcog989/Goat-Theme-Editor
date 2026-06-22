@@ -74,126 +74,128 @@ function parseColorString(str) {
     return null;
 }
 
+function formatHex(colorInfo, c, originalPrefix, outputAlpha) {
+    const originalHexContent = colorInfo.originalString.replace(/^#|^0x/i, '');
+    const isShortHexLen = originalHexContent.length === 3 || originalHexContent.length === 4;
+    const hex = c.toHex();
+    let output;
+    if (outputAlpha) {
+        const hexa = hex.length === 7 ? hex + toHexByte(c.alpha() * 255) : hex;
+        output = isShortHexLen ? hexToShort(hexa) || hexa : hexa;
+    } else {
+        const hexNoAlpha = hex.length > 7 ? hex.substring(0, 7) : hex;
+        output = isShortHexLen ? hexToShort(hexNoAlpha) || hexNoAlpha : hexNoAlpha;
+    }
+    if (originalPrefix.toLowerCase() === "0x") {
+        if (output.startsWith("#")) {
+            if (output.length === 9) {
+                output = originalPrefix + output.substring(7, 9) + output.substring(1, 7);
+            } else if (output.length === 5 && output.charAt(0) === '#') {
+                const r = output[1] + output[1];
+                const g = output[2] + output[2];
+                const b = output[3] + output[3];
+                const a_val = output[4] + output[4];
+                output = originalPrefix + a_val + r + g + b;
+            } else {
+                output = originalPrefix + output.substring(1);
+            }
+        }
+    } else if (originalPrefix === "" && output.startsWith("#")) {
+        output = output.substring(1);
+    }
+    return output;
+}
+
+function formatRgb(c, originalPrefix, usesCommas, outputAlpha) {
+    const rgb = c.toRgb();
+    const r = Math.round(rgb.r);
+    const g = Math.round(rgb.g);
+    const b = Math.round(rgb.b);
+    const a = rgb.alpha;
+    let output;
+    if (usesCommas) {
+        output = outputAlpha
+            ? `rgba(${r}, ${g}, ${b}, ${formatAlpha(a)})`
+            : `rgb(${r}, ${g}, ${b})`;
+    } else {
+        output = outputAlpha
+            ? `rgb(${r} ${g} ${b} / ${formatAlpha(a)})`
+            : `rgb(${r} ${g} ${b})`;
+    }
+    if (originalPrefix) {
+        const funcName = output.substring(0, output.indexOf('('));
+        if (funcName.toLowerCase() !== originalPrefix.toLowerCase()) {
+            output = originalPrefix + output.substring(funcName.length);
+        }
+    }
+    return output;
+}
+
+function formatHsl(c, originalPrefix, usesCommas, outputAlpha) {
+    const hsl = c.toHsl();
+    const h = Math.round(hsl.h);
+    const s = Math.round(hsl.s);
+    const l = Math.round(hsl.l);
+    const a = hsl.alpha;
+    let output;
+    if (usesCommas) {
+        output = outputAlpha
+            ? `hsla(${h}, ${s}%, ${l}%, ${formatAlpha(a)})`
+            : `hsl(${h}, ${s}%, ${l}%)`;
+    } else {
+        output = outputAlpha
+            ? `hsl(${h} ${s}% ${l}% / ${formatAlpha(a)})`
+            : `hsl(${h} ${s}% ${l}%)`;
+    }
+    if (originalPrefix) {
+        const funcName = output.substring(0, output.indexOf('('));
+        if (funcName.toLowerCase() !== originalPrefix.toLowerCase()) {
+            output = originalPrefix + output.substring(funcName.length);
+        }
+    }
+    return output;
+}
+
+function formatOklch(c) {
+    return c.toOklchString();
+}
+
+function formatDefault(c, originalPrefix, outputAlpha) {
+    let output = c.toHex();
+    if (outputAlpha) {
+        output += toHexByte(c.alpha() * 255).toUpperCase();
+    }
+    if (output.startsWith("#")) {
+        if (originalPrefix.toLowerCase() === "0x") {
+            if (outputAlpha) {
+                output = originalPrefix + output.substring(7, 9) + output.substring(1, 7);
+            } else {
+                output = originalPrefix + output.substring(1);
+            }
+        } else if (originalPrefix === "") {
+            output = output.substring(1);
+        }
+    }
+    return output;
+}
+
 function formatColorForOutput(colorInfo) {
     if (!colorInfo || !colorInfo.instance || !colorInfo.instance.isValid()) {
         return colorInfo && typeof colorInfo.originalString === 'string' ? colorInfo.originalString : "#000000";
     }
     const c = colorInfo.instance;
-    const inputFormat = colorInfo.inputFormat;
     const originalPrefix = colorInfo.originalPrefix || "";
     const usesCommas = colorInfo.originalUsesCommas;
     const outputAlpha = colorInfo.originalHadExplicitAlpha || c.alpha() < 1 ||
         (originalPrefix.toLowerCase().endsWith('a') && originalPrefix.length > 3);
-    let outputString = "";
 
-    switch (inputFormat) {
-        case "hex": {
-            const originalHexContent = colorInfo.originalString.replace(/^#|^0x/i, '');
-            const isShortHexLen = originalHexContent.length === 3 || originalHexContent.length === 4;
-            const hex = c.toHex();
-            if (outputAlpha) {
-                const hexa = hex.length === 7 ? hex + toHexByte(c.alpha() * 255) : hex;
-                outputString = isShortHexLen ? hexToShort(hexa) || hexa : hexa;
-            } else {
-                const hexNoAlpha = hex.length > 7 ? hex.substring(0, 7) : hex;
-                outputString = isShortHexLen ? hexToShort(hexNoAlpha) || hexNoAlpha : hexNoAlpha;
-            }
-            if (originalPrefix.toLowerCase() === "0x") {
-                if (outputString.startsWith("#")) {
-                    if (outputString.length === 9) {
-                        outputString = originalPrefix + outputString.substring(7, 9) + outputString.substring(1, 7);
-                    } else if (outputString.length === 5 && outputString.charAt(0) === '#') {
-                        const r = outputString[1] + outputString[1];
-                        const g = outputString[2] + outputString[2];
-                        const b = outputString[3] + outputString[3];
-                        const a_val = outputString[4] + outputString[4];
-                        outputString = originalPrefix + a_val + r + g + b;
-                    } else {
-                        outputString = originalPrefix + outputString.substring(1);
-                    }
-                }
-            } else if (originalPrefix === "" && outputString.startsWith("#")) {
-                outputString = outputString.substring(1);
-            }
-            break;
-        }
-        case "rgb": {
-            const rgb = c.toRgb();
-            const r = Math.round(rgb.r);
-            const g = Math.round(rgb.g);
-            const b = Math.round(rgb.b);
-            const a = rgb.alpha;
-            if (usesCommas) {
-                if (outputAlpha) {
-                    outputString = `rgba(${r}, ${g}, ${b}, ${formatAlpha(a)})`;
-                } else {
-                    outputString = `rgb(${r}, ${g}, ${b})`;
-                }
-            } else {
-                if (outputAlpha) {
-                    outputString = `rgb(${r} ${g} ${b} / ${formatAlpha(a)})`;
-                } else {
-                    outputString = `rgb(${r} ${g} ${b})`;
-                }
-            }
-            if (originalPrefix) {
-                const funcName = outputString.substring(0, outputString.indexOf('('));
-                if (funcName.toLowerCase() !== originalPrefix.toLowerCase()) {
-                    outputString = originalPrefix + outputString.substring(funcName.length);
-                }
-            }
-            break;
-        }
-        case "hsl": {
-            const hsl = c.toHsl();
-            const h = Math.round(hsl.h);
-            const s = Math.round(hsl.s);
-            const l = Math.round(hsl.l);
-            const a = hsl.alpha;
-            if (usesCommas) {
-                if (outputAlpha) {
-                    outputString = `hsla(${h}, ${s}%, ${l}%, ${formatAlpha(a)})`;
-                } else {
-                    outputString = `hsl(${h}, ${s}%, ${l}%)`;
-                }
-            } else {
-                if (outputAlpha) {
-                    outputString = `hsl(${h} ${s}% ${l}% / ${formatAlpha(a)})`;
-                } else {
-                    outputString = `hsl(${h} ${s}% ${l}%)`;
-                }
-            }
-            if (originalPrefix) {
-                const funcName = outputString.substring(0, outputString.indexOf('('));
-                if (funcName.toLowerCase() !== originalPrefix.toLowerCase()) {
-                    outputString = originalPrefix + outputString.substring(funcName.length);
-                }
-            }
-            break;
-        }
-        case "oklch": {
-            outputString = c.toOklchString();
-            break;
-        }
-        default:
-            outputString = c.toHex();
-            if (outputAlpha) {
-                outputString += toHexByte(c.alpha() * 255).toUpperCase();
-            }
-            if (outputString.startsWith("#")) {
-                if (originalPrefix.toLowerCase() === "0x") {
-                    if (outputAlpha) {
-                        outputString = originalPrefix + outputString.substring(7, 9) + outputString.substring(1, 7);
-                    } else {
-                        outputString = originalPrefix + outputString.substring(1);
-                    }
-                } else if (originalPrefix === "") {
-                    outputString = outputString.substring(1);
-                }
-            }
-            break;
+    switch (colorInfo.inputFormat) {
+        case "hex": return formatHex(colorInfo, c, originalPrefix, outputAlpha);
+        case "rgb": return formatRgb(c, originalPrefix, usesCommas, outputAlpha);
+        case "hsl": return formatHsl(c, originalPrefix, usesCommas, outputAlpha);
+        case "oklch": return formatOklch(c);
+        default: return formatDefault(c, originalPrefix, outputAlpha);
     }
-    return outputString;
 }
 
 function normalizeHex(hexInput) {
