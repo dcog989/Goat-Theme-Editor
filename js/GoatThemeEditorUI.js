@@ -14,16 +14,6 @@ function applyTheme(themeName) {
         document.body.classList.remove('light-theme');
         localStorage.setItem('themeEditorTheme', 'dark');
     }
-    const paletteColorsEl = document.getElementById('paletteColors');
-    if (
-        typeof renderPalette === 'function' &&
-        (palette.length > 0 || paletteColorsEl?.innerHTML.includes('palette-color'))
-    ) {
-        renderPalette();
-    }
-    if (typeof renderThemeItems === 'function' && (filteredThemeItems.length > 0 || themeItems.length > 0)) {
-        renderThemeItems();
-    }
 }
 
 function updateButtonStates() {
@@ -170,6 +160,73 @@ function updateThemeItemRow(item, row) {
     }
 }
 
+function createBackgroundPicker(themeColorsDiv) {
+    const bgInput = document.createElement('input');
+    bgInput.type = 'text';
+    bgInput.style.width = '80px';
+    bgInput.style.height = '24px';
+    bgInput.style.padding = '1px 4px';
+    bgInput.style.border = '1px solid var(--border-strong)';
+    bgInput.style.borderRadius = '3px';
+    bgInput.style.fontSize = '0.75rem';
+    bgInput.style.fontFamily = '"Source Code Pro", monospace';
+    bgInput.style.background = 'var(--bg-input)';
+    bgInput.style.color = 'var(--text-input)';
+    bgInput.style.marginLeft = 'auto';
+    bgInput.placeholder = '#1e1e1e';
+    bgInput.title = 'Background color';
+
+    function applyBg(value) {
+        const c = colordx(value);
+        if (c.isValid()) {
+            const hex = c.toHex();
+            themeBgColor = hex;
+            try {
+                localStorage.setItem('themeEditorBg', themeBgColor);
+            } catch (_) {}
+            themeColorsDiv.style.background = hex;
+            bgInput.value = value;
+            return true;
+        }
+        return false;
+    }
+
+    bgInput.onchange = function () {
+        applyBg(this.value);
+    };
+    bgInput.onkeydown = function (e) {
+        if (e.key === 'Enter') applyBg(this.value);
+    };
+    bgInput.onclick = (e) => {
+        const picker = document.createElement('input');
+        picker.type = 'color';
+        picker.style.position = 'fixed';
+        picker.style.opacity = '0';
+        picker.style.width = '1px';
+        picker.style.height = '1px';
+        picker.style.pointerEvents = 'none';
+        const safeX = Math.max(20, Math.min(e.clientX - 150, window.innerWidth - 400));
+        const safeY = Math.max(20, Math.min(e.clientY - 100, window.innerHeight - 300));
+        picker.style.left = `${safeX}px`;
+        picker.style.top = `${safeY}px`;
+        picker.value = bgInput.value || '#1e1e1e';
+
+        function cleanup() {
+            if (picker.parentNode) picker.remove();
+        }
+        picker.onchange = function () {
+            applyBg(this.value);
+            cleanup();
+        };
+        picker.addEventListener('blur', cleanup);
+        setTimeout(cleanup, 60000);
+        document.body.appendChild(picker);
+        picker.click();
+    };
+
+    return bgInput;
+}
+
 function renderThemeItems() {
     const themeColorsDiv = document.getElementById('themeColors');
     if (!themeColorsDiv) {
@@ -205,66 +262,7 @@ function renderThemeItems() {
     headerPreview.textContent = 'Preview';
     header.appendChild(headerPreview);
 
-    const bgInput = document.createElement('input');
-    bgInput.type = 'text';
-    bgInput.style.width = '80px';
-    bgInput.style.height = '24px';
-    bgInput.style.padding = '1px 4px';
-    bgInput.style.border = '1px solid var(--border-strong)';
-    bgInput.style.borderRadius = '3px';
-    bgInput.style.fontSize = '0.75rem';
-    bgInput.style.fontFamily = '"Source Code Pro", monospace';
-    bgInput.style.background = 'var(--bg-input)';
-    bgInput.style.color = 'var(--text-input)';
-    bgInput.style.marginLeft = 'auto';
-    bgInput.placeholder = '#1e1e1e';
-    bgInput.title = 'Background color';
-    function applyBg(value) {
-        const c = colordx(value);
-        if (c.isValid()) {
-            const hex = c.toHex();
-            themeBgColor = hex;
-            try {
-                localStorage.setItem('themeEditorBg', themeBgColor);
-            } catch (_) {}
-            themeColorsDiv.style.background = hex;
-            bgInput.value = value;
-            return true;
-        }
-        return false;
-    }
-    bgInput.onchange = function () {
-        applyBg(this.value);
-    };
-    bgInput.onkeydown = function (e) {
-        if (e.key === 'Enter') applyBg(this.value);
-    };
-    bgInput.onclick = (e) => {
-        const picker = document.createElement('input');
-        picker.type = 'color';
-        picker.style.position = 'fixed';
-        picker.style.opacity = '0';
-        picker.style.width = '1px';
-        picker.style.height = '1px';
-        picker.style.pointerEvents = 'none';
-        const safeX = Math.max(20, Math.min(e.clientX - 150, window.innerWidth - 400));
-        const safeY = Math.max(20, Math.min(e.clientY - 100, window.innerHeight - 300));
-        picker.style.left = `${safeX}px`;
-        picker.style.top = `${safeY}px`;
-        picker.value = bgInput.value || '#1e1e1e';
-        function cleanup() {
-            if (picker.parentNode) picker.remove();
-        }
-        picker.onchange = function () {
-            applyBg(this.value);
-            cleanup();
-        };
-        picker.addEventListener('blur', cleanup);
-        setTimeout(cleanup, 60000);
-        document.body.appendChild(picker);
-        picker.click();
-    };
-    header.appendChild(bgInput);
+    header.appendChild(createBackgroundPicker(themeColorsDiv));
 
     themeColorsDiv.appendChild(header);
 

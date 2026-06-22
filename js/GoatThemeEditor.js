@@ -152,6 +152,8 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 applyTheme('light');
             }
+            renderPalette();
+            renderThemeItems();
         };
     }
 
