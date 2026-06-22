@@ -44,9 +44,10 @@ function parsePaletteXml(xml) {
                 e.getAttribute('oklchValue') ||
                 e.getAttribute('value') ||
                 '';
-            return { name, hex: normalizeHex(colorStr) };
+            const parsed = parseColorString(colorStr);
+            return parsed ? { name, hex: parsed.hex } : null;
         })
-        .filter((e) => e.hex !== '000000');
+        .filter(Boolean);
 }
 
 function parsePaletteCss(css) {
@@ -57,10 +58,10 @@ function parsePaletteCss(css) {
     while ((match = re.exec(css)) !== null) {
         const name = match[1].trim();
         const colorStr = match[2].trim();
-        const hex = normalizeHex(colorStr);
-        if (hex !== '000000' && !seen.has(hex)) {
-            seen.add(hex);
-            palette.push({ name, hex });
+        const parsed = parseColorString(colorStr);
+        if (parsed && !seen.has(parsed.hex)) {
+            seen.add(parsed.hex);
+            palette.push({ name, hex: parsed.hex });
         }
     }
     return palette;
@@ -109,10 +110,10 @@ function parsePaletteJson(json) {
     const palette = [];
 
     walkJsonValues(data, (name, value) => {
-        const hex = normalizeHex(value);
-        if (hex !== '000000' && !seen.has(hex)) {
-            seen.add(hex);
-            palette.push({ name: name || 'Unnamed', hex });
+        const parsed = parseColorString(value);
+        if (parsed && !seen.has(parsed.hex)) {
+            seen.add(parsed.hex);
+            palette.push({ name: name || 'Unnamed', hex: parsed.hex });
         }
     });
 
