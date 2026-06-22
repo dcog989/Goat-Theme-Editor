@@ -17,54 +17,75 @@ function hexToShort(hex) {
     return null;
 }
 
+const colorFormats = [
+    {
+        name: 'hex',
+        test: (str, lower) => lower.startsWith('#') || /^(0x)?[0-9a-f]+$/i.test(str),
+        detect: (str, lower) => {
+            const originalPrefix = str.startsWith('#') ? '#' : lower.startsWith('0x') ? str.substring(0, 2) : '';
+            const hexContent = str.replace(/^#|^0x/i, '');
+            return {
+                originalPrefix,
+                originalUsesCommas: false,
+                originalHadExplicitAlpha:
+                    hexContent.length === 4 ||
+                    hexContent.length === 8 ||
+                    (hexContent.length === 10 && lower.startsWith('0x'))
+            };
+        }
+    },
+    {
+        name: 'rgb',
+        test: (_str, lower) => lower.startsWith('rgb'),
+        detect: (str, lower) => {
+            const originalPrefix = str.substring(0, lower.indexOf('('));
+            const usesCommas = str.includes(',');
+            const hadAlpha =
+                str.includes('/') ||
+                (originalPrefix.toLowerCase() === 'rgba' && str.split(usesCommas ? ',' : ' ').length > 3);
+            return { originalPrefix, originalUsesCommas: usesCommas, originalHadExplicitAlpha: hadAlpha };
+        }
+    },
+    {
+        name: 'hsl',
+        test: (_str, lower) => lower.startsWith('hsl'),
+        detect: (str, lower) => {
+            const originalPrefix = str.substring(0, lower.indexOf('('));
+            const usesCommas = str.includes(',');
+            const hadAlpha =
+                str.includes('/') ||
+                (originalPrefix.toLowerCase() === 'hsla' && str.split(usesCommas ? ',' : ' ').length > 3);
+            return { originalPrefix, originalUsesCommas: usesCommas, originalHadExplicitAlpha: hadAlpha };
+        }
+    },
+    {
+        name: 'oklch',
+        test: (_str, lower) => lower.startsWith('oklch'),
+        detect: (str, lower) => ({
+            originalPrefix: str.substring(0, lower.indexOf('(')),
+            originalUsesCommas: false,
+            originalHadExplicitAlpha: str.includes('/')
+        })
+    }
+];
+
 function parseColorString(str) {
     if (typeof str !== 'string') return null;
     str = str.trim();
-    let originalInputFormat = null;
-    let originalPrefix = '';
-    let originalUsesCommas = false;
-    let originalHadExplicitAlpha = false;
     const lowerStr = str.toLowerCase();
 
-    if (lowerStr.startsWith('#') || /^(0x)?[0-9a-f]+$/i.test(str)) {
-        originalInputFormat = 'hex';
-        if (str.startsWith('#')) originalPrefix = '#';
-        else if (lowerStr.startsWith('0x')) originalPrefix = str.substring(0, 2);
-        const hexContent = str.replace(/^#|^0x/i, '');
-        if (
-            hexContent.length === 4 ||
-            hexContent.length === 8 ||
-            (hexContent.length === 10 && lowerStr.startsWith('0x'))
-        ) {
-            originalHadExplicitAlpha = true;
+    let detected = null;
+    let formatName = 'unknown';
+    for (const fmt of colorFormats) {
+        if (fmt.test(str, lowerStr)) {
+            detected = fmt.detect(str, lowerStr);
+            formatName = fmt.name;
+            break;
         }
-    } else if (lowerStr.startsWith('rgb')) {
-        originalInputFormat = 'rgb';
-        originalPrefix = str.substring(0, lowerStr.indexOf('('));
-        if (str.includes(',')) originalUsesCommas = true;
-        if (
-            str.includes('/') ||
-            (originalPrefix.toLowerCase() === 'rgba' && str.split(originalUsesCommas ? ',' : ' ').length > 3)
-        ) {
-            originalHadExplicitAlpha = true;
-        }
-    } else if (lowerStr.startsWith('hsl')) {
-        originalInputFormat = 'hsl';
-        originalPrefix = str.substring(0, lowerStr.indexOf('('));
-        if (str.includes(',')) originalUsesCommas = true;
-        if (
-            str.includes('/') ||
-            (originalPrefix.toLowerCase() === 'hsla' && str.split(originalUsesCommas ? ',' : ' ').length > 3)
-        ) {
-            originalHadExplicitAlpha = true;
-        }
-    } else if (lowerStr.startsWith('oklch')) {
-        originalInputFormat = 'oklch';
-        originalPrefix = str.substring(0, lowerStr.indexOf('('));
-        if (str.includes('/')) originalHadExplicitAlpha = true;
     }
 
-    const colorParseInput = originalInputFormat === 'hex' && !str.startsWith('#') ? `#${str.replace(/^0x/i, '')}` : str;
+    const colorParseInput =
+        detected && formatName === 'hex' && !str.startsWith('#') ? `#${str.replace(/^0x/i, '')}` : str;
     const c = colordx(colorParseInput);
     if (c.isValid()) {
         const rgb = c.toRgb();
@@ -77,10 +98,10 @@ function parseColorString(str) {
             alpha: c.alpha(),
             instance: c,
             originalString: str,
-            inputFormat: originalInputFormat || 'unknown',
-            originalPrefix: originalPrefix,
-            originalUsesCommas: originalUsesCommas,
-            originalHadExplicitAlpha: originalHadExplicitAlpha
+            inputFormat: formatName,
+            originalPrefix: detected?.originalPrefix || '',
+            originalUsesCommas: detected?.originalUsesCommas || false,
+            originalHadExplicitAlpha: detected?.originalHadExplicitAlpha || false
         };
     }
     return null;
