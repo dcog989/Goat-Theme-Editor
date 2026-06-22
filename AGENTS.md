@@ -4,7 +4,8 @@ Browser-based tool to import theme files, parse and edit color values via drag-a
 
 ## Dev Environment
 
-Linux CachyOS, Limine boot loader, KDE Plasma 6, Wayland, Btrfs. Firefox, Zed code editor, fish shell with Ghostty + Fresh editor. paru and bun package managers. All software is updated as of today.
+- OS: CachyOS, Limine bootloader, KDE Plasma 6, Wayland, Btrfs.
+- Tools: fish shell, Ghostty terminal, Fresh TUI editor, paru repo tool, bun package manager, Firefox, Zed code editor. All software up to date as of today.
 
 ## Tech Stack
 
@@ -13,6 +14,10 @@ Linux CachyOS, Limine boot loader, KDE Plasma 6, Wayland, Btrfs. Firefox, Zed co
 - No build tools, no bundler, no npm dependencies — fully static site
 
 ## Run Dev Server
+
+```sh
+bun run dev
+```
 
 ```sh
 echo "http://localhost:9000" && bunx bunserv --port 9000
@@ -46,7 +51,8 @@ No build or test commands exist.
 
 ## Interaction Style
 
-- do not pretend to understand how the user feels. no "You're right to be frustrated." etc.
-- no analogies, no apologies
-- be concise, be precise
-- answer the question asked, no 'helpful' suggestions
+- Keep responses concise, precise, no analogies.
+- Do NOT "understand" how the user feels or pretend to have human sensibilities.
+- Always output code or terminal commands in code blocks (three back ticks) so the user can copy them.
+- Use metric units with British spelling.
+- Print technical instructions one step at a time. Allow the user to confirm success of each step before providing the next instruction.
