@@ -31,9 +31,10 @@ function parsePaletteXml(xml) {
         return [];
     }
     return Array.from(doc.getElementsByTagName('myColor'))
-        .map(e => {
+        .map((e) => {
             const name = e.getAttribute('name') || 'Unnamed';
-            const colorStr = e.getAttribute('hexvalue') ||
+            const colorStr =
+                e.getAttribute('hexvalue') ||
                 e.getAttribute('hslValue') ||
                 e.getAttribute('rgbValue') ||
                 e.getAttribute('oklchValue') ||
@@ -41,7 +42,7 @@ function parsePaletteXml(xml) {
                 '';
             return { name, hex: normalizeHex(colorStr) };
         })
-        .filter(e => e.hex !== '000000');
+        .filter((e) => e.hex !== '000000');
 }
 
 function parsePaletteCss(css) {
@@ -65,7 +66,7 @@ function parsePaletteJson(json) {
     let data;
     try {
         data = JSON.parse(json);
-    } catch (e) {
+    } catch (_e) {
         alert('Error: Invalid Palette JSON.');
         return [];
     }
@@ -133,7 +134,11 @@ function parseGenericThemeFile(content) {
 
 function parseGenericThemeXml(xml) {
     const doc = new DOMParser().parseFromString(xml, 'application/xml');
-    if (doc.documentElement.nodeName === 'parsererror') { console.error('Theme XML error:', doc.documentElement.textContent); alert('Error: Invalid Theme XML.'); return { doc: null, items: [] }; }
+    if (doc.documentElement.nodeName === 'parsererror') {
+        console.error('Theme XML error:', doc.documentElement.textContent);
+        alert('Error: Invalid Theme XML.');
+        return { doc: null, items: [] };
+    }
     const items = [];
 
     function traverse(node) {
@@ -145,8 +150,18 @@ function parseGenericThemeXml(xml) {
                 const parsedColor = parseColorString(attr.value);
                 if (parsedColor) {
                     const styleNameAttribute = node.getAttribute('name');
-                    const itemName = styleNameAttribute ? `${styleNameAttribute}[${attr.name}]` : `${node.nodeName}[${attr.name}]_idx${items.length}`;
-                    items.push({ id: `gte-item-${items.length}`, name: itemName, currentColorHex: parsedColor.hex, colorInfo: parsedColor, el: node, attributeName: attr.name, isColor: true });
+                    const itemName = styleNameAttribute
+                        ? `${styleNameAttribute}[${attr.name}]`
+                        : `${node.nodeName}[${attr.name}]_idx${items.length}`;
+                    items.push({
+                        id: `gte-item-${items.length}`,
+                        name: itemName,
+                        currentColorHex: parsedColor.hex,
+                        colorInfo: parsedColor,
+                        el: node,
+                        attributeName: attr.name,
+                        isColor: true
+                    });
                 }
             }
         }
@@ -168,7 +183,15 @@ function parseGenericThemeXml(xml) {
             if (textContent && /^#|^rgb|^hsl|^oklch|^[0-9a-fA-F]{3,}$/.test(textContent)) {
                 const parsedColor = parseColorString(textContent);
                 if (parsedColor) {
-                    items.push({ id: `gte-item-${items.length}`, name: `${node.nodeName}[_text_]`, currentColorHex: parsedColor.hex, colorInfo: parsedColor, el: node, attributeName: null, isColor: true });
+                    items.push({
+                        id: `gte-item-${items.length}`,
+                        name: `${node.nodeName}[_text_]`,
+                        currentColorHex: parsedColor.hex,
+                        colorInfo: parsedColor,
+                        el: node,
+                        attributeName: null,
+                        isColor: true
+                    });
                 }
             }
         }
@@ -205,7 +228,7 @@ function parseGenericThemeJson(json) {
     let data;
     try {
         data = JSON.parse(json);
-    } catch (e) {
+    } catch (_e) {
         alert('Error: Invalid Theme JSON.');
         return { doc: null, items: [], data: null };
     }
@@ -229,7 +252,7 @@ function parseGenericThemeJson(json) {
 
     function traverse(obj, prefix) {
         if (Array.isArray(obj)) {
-            if (obj.length >= 3 && obj.length <= 4 && obj.every(v => typeof v === 'number')) {
+            if (obj.length >= 3 && obj.length <= 4 && obj.every((v) => typeof v === 'number')) {
                 tryAdd(prefix, `rgb(${Math.round(obj[0])}, ${Math.round(obj[1])}, ${Math.round(obj[2])})`);
                 return;
             }
@@ -263,7 +286,7 @@ function setJsonValueByPath(obj, path, value) {
         const part = parts[i];
         const arrayMatch = part.match(/^(.+)\[(\d+)\]$/);
         if (arrayMatch) {
-            current = current[arrayMatch[1]][parseInt(arrayMatch[2])];
+            current = current[arrayMatch[1]][parseInt(arrayMatch[2], 10)];
         } else {
             current = current[part];
         }
@@ -273,7 +296,7 @@ function setJsonValueByPath(obj, path, value) {
     const arrayMatch = last.match(/^(.+)\[(\d+)\]$/);
     if (arrayMatch) {
         if (!current[arrayMatch[1]]) return false;
-        current[arrayMatch[1]][parseInt(arrayMatch[2])] = value;
+        current[arrayMatch[1]][parseInt(arrayMatch[2], 10)] = value;
     } else {
         current[last] = value;
     }
@@ -282,7 +305,7 @@ function setJsonValueByPath(obj, path, value) {
 
 function downloadFile(content, mimeType, ext) {
     const now = new Date();
-    const pad = n => String(n).padStart(2, '0');
+    const pad = (n) => String(n).padStart(2, '0');
     const y = now.getFullYear().toString().slice(-2);
     const m = pad(now.getMonth() + 1);
     const d = pad(now.getDate());
@@ -308,14 +331,14 @@ function exportTheme() {
         downloadFile(xmlString, 'application/xml;charset=utf-8', '.xml');
     } else if (themeFileJson) {
         const modifiedData = JSON.parse(JSON.stringify(themeFileJson));
-        themeItems.forEach(item => {
+        themeItems.forEach((item) => {
             if (item.isColor && item.colorInfo) {
                 setJsonValueByPath(modifiedData, item.name, item.colorInfo.originalString);
             }
         });
         downloadFile(JSON.stringify(modifiedData, null, '\t'), 'application/json;charset=utf-8', '.json');
     } else {
-        alert("No theme file loaded to export.");
+        alert('No theme file loaded to export.');
     }
 }
 

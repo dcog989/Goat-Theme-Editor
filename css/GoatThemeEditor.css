@@ -1,4 +1,8 @@
-*, *::before, *::after { box-sizing: border-box; }
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 :root {
     --bg-body: #1a1a1a;
@@ -51,13 +55,24 @@ body {
     font-size: 16px;
     margin: 0;
     min-height: 100vh;
-    transition: background 0.3s, color 0.3s;
+    transition:
+        background 0.3s,
+        color 0.3s;
 }
 @media (prefers-reduced-motion: reduce) {
-    body, .container, .sidebar, .main, .theme-toggle-button, .import-btn,
-    #filterInput, .btn-primary, #paletteColors, .palette-color,
-    .color-value-input, .palette-color-delete-btn {
-        transition: none !important;
+    body,
+    .container,
+    .sidebar,
+    .main,
+    .theme-toggle-button,
+    .import-btn,
+    #filterInput,
+    .btn-primary,
+    #paletteColors,
+    .palette-color,
+    .color-value-input,
+    .palette-color-delete-btn {
+        transition: none;
     }
 }
 .container {
@@ -74,7 +89,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    transition: background 0.3s, border-color 0.3s;
+    transition:
+        background 0.3s,
+        border-color 0.3s;
     flex-shrink: 0;
 }
 .main {
@@ -109,7 +126,9 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s, color 0.2s;
+    transition:
+        background 0.2s,
+        color 0.2s;
 }
 .theme-toggle-button:hover {
     background: var(--button-bg);
@@ -147,7 +166,9 @@ body:not(.light-theme) .theme-icon.moon-icon {
     padding: 8px 12px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: background 0.2s, color 0.2s;
+    transition:
+        background 0.2s,
+        color 0.2s;
     flex-shrink: 0;
 }
 .import-btn:hover {
@@ -173,7 +194,10 @@ body:not(.light-theme) .theme-icon.moon-icon {
     border: 1px solid var(--border-strong);
     background: var(--bg-input);
     color: var(--text-input);
-    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    transition:
+        background 0.3s,
+        color 0.3s,
+        border-color 0.3s;
 }
 .btn-primary {
     background: var(--button-bg);
@@ -184,7 +208,9 @@ body:not(.light-theme) .theme-icon.moon-icon {
     margin-top: 8px;
     cursor: pointer;
     font-size: 1rem;
-    transition: background 0.2s, color 0.2s;
+    transition:
+        background 0.2s,
+        color 0.2s;
 }
 .btn-primary:disabled {
     background: var(--button-bg-disabled);
@@ -224,7 +250,9 @@ body:not(.light-theme) .theme-icon.moon-icon {
     cursor: pointer;
     font-size: 0.85rem;
     font-family: "Source Code Pro", monospace;
-    transition: background 0.2s, color 0.2s;
+    transition:
+        background 0.2s,
+        color 0.2s;
 }
 .sort-btn:hover {
     background: var(--button-bg-hover);
@@ -244,7 +272,9 @@ body:not(.light-theme) .theme-icon.moon-icon {
     padding: 8px;
     margin: 8px 0 0 0;
     border: 1px solid var(--border-medium);
-    transition: background 0.3s, border-color 0.3s;
+    transition:
+        background 0.3s,
+        border-color 0.3s;
 }
 .palette-empty {
     width: 100%;
@@ -274,7 +304,9 @@ body:not(.light-theme) .theme-icon.moon-icon {
     padding: 8px 12px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: background 0.2s, color 0.2s;
+    transition:
+        background 0.2s,
+        color 0.2s;
     flex-shrink: 0;
 }
 .btn-secondary:hover {
@@ -294,7 +326,10 @@ body:not(.light-theme) .theme-icon.moon-icon {
     height: 42px;
     width: 42px;
     margin: 0;
-    transition: border 0.2s, transform 0.1s, border-color 0.3s;
+    transition:
+        border 0.2s,
+        transform 0.1s,
+        border-color 0.3s;
 }
 .palette-color.selected {
     border: 2px solid var(--selected-palette-border);
@@ -313,7 +348,10 @@ body:not(.light-theme) .theme-icon.moon-icon {
     font-weight: 700;
     color: var(--text-filename-display);
     cursor: pointer;
-    transition: border-color 0.2s, color 0.2s, background 0.2s;
+    transition:
+        border-color 0.2s,
+        color 0.2s,
+        background 0.2s;
 }
 .palette-add-btn:hover {
     border-color: var(--selected-palette-border);
@@ -338,7 +376,9 @@ body:not(.light-theme) .theme-icon.moon-icon {
     text-align: center;
     cursor: pointer;
     opacity: 0;
-    transition: opacity 0.2s, background-color 0.2s;
+    transition:
+        opacity 0.2s,
+        background-color 0.2s;
     z-index: 10;
 }
 .palette-color-wrapper:hover .palette-color-delete-btn {
@@ -361,7 +401,9 @@ button {
     border-radius: 4px;
     padding: 0 0 8px 0;
     min-height: 0;
-    transition: background 0.3s, border-color 0.3s;
+    transition:
+        background 0.3s,
+        border-color 0.3s;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -440,7 +482,10 @@ button {
     text-align: left;
     font-size: 0.95rem;
     flex-shrink: 0;
-    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+    transition:
+        background-color 0.2s,
+        color 0.2s,
+        border-color 0.2s;
     background: var(--bg-input);
 }
 .col-header-value {

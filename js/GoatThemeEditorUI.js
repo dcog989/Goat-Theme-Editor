@@ -6,8 +6,12 @@
  * @author Chase McGoat
  */
 
-let columnWidths = (() => {
-    try { return JSON.parse(localStorage.getItem('themeEditorColWidths')) || {}; } catch (_) { return {}; }
+const columnWidths = (() => {
+    try {
+        return JSON.parse(localStorage.getItem('themeEditorColWidths')) || {};
+    } catch (_) {
+        return {};
+    }
 })();
 
 function applyTheme(themeName) {
@@ -19,7 +23,10 @@ function applyTheme(themeName) {
         localStorage.setItem('themeEditorTheme', 'dark');
     }
     const paletteColorsEl = document.getElementById('paletteColors');
-    if (typeof renderPalette === 'function' && (palette.length > 0 || (paletteColorsEl && paletteColorsEl.innerHTML.includes('palette-color')))) {
+    if (
+        typeof renderPalette === 'function' &&
+        (palette.length > 0 || paletteColorsEl?.innerHTML.includes('palette-color'))
+    ) {
         renderPalette();
     }
     if (typeof renderThemeItems === 'function' && (filteredThemeItems.length > 0 || themeItems.length > 0)) {
@@ -30,22 +37,26 @@ function applyTheme(themeName) {
 function updateButtonStates() {
     const bulkAssignBtn = document.getElementById('bulkAssignBtn');
     const exportBtn = document.getElementById('exportBtn');
-    if (!bulkAssignBtn || !exportBtn) { return; }
+    if (!bulkAssignBtn || !exportBtn) {
+        return;
+    }
 
-    const hasColorItems = themeItems.some(it => it.isColor);
+    const hasColorItems = themeItems.some((it) => it.isColor);
     exportBtn.disabled = !(themeFileDoc || themeFileJson) || !hasColorItems;
-    bulkAssignBtn.disabled = !(selectedPaletteColor && filteredThemeItems.some(it => it.isColor));
+    bulkAssignBtn.disabled = !(selectedPaletteColor && filteredThemeItems.some((it) => it.isColor));
 }
 
 function renderPalette() {
     const div = document.getElementById('paletteColors');
-    if (!div) { return; }
+    if (!div) {
+        return;
+    }
     div.innerHTML = '';
     const isEditorLightTheme = document.body.classList.contains('light-theme');
 
     const sorted = [...palette].sort((a, b) => {
-        const ca = colordx('#' + a.hex);
-        const cb = colordx('#' + b.hex);
+        const ca = colordx(`#${a.hex}`);
+        const cb = colordx(`#${b.hex}`);
         if (!ca.isValid()) return 1;
         if (!cb.isValid()) return -1;
         const ha = ca.toHsl();
@@ -53,28 +64,38 @@ function renderPalette() {
         const ga = ha.s < 5 ? 1 : 0;
         const gb = hb.s < 5 ? 1 : 0;
         switch (paletteSortMode) {
-            case 'L': return ha.l - hb.l;
-            case 'C': return ha.s - hb.s;
+            case 'L':
+                return ha.l - hb.l;
+            case 'C':
+                return ha.s - hb.s;
             case 'H':
                 if (ga !== gb) return ga - gb;
                 if (ga) return ha.l - hb.l;
                 return ha.h - hb.h;
-            default: return 0;
+            default:
+                return 0;
         }
     });
 
-    sorted.forEach(c => {
+    sorted.forEach((c) => {
         const colorHexNoHash = c.hex;
         const wrapper = document.createElement('div');
         wrapper.className = 'palette-color-wrapper';
 
         const d = document.createElement('div');
-        d.className = 'palette-color' + (selectedPaletteColor && selectedPaletteColor.hex === colorHexNoHash ? ' selected' : '');
-        d.title = (c.name || 'Color') + ' #' + colorHexNoHash;
-        d.style.background = '#' + colorHexNoHash;
+        d.className = `palette-color${selectedPaletteColor && selectedPaletteColor.hex === colorHexNoHash ? ' selected' : ''}`;
+        d.title = `${c.name || 'Color'} #${colorHexNoHash}`;
+        d.style.background = `#${colorHexNoHash}`;
         d.draggable = true;
-        d.ondragstart = (e) => { e.dataTransfer.setData('text/plain', colorHexNoHash); };
-        d.onclick = () => { selectedPaletteColor = { name: c.name, hex: colorHexNoHash }; window.selectedPaletteColor = selectedPaletteColor; renderPalette(); updateButtonStates(); };
+        d.ondragstart = (e) => {
+            e.dataTransfer.setData('text/plain', colorHexNoHash);
+        };
+        d.onclick = () => {
+            selectedPaletteColor = { name: c.name, hex: colorHexNoHash };
+            window.selectedPaletteColor = selectedPaletteColor;
+            renderPalette();
+            updateButtonStates();
+        };
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'palette-color-delete-btn';
@@ -86,7 +107,7 @@ function renderPalette() {
         };
 
         const label = document.createElement('div');
-        label.textContent = '#' + colorHexNoHash;
+        label.textContent = `#${colorHexNoHash}`;
         label.style.fontSize = '10px';
         label.style.textAlign = 'center';
         label.style.color = isEditorLightTheme ? '#000000' : '#FFFFFF';
@@ -119,7 +140,7 @@ function renderPalette() {
     colorInput.style.height = '0';
     colorInput.onchange = function () {
         const hex = this.value.substring(1).toUpperCase();
-        const isDuplicate = palette.some(p => p.hex === hex);
+        const isDuplicate = palette.some((p) => p.hex === hex);
         if (!isDuplicate) {
             palette.push({ name: this.value, hex });
             window.palette = palette;
@@ -138,16 +159,16 @@ function updateThemeItemRow(item, row) {
 
     const swatchDiv = row.querySelector('.color-sample');
     if (swatchDiv) {
-        swatchDiv.style.backgroundColor = '#' + item.currentColorHex;
+        swatchDiv.style.backgroundColor = `#${item.currentColorHex}`;
         const colorInput = swatchDiv.querySelector('input[type="color"]');
         if (colorInput) {
-            colorInput.value = '#' + item.currentColorHex;
+            colorInput.value = `#${item.currentColorHex}`;
         }
     }
 
     const valueInput = row.querySelector('.color-value-input');
     const sampleText = row.querySelector('.color-sample-text');
-    const fullHex = '#' + item.currentColorHex;
+    const fullHex = `#${item.currentColorHex}`;
 
     if (valueInput) {
         valueInput.value = item.colorInfo.originalString;
@@ -161,14 +182,16 @@ function updateThemeItemRow(item, row) {
 
 function renderThemeItems() {
     const themeColorsDiv = document.getElementById('themeColors');
-    if (!themeColorsDiv) { return; }
+    if (!themeColorsDiv) {
+        return;
+    }
     themeColorsDiv.innerHTML = '';
     if (themeBgColor) themeColorsDiv.style.background = themeBgColor;
 
     const savedNameWidth = columnWidths['--col-name-width'];
     const savedValueWidth = columnWidths['--col-value-width'];
-    if (savedNameWidth) themeColorsDiv.style.setProperty('--col-name-width', savedNameWidth + 'px');
-    if (savedValueWidth) themeColorsDiv.style.setProperty('--col-value-width', savedValueWidth + 'px');
+    if (savedNameWidth) themeColorsDiv.style.setProperty('--col-name-width', `${savedNameWidth}px`);
+    if (savedValueWidth) themeColorsDiv.style.setProperty('--col-value-width', `${savedValueWidth}px`);
 
     // Build header row
     const header = document.createElement('div');
@@ -217,16 +240,22 @@ function renderThemeItems() {
             const hex = c.toHex();
             themeBgColor = hex;
             window.themeBgColor = themeBgColor;
-            try { localStorage.setItem('themeEditorBg', themeBgColor); } catch (_) {}
+            try {
+                localStorage.setItem('themeEditorBg', themeBgColor);
+            } catch (_) {}
             themeColorsDiv.style.background = hex;
             bgInput.value = value;
             return true;
         }
         return false;
     }
-    bgInput.onchange = function () { applyBg(this.value); };
-    bgInput.onkeydown = function (e) { if (e.key === 'Enter') applyBg(this.value); };
-    bgInput.onclick = function (e) {
+    bgInput.onchange = function () {
+        applyBg(this.value);
+    };
+    bgInput.onkeydown = function (e) {
+        if (e.key === 'Enter') applyBg(this.value);
+    };
+    bgInput.onclick = (e) => {
         const picker = document.createElement('input');
         picker.type = 'color';
         picker.style.position = 'fixed';
@@ -236,11 +265,16 @@ function renderThemeItems() {
         picker.style.pointerEvents = 'none';
         const safeX = Math.max(20, Math.min(e.clientX - 150, window.innerWidth - 400));
         const safeY = Math.max(20, Math.min(e.clientY - 100, window.innerHeight - 300));
-        picker.style.left = safeX + 'px';
-        picker.style.top = safeY + 'px';
+        picker.style.left = `${safeX}px`;
+        picker.style.top = `${safeY}px`;
         picker.value = bgInput.value || '#1e1e1e';
-        function cleanup() { if (picker.parentNode) picker.remove(); }
-        picker.onchange = function () { applyBg(this.value); cleanup(); };
+        function cleanup() {
+            if (picker.parentNode) picker.remove();
+        }
+        picker.onchange = function () {
+            applyBg(this.value);
+            cleanup();
+        };
         picker.addEventListener('blur', cleanup);
         setTimeout(cleanup, 60000);
         document.body.appendChild(picker);
@@ -258,12 +292,14 @@ function renderThemeItems() {
         row.className = 'color-row';
         row.id = item.id;
 
-        row.ondragover = (e) => { e.preventDefault(); };
+        row.ondragover = (e) => {
+            e.preventDefault();
+        };
         row.ondrop = (e) => {
             e.preventDefault();
             const droppedHexNoHash = e.dataTransfer.getData('text/plain');
             if (/^[0-9A-F]{6}$/i.test(droppedHexNoHash)) {
-                updateItemColor(item, '#' + droppedHexNoHash);
+                updateItemColor(item, `#${droppedHexNoHash}`);
                 updateButtonStates();
             }
         };
@@ -291,9 +327,9 @@ function renderThemeItems() {
         let styleName = item.name;
         const match = item.name.match(/^(.*?)\[(.*?)\](?:_idx\d+)?$/);
         if (match) {
-            styleName = match[1].trim() + ' [' + match[2] + ']';
+            styleName = `${match[1].trim()} [${match[2]}]`;
         } else {
-            styleName = item.name.replace(/_idx\d+$/, "");
+            styleName = item.name.replace(/_idx\d+$/, '');
         }
 
         const styleNameSpan = document.createElement('span');
@@ -314,7 +350,8 @@ function renderThemeItems() {
 
         const sampleText = document.createElement('span');
         sampleText.className = 'color-sample-text';
-        sampleText.textContent = 'How quickly the cunning brown foxes vexed the daft jumping zebras. 1 2 3 4 5 6 7 8 9 0 ! $ % & @ / #';
+        sampleText.textContent =
+            'How quickly the cunning brown foxes vexed the daft jumping zebras. 1 2 3 4 5 6 7 8 9 0 ! $ % & @ / #';
         row.appendChild(sampleText);
 
         themeColorsDiv.appendChild(row);
@@ -327,7 +364,7 @@ function createResizeHandle(cssProp) {
     const handle = document.createElement('div');
     handle.className = 'resize-handle';
 
-    handle.addEventListener('mousedown', function (e) {
+    handle.addEventListener('mousedown', (e) => {
         e.preventDefault();
         const container = document.getElementById('themeColors');
         const prev = handle.previousElementSibling;
@@ -339,7 +376,7 @@ function createResizeHandle(cssProp) {
         function onMouseMove(ev) {
             const diff = ev.clientX - startX;
             const newWidth = Math.max(60, startWidth + diff);
-            container.style.setProperty(cssProp, newWidth + 'px');
+            container.style.setProperty(cssProp, `${newWidth}px`);
             columnWidths[cssProp] = Math.round(newWidth);
         }
 
@@ -348,7 +385,9 @@ function createResizeHandle(cssProp) {
             document.removeEventListener('mouseup', onMouseUp);
             document.body.style.userSelect = '';
             document.body.style.cursor = '';
-            try { localStorage.setItem('themeEditorColWidths', JSON.stringify(columnWidths)); } catch (_) {}
+            try {
+                localStorage.setItem('themeEditorColWidths', JSON.stringify(columnWidths));
+            } catch (_) {}
         }
 
         document.addEventListener('mousemove', onMouseMove);
