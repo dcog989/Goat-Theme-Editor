@@ -229,6 +229,10 @@ function parseGenericThemeJson(json) {
 
     function traverse(obj, prefix) {
         if (Array.isArray(obj)) {
+            if (obj.length >= 3 && obj.length <= 4 && obj.every(v => typeof v === 'number')) {
+                tryAdd(prefix, `rgb(${Math.round(obj[0])}, ${Math.round(obj[1])}, ${Math.round(obj[2])})`);
+                return;
+            }
             obj.forEach((item, i) => {
                 if (typeof item === 'string') {
                     tryAdd(prefix ? `${prefix}[${i}]` : `color-${i + 1}`, item);
