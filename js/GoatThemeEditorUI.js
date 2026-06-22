@@ -73,8 +73,10 @@ function renderPalette() {
             e.dataTransfer.setData('text/plain', colorHexNoHash);
         };
         d.onclick = () => {
+            const prev = document.querySelector('.palette-color.selected');
+            if (prev) prev.classList.remove('selected');
+            d.classList.add('selected');
             setSelectedPaletteColor({ name: c.name, hex: colorHexNoHash });
-            renderPalette();
             updateButtonStates();
         };
 

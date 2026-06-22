@@ -216,7 +216,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (filterInputElement) {
-        filterInputElement.oninput = filterThemeItems;
+        let filterTimer;
+        filterInputElement.oninput = () => {
+            clearTimeout(filterTimer);
+            filterTimer = setTimeout(filterThemeItems, 150);
+        };
     }
 
     if (bulkAssignBtnElement) {
