@@ -15,7 +15,7 @@ window.appState = {
     themeFileDoc: null,
     themeFileJson: null,
     originalThemeFileName: 'Theme',
-    paletteSortMode: 'L',
+    paletteSortMode: 'H',
     themeBgColor: localStorage.getItem('themeEditorBg') || ''
 };
 const paletteReadId = { value: 0 };
@@ -77,9 +77,8 @@ function populatePaletteFromTheme() {
     });
     appState.palette = colors;
     appState.selectedPaletteColor = null;
-    appState.paletteSortMode = 'H';
     document.querySelectorAll('.sort-btn').forEach((b) => {
-        b.classList.toggle('active', b.dataset.sort === 'H');
+        b.classList.toggle('active', b.dataset.sort === appState.paletteSortMode);
     });
     renderPalette();
     updateButtonStates();
