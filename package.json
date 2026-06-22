@@ -3,7 +3,7 @@
 	"private": true,
 	"scripts": {
 		"build": "bun build vendor/colordx-entry.js --outfile js/vendor.colordx.js --target browser",
-		"dev": "bunx bunserv --port 9000"
+		"dev": "echo 'http://localhost:9000' && bunx bunserv --port 9000"
 	},
 	"dependencies": {
 		"@colordx/core": "^5.4.3"
