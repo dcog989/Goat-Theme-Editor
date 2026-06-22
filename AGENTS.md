@@ -1,10 +1,10 @@
 # Goat Theme Editor
 
-Browser-based tool to import XML theme files (Ditto Clipboard Manager, Notepad++, etc.), parse and edit color values via drag-and-drop/color pickers/bulk keyword filtering, and export modified XML.
+Browser-based tool to import theme files, parse and edit color values via drag-and-drop/color pickers/bulk keyword filtering, and export modified theme to original format.
 
 ## Dev Environment
 
-Linux CachyOS, Limine boot loader, KDE Plasma 6, Wayland, Btrfs. Firefox, Kate text editor, Zed code editor, fish shell with Ghostty + Fresh editor. paru and bun package managers. All software is updated as of today.
+Linux CachyOS, Limine boot loader, KDE Plasma 6, Wayland, Btrfs. Firefox, Zed code editor, fish shell with Ghostty + Fresh editor. paru and bun package managers. All software is updated as of today.
 
 ## Tech Stack
 
