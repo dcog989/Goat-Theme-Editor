@@ -91,29 +91,41 @@ body {
 }
 h1 {
     font-size: 2rem;
-    margin-bottom: 16px;
     letter-spacing: 1px;
     color: var(--text-title);
 }
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 .theme-toggle-button {
-    background: var(--button-bg);
-    color: var(--button-text);
+    background: none;
     border: none;
     border-radius: 4px;
-    padding: 8px 12px;
     cursor: pointer;
-    font-size: 0.9rem;
+    padding: 6px;
+    color: var(--text-body);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.2s, color 0.2s;
-    margin-bottom: 10px;
-    align-self: flex-start;
 }
 .theme-toggle-button:hover {
-    background: var(--button-bg-hover);
+    background: var(--button-bg);
+    color: var(--selected-palette-border);
+}
+.theme-icon {
+    display: block;
+}
+body.light-theme .theme-icon.sun-icon,
+body:not(.light-theme) .theme-icon.moon-icon {
+    display: none;
 }
 .theme-toggle-button:focus-visible,
 .import-btn:focus-visible,
 .btn-primary:focus-visible,
-#addCustomColorBtn:focus-visible {
+.btn-secondary:focus-visible {
     outline: 2px solid var(--selected-palette-border);
     outline-offset: 2px;
 }
@@ -150,7 +162,7 @@ h1 {
     flex-grow: 1;
 }
 .filter-row {
-    margin: 12px 0 0 0;
+    margin: 0 0 8px 0;
     display: flex;
     gap: 8px;
 }
@@ -182,33 +194,44 @@ h1 {
 .btn-primary:hover:not(:disabled) {
     background: var(--button-bg-hover);
 }
-.add-color-row {
+.btn-export {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1.1rem;
+}
+.sidebar hr {
+    border: none;
+    border-top: 1px solid var(--border-medium);
+    margin: 8px 0;
+}
+.sort-toggle {
     display: flex;
-    gap: 8px;
-    margin: 8px 0 4px 0;
+    align-items: center;
+    gap: 4px;
+    margin: 8px 0 0 0;
 }
-#customColorInput {
-    flex-grow: 1;
-    padding: 6px 10px;
-    border-radius: 4px;
-    border: 1px solid var(--border-strong);
-    background: var(--bg-input);
-    color: var(--text-input);
+.sort-label {
+    font-size: 0.8rem;
+    color: var(--text-filename-display);
+    margin-right: 4px;
 }
-#addCustomColorBtn {
-    flex-shrink: 0;
-    width: 40px;
-    padding: 6px;
-    font-size: 1.2rem;
-    line-height: 1;
+.sort-btn {
     background: var(--button-bg);
     color: var(--button-text);
     border: none;
     border-radius: 4px;
+    padding: 4px 10px;
     cursor: pointer;
+    font-size: 0.85rem;
+    font-family: "Source Code Pro", monospace;
+    transition: background 0.2s, color 0.2s;
 }
-#addCustomColorBtn:hover {
+.sort-btn:hover {
     background: var(--button-bg-hover);
+}
+.sort-btn.active {
+    background: var(--selected-palette-border);
+    color: #000;
 }
 #paletteColors {
     display: flex;
@@ -219,9 +242,43 @@ h1 {
     background: var(--bg-palette-container);
     border-radius: 4px;
     padding: 8px;
-    margin: 8px 0;
+    margin: 8px 0 0 0;
     border: 1px solid var(--border-medium);
     transition: background 0.3s, border-color 0.3s;
+}
+.palette-empty {
+    width: 100%;
+    text-align: center;
+    padding: 16px;
+    color: var(--text-filename-display);
+    font-size: 0.85rem;
+}
+.palette-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+.palette-controls .file-input-row {
+    flex: 1;
+    min-width: 0;
+}
+.palette-controls > #bulkAssignBtn {
+    align-self: flex-start;
+}
+.btn-secondary {
+    background: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+.btn-secondary:hover {
+    background: var(--button-bg-hover);
 }
 .palette-color-wrapper {
     position: relative;
@@ -246,6 +303,25 @@ h1 {
 }
 .palette-color:hover {
     border: 2px solid var(--button-bg-hover);
+}
+.palette-add-btn {
+    border: 2px dashed var(--border-strong);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-filename-display);
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, background 0.2s;
+}
+.palette-add-btn:hover {
+    border-color: var(--selected-palette-border);
+    color: var(--selected-palette-border);
+    background: var(--bg-theme-item-row-hover);
+}
+.palette-add-wrapper {
+    position: relative;
 }
 .palette-color-delete-btn {
     position: absolute;
@@ -360,7 +436,7 @@ button {
     border: 1px solid var(--border-strong);
     border-radius: 4px;
     width: var(--col-value-width, 140px);
-    min-width: 60px;
+    min-width: 180px;
     text-align: left;
     font-size: 0.95rem;
     flex-shrink: 0;
@@ -369,7 +445,7 @@ button {
 }
 .col-header-value {
     width: var(--col-value-width, 140px);
-    min-width: 60px;
+    min-width: 180px;
     flex-shrink: 0;
     padding: 4px 8px;
 }

@@ -39,7 +39,27 @@ function renderPalette() {
     div.innerHTML = '';
     const isEditorLightTheme = document.body.classList.contains('light-theme');
 
-    palette.forEach(c => {
+    const sorted = [...palette].sort((a, b) => {
+        const ca = colordx('#' + a.hex);
+        const cb = colordx('#' + b.hex);
+        if (!ca.isValid()) return 1;
+        if (!cb.isValid()) return -1;
+        const ha = ca.toHsl();
+        const hb = cb.toHsl();
+        const ga = ha.s < 5 ? 1 : 0;
+        const gb = hb.s < 5 ? 1 : 0;
+        switch (paletteSortMode) {
+            case 'L': return ha.l - hb.l;
+            case 'C': return ha.s - hb.s;
+            case 'H':
+                if (ga !== gb) return ga - gb;
+                if (ga) return ha.l - hb.l;
+                return ha.h - hb.h;
+            default: return 0;
+        }
+    });
+
+    sorted.forEach(c => {
         const colorHexNoHash = c.hex;
         const wrapper = document.createElement('div');
         wrapper.className = 'palette-color-wrapper';
@@ -50,7 +70,7 @@ function renderPalette() {
         d.style.background = '#' + colorHexNoHash;
         d.draggable = true;
         d.ondragstart = (e) => { e.dataTransfer.setData('text/plain', colorHexNoHash); };
-        d.onclick = () => { window.selectedPaletteColor = { name: c.name, hex: colorHexNoHash }; renderPalette(); updateButtonStates(); };
+        d.onclick = () => { selectedPaletteColor = { name: c.name, hex: colorHexNoHash }; window.selectedPaletteColor = selectedPaletteColor; renderPalette(); updateButtonStates(); };
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'palette-color-delete-btn';
@@ -74,36 +94,39 @@ function renderPalette() {
         div.appendChild(wrapper);
     });
 
-    const br = document.createElement('div');
-    br.style.width = '100%';
-    br.style.height = '8px';
-    div.appendChild(br);
+    if (palette.length === 0) {
+        const empty = document.createElement('div');
+        empty.className = 'palette-empty';
+        empty.textContent = 'Import a theme to populate the palette.';
+        div.appendChild(empty);
+    }
 
-    const grayHexesWithHash = ['#FFFFFF', '#EEEEEE', '#DDDDDD', '#CCCCCC', '#BBBBBB', '#AAAAAA', '#999999', '#888888', '#777777', '#666666', '#555555', '#444444', '#333333', '#222222', '#111111', '#000000'];
-    grayHexesWithHash.forEach(grayHexWithHash => {
-        const grayHexNoHash = grayHexWithHash.replace('#', '');
-        const d = document.createElement('div');
-        d.className = 'palette-color' + (selectedPaletteColor && selectedPaletteColor.hex === grayHexNoHash ? ' selected' : '');
-        d.title = grayHexWithHash;
-        d.style.background = grayHexWithHash;
-        d.draggable = true;
-        d.ondragstart = (e) => { e.dataTransfer.setData('text/plain', grayHexNoHash); };
-        d.onclick = () => { window.selectedPaletteColor = { name: grayHexWithHash, hex: grayHexNoHash }; renderPalette(); updateButtonStates(); };
-
-        const label = document.createElement('div');
-        label.textContent = grayHexWithHash;
-        label.style.fontSize = '10px';
-        label.style.textAlign = 'center';
-        const labelTextColor = isEditorLightTheme ? '#000000' : '#FFFFFF';
-        label.style.color = labelTextColor;
-        label.style.marginTop = '2px';
-
-        const wrapper = document.createElement('div');
-        wrapper.className = 'palette-color-wrapper';
-        wrapper.appendChild(d);
-        wrapper.appendChild(label);
-        div.appendChild(wrapper);
-    });
+    const addWrapper = document.createElement('div');
+    addWrapper.className = 'palette-color-wrapper palette-add-wrapper';
+    const addBtn = document.createElement('div');
+    addBtn.className = 'palette-color palette-add-btn';
+    addBtn.title = 'Add color';
+    addBtn.textContent = '+';
+    const colorInput = document.createElement('input');
+    colorInput.type = 'color';
+    colorInput.style.position = 'absolute';
+    colorInput.style.opacity = '0';
+    colorInput.style.width = '0';
+    colorInput.style.height = '0';
+    colorInput.onchange = function () {
+        const hex = this.value.substring(1).toUpperCase();
+        const isDuplicate = palette.some(p => p.hex === hex);
+        if (!isDuplicate) {
+            palette.push({ name: this.value, hex });
+            window.palette = palette;
+            renderPalette();
+        }
+        this.value = '#000000';
+    };
+    addBtn.onclick = () => colorInput.click();
+    addWrapper.appendChild(addBtn);
+    addWrapper.appendChild(colorInput);
+    div.appendChild(addWrapper);
 }
 
 function updateThemeItemRow(item, row) {
@@ -136,6 +159,7 @@ function renderThemeItems() {
     const themeColorsDiv = document.getElementById('themeColors');
     if (!themeColorsDiv) { return; }
     themeColorsDiv.innerHTML = '';
+    if (themeBgColor) themeColorsDiv.style.background = themeBgColor;
 
     // Build header row
     const header = document.createElement('div');
@@ -158,6 +182,63 @@ function renderThemeItems() {
     header.appendChild(headerValue);
 
     header.appendChild(createResizeHandle('--col-value-width'));
+
+    const headerBg = document.createElement('span');
+    headerBg.className = 'col-header-value col-header';
+    headerBg.style.display = 'flex';
+    headerBg.style.alignItems = 'center';
+    headerBg.style.gap = '4px';
+    headerBg.style.border = 'none';
+    headerBg.style.padding = '0 8px';
+    const bgLabel = document.createElement('span');
+    bgLabel.textContent = 'Bg:';
+    bgLabel.style.fontSize = '0.75rem';
+    bgLabel.style.opacity = '0.7';
+    const bgPicker = document.createElement('input');
+    bgPicker.type = 'color';
+    bgPicker.value = themeBgColor || '#1e1e1e';
+    bgPicker.style.width = '24px';
+    bgPicker.style.height = '24px';
+    bgPicker.style.padding = '0';
+    bgPicker.style.border = '1px solid var(--border-strong)';
+    bgPicker.style.borderRadius = '3px';
+    bgPicker.style.cursor = 'pointer';
+    bgPicker.style.background = 'none';
+    bgPicker.title = 'Pick a color';
+    const bgText = document.createElement('input');
+    bgText.type = 'text';
+    bgText.style.width = '72px';
+    bgText.style.height = '22px';
+    bgText.style.padding = '1px 4px';
+    bgText.style.border = '1px solid var(--border-strong)';
+    bgText.style.borderRadius = '3px';
+    bgText.style.fontSize = '0.75rem';
+    bgText.style.fontFamily = '"Source Code Pro", monospace';
+    bgText.style.background = 'var(--bg-input)';
+    bgText.style.color = 'var(--text-input)';
+    bgText.placeholder = '#1e1e1e';
+    bgText.title = 'Any CSS color format';
+    function applyBg(value) {
+        const c = colordx(value);
+        if (c.isValid()) {
+            const hex = c.toHex();
+            themeBgColor = hex;
+            window.themeBgColor = themeBgColor;
+            try { localStorage.setItem('themeEditorBg', themeBgColor); } catch (_) {}
+            themeColorsDiv.style.background = hex;
+            bgPicker.value = hex;
+            bgText.value = value;
+            return true;
+        }
+        return false;
+    }
+    bgPicker.onchange = function () { applyBg(this.value); };
+    bgText.onchange = function () { applyBg(this.value); };
+    bgText.onkeydown = function (e) { if (e.key === 'Enter') applyBg(this.value); };
+    headerBg.appendChild(bgLabel);
+    headerBg.appendChild(bgPicker);
+    headerBg.appendChild(bgText);
+    header.appendChild(headerBg);
 
     const headerPreview = document.createElement('span');
     headerPreview.className = 'color-sample-text col-header';
@@ -276,22 +357,7 @@ function createResizeHandle(cssProp) {
     return handle;
 }
 
-const columnWidths = (() => {
-    try { return JSON.parse(localStorage.getItem('themeEditorColWidths')) || {}; } catch (_) { return {}; }
-})();
-
-(function applySavedColumnWidths() {
-    const container = document.getElementById('themeColors');
-    if (!container) { return; }
-    ['--col-name-width', '--col-value-width'].forEach(function (prop) {
-        if (columnWidths[prop]) {
-            container.style.setProperty(prop, columnWidths[prop] + 'px');
-        }
-    });
-})();
-
 window.applyTheme = applyTheme;
-window.updateButtonStates = updateButtonStates;
 window.renderPalette = renderPalette;
-window.renderThemeItems = renderThemeItems;
 window.updateThemeItemRow = updateThemeItemRow;
+window.renderThemeItems = renderThemeItems;

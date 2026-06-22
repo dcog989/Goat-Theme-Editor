@@ -16,32 +16,11 @@ let themeFileJson = null; window.themeFileJson = themeFileJson;
 let originalThemeFileName = "Theme"; window.originalThemeFileName = originalThemeFileName;
 let currentPaletteReadId = 0;
 let currentThemeReadId = 0;
+let paletteSortMode = 'L'; window.paletteSortMode = paletteSortMode;
+let themeBgColor = localStorage.getItem('themeEditorBg') || ''; window.themeBgColor = themeBgColor;
 
 
 // --- Core Logic Functions ---
-
-function addCustomColor() {
-    const input = document.getElementById('customColorInput');
-    if (!input) return;
-    const colorStr = input.value.trim();
-    if (!colorStr) return;
-
-    const newColor = colordx(colorStr);
-    if (newColor.isValid()) {
-        const newHex = newColor.toHex().substring(1, 7).toUpperCase();
-        const isDuplicate = palette.some(p => p.hex === newHex);
-        if (!isDuplicate) {
-            palette.push({
-                name: colorStr, // Store original input as name
-                hex: newHex
-            });
-            renderPalette();
-        }
-        input.value = '';
-    } else {
-        alert(`'${colorStr}' is not a valid color.`);
-    }
-}
 
 function deleteColorFromPalette(hexToDelete) {
     palette = palette.filter(p => p.hex !== hexToDelete); window.palette = palette;
@@ -83,6 +62,30 @@ function updateItemColor(item, newColorString) {
     return false;
 }
 
+function populatePaletteFromTheme() {
+    const seen = new Set();
+    const colors = [];
+    themeItems.forEach(item => {
+        if (item.isColor && item.currentColorHex && !seen.has(item.currentColorHex)) {
+            seen.add(item.currentColorHex);
+            colors.push({ name: item.name, hex: item.currentColorHex });
+        }
+    });
+    palette = colors; window.palette = palette;
+    selectedPaletteColor = null; window.selectedPaletteColor = selectedPaletteColor;
+    paletteSortMode = 'H'; window.paletteSortMode = paletteSortMode;
+    document.querySelectorAll('.sort-btn').forEach(b => b.classList.toggle('active', b.dataset.sort === 'H'));
+    renderPalette();
+    updateButtonStates();
+}
+
+function clearPalette() {
+    palette = []; window.palette = palette;
+    selectedPaletteColor = null; window.selectedPaletteColor = selectedPaletteColor;
+    renderPalette();
+    updateButtonStates();
+}
+
 function filterThemeItems() {
     const filterInput = document.getElementById('filterInput');
     if (!filterInput) { console.error("filterThemeItems: filterInput not found."); return; }
@@ -113,8 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filterInputElement = document.getElementById('filterInput');
     const bulkAssignBtnElement = document.getElementById('bulkAssignBtn');
     const exportBtnElement = document.getElementById('exportBtn');
-    const customColorInputElement = document.getElementById('customColorInput');
-    const addCustomColorBtnElement = document.getElementById('addCustomColorBtn');
+    const clearPaletteBtnElement = document.getElementById('clearPaletteBtn');
 
     if (themeToggleBtn) {
         themeToggleBtn.onclick = () => {
@@ -179,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         themeFileJson = result.data || null; window.themeFileJson = themeFileJson;
                         themeItems = result.items; window.themeItems = themeItems;
                         themeItems.sort((a, b) => a.name.localeCompare(b.name));
+                        populatePaletteFromTheme();
                         filterThemeItems();
                     } else { alert("Error: Theme file content is empty or unreadable."); }
                 } catch (error) { alert(`Error processing theme file: ${error.message}`); }
@@ -208,14 +211,19 @@ document.addEventListener('DOMContentLoaded', () => {
         exportBtnElement.onclick = exportTheme;
     }
 
-    if (addCustomColorBtnElement && customColorInputElement) {
-        addCustomColorBtnElement.onclick = addCustomColor;
-        customColorInputElement.onkeydown = (e) => {
-            if (e.key === 'Enter') {
-                addCustomColor();
-            }
-        };
+    if (clearPaletteBtnElement) {
+        clearPaletteBtnElement.onclick = clearPalette;
     }
+
+    document.querySelectorAll('.sort-btn').forEach(btn => {
+        if (btn.dataset.sort === paletteSortMode) btn.classList.add('active');
+        btn.onclick = () => {
+            document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            paletteSortMode = btn.dataset.sort; window.paletteSortMode = paletteSortMode;
+            renderPalette();
+        };
+    });
 
     // Initial Setup Calls
     const initialTheme = localStorage.getItem('themeEditorTheme') || 'dark';
@@ -227,3 +235,4 @@ document.addEventListener('DOMContentLoaded', () => {
 window.updateItemColor = updateItemColor;
 window.deleteColorFromPalette = deleteColorFromPalette;
 window.filterThemeItems = filterThemeItems;
+window.clearPalette = clearPalette;

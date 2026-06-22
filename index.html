@@ -12,35 +12,58 @@
 <body>
     <div class="container">
         <div class="sidebar">
-            <div>
+            <div class="sidebar-header">
                 <h1>GOAT Theme Editor</h1>
-                <button type="button" id="themeToggleBtn" class="theme-toggle-button">Toggle Light or Dark</button>
+                <button type="button" id="themeToggleBtn" class="theme-toggle-button" aria-label="Toggle theme">
+                    <svg class="theme-icon sun-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                        <line x1="12" y1="1" x2="12" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="23"/>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                        <line x1="1" y1="12" x2="3" y2="12"/>
+                        <line x1="21" y1="12" x2="23" y2="12"/>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                    </svg>
+                    <svg class="theme-icon moon-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                </button>
             </div>
             <div class="file-inputs">
-                <div class="file-input-row">
-                    <button type="button" id="importPaletteBtn" class="import-btn">Import Palette</button>
-                    <span id="paletteFileName" class="file-name-display">No palette file selected</span>
-                    <input type="file" id="paletteFile" accept=".xml,.css,.json" style="display: none;">
-                </div>
                 <div class="file-input-row">
                     <button type="button" id="importThemeBtn" class="import-btn">Import Theme</button>
                     <span id="themeFileName" class="file-name-display">No theme file selected</span>
                     <input type="file" id="themeFile" accept=".xml,.css,.json" style="display: none;">
                 </div>
             </div>
+            <div class="sort-toggle">
+                <span class="sort-label">Sort:</span>
+                <button type="button" class="sort-btn" data-sort="L">L</button>
+                <button type="button" class="sort-btn" data-sort="C">C</button>
+                <button type="button" class="sort-btn" data-sort="H">H</button>
+            </div>
+            <div id="paletteColors">
+                <div class="palette-empty">Import a theme to populate the palette.</div>
+            </div>
+            <div class="palette-controls">
+                <div class="file-input-row">
+                    <button type="button" id="importPaletteBtn" class="import-btn">Import Palette</button>
+                    <span id="paletteFileName" class="file-name-display">No palette file selected</span>
+                    <input type="file" id="paletteFile" accept=".xml,.css,.json" style="display: none;">
+                    <button type="button" id="clearPaletteBtn" class="btn-secondary">Clear Palette</button>
+                </div>
+                <button type="button" id="bulkAssignBtn" class="btn-secondary" disabled>Bulk Assign</button>
+            </div>
+
+            <hr>
+            <button type="button" id="exportBtn" class="btn-primary btn-export" disabled>Export Theme</button>
+        </div>
+        <div class="main">
             <div class="filter-row">
                 <input type="text" id="filterInput" placeholder="Filter by name...">
             </div>
-            <button type="button" id="bulkAssignBtn" class="btn-primary" disabled>Bulk Assign Selected Color</button>
-            <div class="add-color-row">
-                <input type="text" id="customColorInput" placeholder="Add color (hex, rgb, etc)...">
-                <button type="button" id="addCustomColorBtn">+</button>
-            </div>
-            <div id="paletteColors"></div>
-
-            <button type="button" id="exportBtn" class="btn-primary" disabled>Export Updated XML</button>
-        </div>
-        <div class="main">
             <div id="themeColors">
             </div>
         </div>
