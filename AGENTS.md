@@ -5,7 +5,7 @@ Browser-based tool to import theme files, parse and edit color values via drag-a
 ## Dev Environment
 
 - OS: CachyOS, Limine bootloader, KDE Plasma 6, Wayland, Btrfs.
-- Tools: fish shell, Ghostty terminal, Fresh TUI editor, paru repo tool, bun package manager, Firefox, Zed code editor. All software up to date as of today.
+- Tools: fish shell, Ghostty terminal, Fresh TUI editor, yay repo tool, bun package manager, Firefox, Zed code editor. All software up to date as of today.
 
 ## Tech Stack
 
