@@ -7,10 +7,10 @@
     "update": "bun update --latest"
   },
   "dependencies": {
-    "@colordx/core": "^5.4.3"
+    "@colordx/core": "^5.5.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.0",
+    "@biomejs/biome": "^2.5.1",
     "@evilmartians/lefthook": "^2.1.9"
   }
 }
