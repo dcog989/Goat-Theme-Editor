@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "build": "bun build vendor/colordx-entry.js --outfile js/vendor.colordx.js --target browser",
+    "clean": "rm -rf node_modules bun.lock",
     "dev": "echo 'http://localhost:9000' && bunx bunserv --port 9000",
     "update": "bun update --latest"
   },
@@ -10,7 +11,7 @@
     "@colordx/core": "^5.5.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.1",
+    "@biomejs/biome": "^2.5.2",
     "@evilmartians/lefthook": "^2.1.9"
   }
 }
