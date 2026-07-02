@@ -187,6 +187,8 @@ function createBackgroundPicker(themeColorsDiv) {
                 localStorage.setItem('themeEditorBg', appState.themeBgColor);
             } catch (_) {}
             themeColorsDiv.style.background = hex;
+            const header = themeColorsDiv.querySelector('.color-row-header');
+            if (header) header.style.background = 'transparent';
             bgInput.value = value;
             return true;
         }
@@ -235,11 +237,16 @@ function renderThemeItems() {
         return;
     }
     themeColorsDiv.innerHTML = '';
-    if (appState.themeBgColor) themeColorsDiv.style.background = appState.themeBgColor;
+    if (appState.themeBgColor) {
+        themeColorsDiv.style.background = appState.themeBgColor;
+    } else {
+        themeColorsDiv.style.removeProperty('background');
+    }
 
     // Build header row
     const header = document.createElement('div');
     header.className = 'color-row color-row-header';
+    if (appState.themeBgColor) header.style.background = 'transparent';
 
     const headerSwatch = document.createElement('div');
     headerSwatch.className = 'color-sample col-header';
