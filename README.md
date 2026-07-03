@@ -1,11 +1,35 @@
 # Goat Theme Editor
 
-A theme editor that parses CSS, JSON, XML themes and displays the color values for editing.
-
-Features - drag & drop color editing, or edit each color with a color picker, or apply global edits by filtering on keywords. The UI can be toggled light / dark.
-
-![Screenshot 2025-05-12 150627](https://github.com/user-attachments/assets/f7d0ecdc-9a26-44e1-b54f-41441ad1ce15)
+Browser-based tool to import theme files (XML, CSS, JSON), parse and edit colour values via drag-and-drop, colour pickers, or bulk keyword filtering, and export the modified theme in its original format.
 
 ## Usage
 
-Either [open the HTML](https://rawcdn.githack.com/dcog989/Goat-Theme-Editor/145b25d06f8ea4c42ad4f7278e02cbe727ac6add/Goat%20Theme%20Editor.html), or [download the files](https://github.com/dcog989/Goat-Theme-Editor/archive/refs/heads/main.zip) to use it locally.
+```sh
+bun install
+bun run dev
+```
+
+Open the URL printed in the terminal (default `http://localhost:9000`).
+
+## Tech Stack
+
+- Vanilla JS (ES6 modules), HTML5, CSS3
+- [colordx](https://www.npmjs.com/package/@colordx/core) for colour parsing/manipulation
+- No build tools, no bundler — fully static site
+- [Biome](https://biomejs.dev) for linting and formatting
+- [Lefthook](https://github.com/evilmartians/lefthook) for pre-commit hooks
+
+## Project Structure
+
+```
+├── index.html
+├── css/GoatThemeEditor.css
+├── js/
+│   ├── GoatThemeEditor.js
+│   ├── GoatThemeEditorColorUtils.js
+│   ├── GoatThemeEditorIO.js
+│   ├── GoatThemeEditorUI.js
+│   └── vendor.colordx.js
+├── favicon.svg
+└── AGENTS.md
+```
