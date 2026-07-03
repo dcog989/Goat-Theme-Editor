@@ -6,6 +6,8 @@
  * @author Chase McGoat
  */
 
+const APP_VERSION = '0.1.0';
+
 // --- State Variables ---
 window.appState = {
     palette: [],
@@ -269,6 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
     applyTheme(initialTheme);
     renderPalette();
     renderThemeItems();
+
+    const versionEl = document.getElementById('appVersion');
+    if (versionEl) versionEl.textContent = `v${APP_VERSION}`;
 });
 
 window.updateItemColor = updateItemColor;
