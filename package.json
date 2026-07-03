@@ -4,8 +4,12 @@
   "private": true,
   "scripts": {
     "build": "bun build vendor/colordx-entry.js --outfile js/vendor.colordx.js --target browser",
+    "check": "bun run lint && bun run typecheck",
+    "typecheck": "echo 'no types to check'",
     "clean": "rm -rf node_modules bun.lock",
     "dev": "echo 'http://localhost:9000' && bunx bunserv --port 9000",
+    "format": "biome format --write js/",
+    "lint": "biome check js/",
     "update": "bun update --latest"
   },
   "dependencies": {
