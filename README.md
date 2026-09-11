@@ -21,7 +21,7 @@ Open the URL printed in the terminal (default `http://localhost:9000`).
 
 ## Project Structure
 
-```
+```text
 ├── index.html
 ├── css/GoatThemeEditor.css
 ├── js/
@@ -32,4 +32,14 @@ Open the URL printed in the terminal (default `http://localhost:9000`).
 │   └── vendor.colordx.js
 ├── favicon.svg
 └── AGENTS.md
+```
+
+## Run Dev Server
+
+```sh
+bun run dev
+```
+
+```sh
+echo "http://localhost:9000" && bunx bunserv --port 9000
 ```

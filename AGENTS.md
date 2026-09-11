@@ -1,31 +1,40 @@
-# Goat Theme Editor
+# Agent Directives
 
-Browser-based tool to import theme files, parse and edit color values via drag-and-drop/color pickers/bulk keyword filtering, and export modified theme to original format.
+## Project Specifics
 
-## Dev Environment
+- Name: Goat Theme Editor
+- Description: Browser-based tool to import theme files, parse and edit color values via drag-and-drop/color pickers/bulk keyword filtering, and export modified theme to original format.
+- Tech: Vanilla JS (ES6 modules), HTML5, CSS3, [colordx](https://www.npmjs.com/package/@colordx/core) for color parsing/manipulation. No build tools, no bundler, no npm dependencies — fully static site
 
-- OS: CachyOS, Limine bootloader, KDE Plasma 6, Wayland, Btrfs.
-- Tools: fish shell, Ghostty terminal, Fresh TUI editor, yay repo tool, bun package manager, Firefox, Zed code editor. All software up to date as of today.
+### Key Files
 
-## Tech Stack
+- `<path>` — entry point
+- `<path>` — state
+- `<path>` — tests
 
-- Vanilla JS (ES6 modules), HTML5, CSS3 (light/dark theme via custom properties)
-- [colordx](https://www.npmjs.com/package/@colordx/core) v5.4.3 (CDN via import map) for color parsing/manipulation
-- No build tools, no bundler, no npm dependencies — fully static site
+### Workflow
 
-## Run Dev Server
+- Install: `<install-command>`
+- Dev: `<dev-command>`
+- Test: `<test-command>`
+- Lint: `<lint-command>`
+- Format: `<format-command>`
+- Build: `<build-command>`
 
-```sh
-bun run dev
-```
+### Common Patterns
 
-```sh
-echo "http://localhost:9000" && bunx bunserv --port 9000
-```
+- Add feature: Update store in `<stores-dir>`, add UI in `<components-dir>`, wire with events.
+- Backend call: Add command in `<backend-commands-dir>`, register in entry point, call from UI via the frontend wrapper.
+- State access: Import the central state from its store module.
+- These are examples. Follow only if they apply; otherwise state your approach before implementing.
 
-The echo is for the user to click on.
+### File System Access
 
-No build or test commands exist.
+- Allowed: <project root> and all contained directories + files; `/tmp/*`.
+- Read-Only: `.env*`, `.git/`.
+- Disallowed: everything not listed in 'Allowed' unless user grants permission.
+- Require confirmation: adding/removing dependencies, any operation outside project root.
+- Do not delete files or make destructive changes without permission / confirmation.
 
 ## Project Structure
 
@@ -49,10 +58,47 @@ No build or test commands exist.
 - All color values flow through `colordx` for consistent format support
 - Theme preference persisted in `localStorage` key `themeEditorTheme`
 
-## Interaction Style
+---
 
-- Keep responses concise, precise, no analogies.
-- Do NOT "understand" how the user feels or pretend to have human sensibilities.
-- Always output code or terminal commands in code blocks (three back ticks) so the user can copy them.
-- Use metric units with British spelling.
-- Print technical instructions one step at a time. Allow the user to confirm success of each step before providing the next instruction.
+## General Guidelines
+
+### Code Changes
+
+- For non-trivial work, propose an approach and confirm before implementing.
+- Keep modifications minimal and scoped; prefer incremental improvements over rewrites. Ask before architectural changes.
+- Use explicit types and named constants (no magic numbers).
+- Return explicit error types; do not suppress exceptions.
+- Follow standard repository linting and formatting configs.
+- Decompose files over 400 lines if they mix concerns.
+- Use clear naming over comments; reserve comments for complex workarounds or non-obvious issues — why, not what.
+- Never run git mutations (commit, push, reset, rebase, amend) unless explicitly instructed.
+- Do not create documentation files unless explicitly requested.
+
+### Verification
+
+- Do not run test, lint, format, or type-check commands; the user builds, tests, and lints manually.
+- Run them only when the user explicitly asks.
+
+### Author Environment
+
+- CachyOS, KDE Plasma 6, Wayland, Btrfs.
+- fish shell, Ghostty terminal, Fresh TUI editor, yay package manager, bun npm manager, Firefox, and Zed code editor.
+
+### Testing
+
+- Do not create test files for trivial changes, or for behavior that is not reliably unit-testable in the test environment (e.g. UI layout/click mapping). Prefer no new files; only add a test when the logic is genuinely testable and worth guarding.
+
+### Definition of Done
+
+- Logic fully implemented.
+- Existing docs updated if public interfaces changed.
+- When required by the `Verification` rules, run the corresponding `Workflow` command.
+- On completion of an update or fix, print a concise conventional commit message in a fenced code block.
+
+### Communication Style
+
+- Provide concise, actionable responses.
+- Ask clarifying questions when requirements are ambiguous.
+- Flag potential risks or edge cases proactively.
+- Do not pretend to understand how the user feels.
+- Never editorialise your answer. No "to be honest", "honestly", hedging, disclaimers, or meta-commentary — just answer.
