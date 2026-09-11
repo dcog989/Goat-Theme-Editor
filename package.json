@@ -13,7 +13,7 @@
     "update": "bun update --latest"
   },
   "dependencies": {
-    "@colordx/core": "^5.5.0"
+    "@colordx/core": "^6.4.0"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.2",
