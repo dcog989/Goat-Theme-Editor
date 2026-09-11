@@ -2,6 +2,7 @@
   "name": "goat-theme-editor",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "bun@1.4.0",
   "scripts": {
     "build": "bun build vendor/colordx-entry.js --outfile js/vendor.colordx.js --target browser",
     "check": "bun run lint && bun run typecheck",
