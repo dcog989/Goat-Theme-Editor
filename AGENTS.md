@@ -4,7 +4,7 @@
 
 - Name: Goat Theme Editor
 - Description: Browser-based tool to import theme files, parse and edit color values via drag-and-drop/color pickers/bulk keyword filtering, and export modified theme to original format.
-- Tech: Vanilla JS (ES6 modules), HTML5, CSS3, [colordx](https://www.npmjs.com/package/@colordx/core) for color parsing/manipulation. No build tools, no bundler, no npm dependencies — fully static site
+- Tech: Vanilla JS (ES6 modules), HTML5, CSS3, [colordx](https://www.npmjs.com/package/@colordx/core) for color parsing/manipulation.
 
 ### Key Files
 
