@@ -2,5 +2,5 @@ pre-commit:
   commands:
     biome:
       glob: "*.{js,jsx,ts,tsx,css,html,json}"
-      run: bunx biome check --write --no-errors-on-unmatched {staged_files}
+      run: just format-staged {staged_files}
       stage_fixed: true

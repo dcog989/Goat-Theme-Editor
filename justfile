@@ -32,3 +32,7 @@ update:
 # package.json script: typecheck.
 typecheck:
     bun run typecheck
+
+# Biome over a file list, as the pre-commit hook passes it.
+format-staged *files:
+    bunx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {{files}}
