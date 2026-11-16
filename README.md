@@ -6,7 +6,7 @@ Browser-based tool to import theme files (XML, CSS, JSON), parse and edit colour
 
 ```sh
 bun install
-bun run dev
+just dev
 ```
 
 Open the URL printed in the terminal (default `http://localhost:9000`).
@@ -37,7 +37,7 @@ Open the URL printed in the terminal (default `http://localhost:9000`).
 ## Run Dev Server
 
 ```sh
-bun run dev
+just dev
 ```
 
 ```sh
