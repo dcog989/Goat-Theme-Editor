@@ -39,7 +39,3 @@ Open the URL printed in the terminal (default `http://localhost:9000`).
 ```sh
 just dev
 ```
-
-```sh
-echo "http://localhost:9000" && bunx bunserv --port 9000
-```
