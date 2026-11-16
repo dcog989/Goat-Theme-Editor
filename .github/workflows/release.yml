@@ -17,7 +17,10 @@ jobs:
         with:
           bun-version: 1.4.0
       - run: bun install --frozen-lockfile
-      - run: bunx biome ci .
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: just
+      - run: just check
       - uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
