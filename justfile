@@ -28,3 +28,7 @@ clean:
 # Refresh dependencies to their latest allowed versions.
 update:
     bun run update
+
+# package.json script: typecheck.
+typecheck:
+    bun run typecheck
