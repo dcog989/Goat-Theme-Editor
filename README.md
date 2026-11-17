@@ -2,15 +2,6 @@
 
 Browser-based tool to import theme files (XML, CSS, JSON), parse and edit colour values via drag-and-drop, colour pickers, or bulk keyword filtering, and export the modified theme in its original format.
 
-## Usage
-
-```sh
-bun install
-just dev
-```
-
-Open the URL printed in the terminal (default `http://localhost:9000`).
-
 ## Tech Stack
 
 - Vanilla JS (ES6 modules), HTML5, CSS3
@@ -34,8 +25,20 @@ Open the URL printed in the terminal (default `http://localhost:9000`).
 └── AGENTS.md
 ```
 
-## Run Dev Server
+## Development
 
 ```sh
-just dev
+bun install
+just --list
+
+just                      # Verify the repo: the same checks CI runs.
+just build                # Production build.
+just check                # Full check, the same command CI runs.
+just clean                # Remove build output and dependencies.
+just dev                  # Static server on :9000.
+just format               # Rewrite formatting.
+just format-staged *files # Biome over a file list, as the pre-commit hook passes it.
+just lint                 # Linter alone.
+just typecheck            # package.json script: typecheck.
+just update               # Refresh dependencies to their latest allowed versions.
 ```

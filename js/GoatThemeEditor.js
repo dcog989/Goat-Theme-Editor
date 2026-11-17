@@ -79,9 +79,11 @@ function populatePaletteFromTheme() {
     });
     appState.palette = colors;
     appState.selectedPaletteColor = null;
-    document.querySelectorAll('.sort-btn').forEach((b) => {
-        b.classList.toggle('active', b.dataset.sort === appState.paletteSortMode);
-    });
+    document.querySelectorAll('.sort-btn').forEach(
+        /** @param {HTMLElement} b */ (b) => {
+            b.classList.toggle('active', b.dataset.sort === appState.paletteSortMode);
+        }
+    );
     renderPalette();
     updateButtonStates();
 }
@@ -94,7 +96,7 @@ function clearPalette() {
 }
 
 function filterThemeItems() {
-    const filterInput = document.getElementById('filterInput');
+    const filterInput = /** @type {HTMLInputElement | null} */ (document.getElementById('filterInput'));
     if (!filterInput) {
         console.error('filterThemeItems: filterInput not found.');
         return;
@@ -143,10 +145,10 @@ function readFileWithTracker(file, readId, onContent) {
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     const importPaletteBtn = document.getElementById('importPaletteBtn');
-    const paletteFileEl = document.getElementById('paletteFile');
+    const paletteFileEl = /** @type {HTMLInputElement | null} */ (document.getElementById('paletteFile'));
     const paletteFileNameEl = document.getElementById('paletteFileName');
     const importThemeBtn = document.getElementById('importThemeBtn');
-    const themeFileEl = document.getElementById('themeFile');
+    const themeFileEl = /** @type {HTMLInputElement | null} */ (document.getElementById('themeFile'));
     const themeFileNameEl = document.getElementById('themeFileName');
     const filterInputElement = document.getElementById('filterInput');
     const bulkAssignBtnElement = document.getElementById('bulkAssignBtn');
@@ -170,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
             paletteFileEl.value = null;
             paletteFileEl.click();
         };
-        paletteFileEl.onchange = (e) => {
-            const file = e.target.files[0];
+        paletteFileEl.onchange = () => {
+            const file = paletteFileEl.files[0];
             if (!file) {
                 paletteFileNameEl.textContent = 'No palette file selected';
                 return;
@@ -197,8 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
             themeFileEl.value = null;
             themeFileEl.click();
         };
-        themeFileEl.onchange = (e) => {
-            const file = e.target.files[0];
+        themeFileEl.onchange = () => {
+            const file = themeFileEl.files[0];
             if (!file) {
                 themeFileNameEl.textContent = 'No theme file selected';
                 appState.originalThemeFileName = 'Theme';
@@ -254,17 +256,19 @@ document.addEventListener('DOMContentLoaded', () => {
         clearPaletteBtnElement.onclick = clearPalette;
     }
 
-    document.querySelectorAll('.sort-btn').forEach((btn) => {
-        if (btn.dataset.sort === appState.paletteSortMode) btn.classList.add('active');
-        btn.onclick = () => {
-            document.querySelectorAll('.sort-btn').forEach((b) => {
-                b.classList.remove('active');
-            });
-            btn.classList.add('active');
-            appState.paletteSortMode = btn.dataset.sort;
-            renderPalette();
-        };
-    });
+    document.querySelectorAll('.sort-btn').forEach(
+        /** @param {HTMLElement} btn */ (btn) => {
+            if (btn.dataset.sort === appState.paletteSortMode) btn.classList.add('active');
+            btn.onclick = () => {
+                document.querySelectorAll('.sort-btn').forEach((b) => {
+                    b.classList.remove('active');
+                });
+                btn.classList.add('active');
+                appState.paletteSortMode = btn.dataset.sort;
+                renderPalette();
+            };
+        }
+    );
 
     // Initial Setup Calls
     const initialTheme = localStorage.getItem('themeEditorTheme') || 'dark';

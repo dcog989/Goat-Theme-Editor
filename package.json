@@ -2,11 +2,11 @@
   "name": "goat-theme-editor",
   "version": "0.1.0",
   "private": true,
-  "packageManager": "bun@1.4.0",
+  "packageManager": "bun@1.4.4",
   "scripts": {
     "build": "bun build vendor/colordx-entry.js --outfile js/vendor.colordx.js --target browser",
     "check": "bun run lint && bun run typecheck",
-    "typecheck": "echo 'no types to check'",
+    "typecheck": "bun check --no-script",
     "clean": "rm -rf node_modules bun.lock",
     "dev": "echo 'http://localhost:9000' && bunx bunserv --port 9000",
     "format": "biome format --write js/",
@@ -14,10 +14,10 @@
     "update": "bun update --latest"
   },
   "dependencies": {
-    "@colordx/core": "^6.4.0"
+    "@colordx/core": "^7.3.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.5.13",
-    "@evilmartians/lefthook": "^2.1.12"
+    "@biomejs/biome": "^2.6.8",
+    "@evilmartians/lefthook": "^2.2.2"
   }
 }

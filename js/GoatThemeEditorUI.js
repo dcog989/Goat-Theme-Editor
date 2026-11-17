@@ -17,8 +17,8 @@ function applyTheme(themeName) {
 }
 
 function updateButtonStates() {
-    const bulkAssignBtn = document.getElementById('bulkAssignBtn');
-    const exportBtn = document.getElementById('exportBtn');
+    const bulkAssignBtn = /** @type {HTMLButtonElement | null} */ (document.getElementById('bulkAssignBtn'));
+    const exportBtn = /** @type {HTMLButtonElement | null} */ (document.getElementById('exportBtn'));
     if (!bulkAssignBtn || !exportBtn) {
         return;
     }
@@ -121,14 +121,14 @@ function renderPalette() {
     colorInput.style.opacity = '0';
     colorInput.style.width = '0';
     colorInput.style.height = '0';
-    colorInput.onchange = function () {
-        const hex = this.value.substring(1).toUpperCase();
+    colorInput.onchange = () => {
+        const hex = colorInput.value.substring(1).toUpperCase();
         const isDuplicate = appState.palette.some((p) => p.hex === hex);
         if (!isDuplicate) {
-            addPaletteColor(this.value, hex);
+            addPaletteColor(colorInput.value, hex);
             renderPalette();
         }
-        this.value = '#000000';
+        colorInput.value = '#000000';
     };
     addBtn.onclick = () => colorInput.click();
     addWrapper.appendChild(addBtn);
@@ -195,11 +195,11 @@ function createBackgroundPicker(themeColorsDiv) {
         return false;
     }
 
-    bgInput.onchange = function () {
-        applyBg(this.value);
+    bgInput.onchange = () => {
+        applyBg(bgInput.value);
     };
-    bgInput.onkeydown = function (e) {
-        if (e.key === 'Enter') applyBg(this.value);
+    bgInput.onkeydown = (e) => {
+        if (e.key === 'Enter') applyBg(bgInput.value);
     };
     bgInput.onclick = (e) => {
         const picker = document.createElement('input');
@@ -218,8 +218,8 @@ function createBackgroundPicker(themeColorsDiv) {
         function cleanup() {
             if (picker.parentNode) picker.remove();
         }
-        picker.onchange = function () {
-            applyBg(this.value);
+        picker.onchange = () => {
+            applyBg(picker.value);
             cleanup();
         };
         picker.addEventListener('blur', cleanup);
@@ -301,15 +301,15 @@ function renderThemeItems() {
 
         const colorInput = document.createElement('input');
         colorInput.type = 'color';
-        colorInput.style.opacity = 0;
+        colorInput.style.opacity = '0';
         colorInput.style.position = 'absolute';
         colorInput.style.left = '0';
         colorInput.style.top = '0';
         colorInput.style.width = '100%';
         colorInput.style.height = '100%';
         colorInput.style.cursor = 'pointer';
-        colorInput.oninput = (e) => {
-            updateItemColor(item, e.target.value);
+        colorInput.oninput = () => {
+            updateItemColor(item, colorInput.value);
         };
         swatchDiv.appendChild(colorInput);
         swatchDiv.onclick = () => colorInput.click();
@@ -332,9 +332,9 @@ function renderThemeItems() {
         const valueInput = document.createElement('input');
         valueInput.type = 'text';
         valueInput.className = 'color-value-input';
-        valueInput.onchange = (e) => {
-            if (!updateItemColor(item, e.target.value)) {
-                e.target.value = item.colorInfo.originalString;
+        valueInput.onchange = () => {
+            if (!updateItemColor(item, valueInput.value)) {
+                valueInput.value = item.colorInfo.originalString;
             }
         };
         row.appendChild(valueInput);
